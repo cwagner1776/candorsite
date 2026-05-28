@@ -1,14 +1,18 @@
 /**
  * live-header.js — makes the masthead location / weather / date chips live.
  *
- * - The date updates immediately on every page (pure client-side, always works).
- * - The location + temperature + condition + icon are filled in from the
- *   /api/local Cloudflare Pages Function. If that call fails (e.g. opening the
- *   file locally without `wrangler`), the existing static text is left alone.
+ * Fully client-side: works on ANY static host (Cloudflare Workers or Pages,
+ * GitHub Pages, Netlify, etc.) with no server function or config.
  *
- * Works with both header markups used across the site:
- *   1) <div class="weather-chip"><svg>…</svg><span>Pasadena · 74°F · Clear</span></div>
- *   2) <div class="weather-chip">Pasadena · 74°F · Clear</div>
+ *  - Date:     updated immediately from the visitor's browser.
+ *  - Location: approximate city from a free, keyless IP lookup (ipwho.is,
+ *              falling back to geojs.io).
+ *  - Weather:  current conditions from Open-Meteo (free, keyless).
+ *
+ * If any network call fails, the existing static text is left untouched.
+ * Works with both header markups on the site:
+ *   1) <div class="weather-chip"><svg>…</svg><span>…</span></div>
+ *   2) <div class="weather-chip">…</div>
  */
 (function () {
   'use strict';
@@ -59,10 +63,27 @@
     svg.innerHTML = ICONS[key] || ICONS.sun;
   }
 
-  /* ---------- Weather + location -------------------------------------- */
+  /* ---------- WMO weather code -> label + icon ------------------------ */
 
-  var CACHE_KEY = 'candorLocalWeather';
-  var CACHE_MS = 15 * 60 * 1000; // 15 minutes
+  function conditionFromCode(code) {
+    if (code === 0) return { label: 'Clear', icon: 'sun' };
+    if (code === 1) return { label: 'Mostly Clear', icon: 'sun' };
+    if (code === 2) return { label: 'Partly Cloudy', icon: 'cloud-sun' };
+    if (code === 3) return { label: 'Overcast', icon: 'cloud' };
+    if (code === 45 || code === 48) return { label: 'Fog', icon: 'fog' };
+    if (code >= 51 && code <= 57) return { label: 'Drizzle', icon: 'rain' };
+    if (code >= 61 && code <= 67) return { label: 'Rain', icon: 'rain' };
+    if (code >= 71 && code <= 77) return { label: 'Snow', icon: 'snow' };
+    if (code >= 80 && code <= 82) return { label: 'Showers', icon: 'rain' };
+    if (code === 85 || code === 86) return { label: 'Snow', icon: 'snow' };
+    if (code >= 95) return { label: 'Thunderstorm', icon: 'storm' };
+    return { label: 'Clear', icon: 'sun' };
+  }
+
+  // Countries that use Fahrenheit.
+  var FAHRENHEIT = { US: 1, BS: 1, BZ: 1, KY: 1, PW: 1, FM: 1, MH: 1 };
+
+  /* ---------- Apply to the chips -------------------------------------- */
 
   function applyWeather(data) {
     if (!data || !data.location) return;
@@ -83,7 +104,6 @@
       if (span) {
         span.textContent = text; // markup variant 1
       } else if (svg) {
-        // svg but no span: drop stray text nodes, add a span after the icon
         var kids = chip.childNodes;
         for (var j = kids.length - 1; j >= 0; j--) {
           if (kids[j].nodeType === 3) chip.removeChild(kids[j]);
@@ -97,7 +117,51 @@
     }
   }
 
-  function fetchWeather() {
+  /* ---------- Network lookups ----------------------------------------- */
+
+  // Approximate location from the visitor's IP. Tries ipwho.is, then geojs.io.
+  function getLocation() {
+    return fetch('https://ipwho.is/')
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        if (j && j.success !== false && j.latitude != null) {
+          return {
+            city: j.city || j.region || null,
+            country: j.country_code || null,
+            lat: j.latitude,
+            lon: j.longitude,
+          };
+        }
+        throw new Error('primary geo unavailable');
+      })
+      .catch(function () {
+        return fetch('https://get.geojs.io/v1/ip/geo.json')
+          .then(function (r) { return r.json(); })
+          .then(function (j) {
+            return {
+              city: j.city || j.region || null,
+              country: j.country_code || null,
+              lat: parseFloat(j.latitude),
+              lon: parseFloat(j.longitude),
+            };
+          });
+      });
+  }
+
+  function getWeather(lat, lon, useF) {
+    var url =
+      'https://api.open-meteo.com/v1/forecast' +
+      '?latitude=' + lat + '&longitude=' + lon +
+      '&current=temperature_2m,weather_code' +
+      '&temperature_unit=' + (useF ? 'fahrenheit' : 'celsius') +
+      '&timezone=auto';
+    return fetch(url).then(function (r) { return r.json(); });
+  }
+
+  var CACHE_KEY = 'candorLocalWeather';
+  var CACHE_MS = 15 * 60 * 1000; // 15 minutes
+
+  function loadLive() {
     try {
       var cached = JSON.parse(sessionStorage.getItem(CACHE_KEY) || 'null');
       if (cached && Date.now() - cached.t < CACHE_MS) {
@@ -108,18 +172,30 @@
       /* ignore cache errors */
     }
 
-    fetch('/api/local', { headers: { Accept: 'application/json' } })
-      .then(function (r) {
-        return r.ok ? r.json() : null;
-      })
-      .then(function (d) {
-        if (!d) return;
-        applyWeather(d);
-        try {
-          sessionStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), d: d }));
-        } catch (e) {
-          /* storage may be unavailable; not critical */
-        }
+    getLocation()
+      .then(function (loc) {
+        if (!loc || loc.lat == null || isNaN(loc.lat)) return;
+        var useF = !!FAHRENHEIT[loc.country];
+        return getWeather(loc.lat, loc.lon, useF).then(function (w) {
+          var cur = (w && w.current) || {};
+          var cond = conditionFromCode(cur.weather_code);
+          var data = {
+            location: loc.city,
+            unit: useF ? 'F' : 'C',
+            temp:
+              typeof cur.temperature_2m === 'number'
+                ? Math.round(cur.temperature_2m)
+                : null,
+            condition: cond.label,
+            icon: cond.icon,
+          };
+          applyWeather(data);
+          try {
+            sessionStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), d: data }));
+          } catch (e) {
+            /* storage may be unavailable; not critical */
+          }
+        });
       })
       .catch(function () {
         /* leave the static text in place */
@@ -130,7 +206,7 @@
 
   function init() {
     updateDate();
-    fetchWeather();
+    loadLive();
     setInterval(updateDate, 60 * 1000); // keep correct across midnight
   }
 
