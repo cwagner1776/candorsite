@@ -378,6 +378,29 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 .footer-cert { display: inline-flex; align-items: center; gap: 10px; margin-top: 16px; padding: 9px 13px; background: var(--white); border: 1px solid var(--line); font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 13px; font-weight: 700; color: var(--ink); letter-spacing: 0.08em; }
 .footer-cert svg { width: 14px; height: 14px; color: #2ecc71; }
 [data-theme="dark"] .footer-cert { background: var(--paper-3); border-color: var(--line); }
+
+/* ════════════ MOBILE OPTIMIZATION ════════════ */
+@media (max-width: 700px) {
+  /* Top utility bar: wrap and center instead of crowding/overflowing */
+  .util-inner { flex-wrap: wrap; justify-content: center; gap: 6px 16px; padding: 8px 18px; }
+
+  /* Masthead: stack the three groups into one centered column */
+  .mast-inner { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 12px; padding: 16px 18px 14px; }
+  .mast-left { align-items: center; text-align: center; }
+  .mast-right { justify-content: center; flex-wrap: wrap; }
+  .logo { font-size: 36px; }
+
+  /* Nav: scroll horizontally rather than overflow */
+  .nav-inner { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .nav-inner::-webkit-scrollbar { display: none; }
+
+  /* Never let an image force horizontal scrolling */
+  img { max-width: 100%; }
+}
+@media (max-width: 430px) {
+  .logo { font-size: 31px; }
+  .mast-inner { gap: 10px; }
+}
 </style>
 </head>
 <body>
@@ -540,33 +563,36 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
         <p class="form-sub">We'll route your message to the right team within 24 hours.</p>
       </div>
 
-      <form class="contact-form" onsubmit="event.preventDefault(); document.querySelector('.submit-btn').textContent='Sent ✓'; this.querySelector('.submit-btn').style.background='var(--accent)';">
+      <form class="contact-form" data-formspree data-success-text="Sent ✓">
+        <!-- Spam honeypot: bots fill this in, humans never see it -->
+        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+        <input type="hidden" name="_subject" value="New contact message — Candor">
         <div class="form-row">
           <div class="field">
             <label class="field-label">First name <span class="req">*</span></label>
-            <input class="field-input" type="text" placeholder="Jane" required>
+            <input class="field-input" type="text" name="First name" placeholder="Jane" required>
           </div>
           <div class="field">
             <label class="field-label">Last name <span class="req">*</span></label>
-            <input class="field-input" type="text" placeholder="Reader" required>
+            <input class="field-input" type="text" name="Last name" placeholder="Reader" required>
           </div>
         </div>
 
         <div class="form-row">
           <div class="field">
             <label class="field-label">Email <span class="req">*</span></label>
-            <input class="field-input" type="email" placeholder="you@domain.com" required>
+            <input class="field-input" type="email" name="email" placeholder="you@domain.com" required>
             <span class="field-hint">We use this only to reply. We don't add you to a list.</span>
           </div>
           <div class="field">
             <label class="field-label">Organization (optional)</label>
-            <input class="field-input" type="text" placeholder="If relevant to your inquiry">
+            <input class="field-input" type="text" name="Organization" placeholder="If relevant to your inquiry">
           </div>
         </div>
 
         <div class="field">
           <label class="field-label">What's this about? <span class="req">*</span></label>
-          <select class="field-select" required>
+          <select class="field-select" name="Topic" required>
             <option value="">Select a topic…</option>
             <option>Correction or factual error in a story</option>
             <option>I'm the subject of an article</option>
@@ -582,17 +608,17 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 
         <div class="field">
           <label class="field-label">Article URL (if applicable)</label>
-          <input class="field-input" type="url" placeholder="https://candornews.org/…">
+          <input class="field-input" type="url" name="Article URL" placeholder="https://candornews.org/…">
           <span class="field-hint">Only required for corrections or article-related messages.</span>
         </div>
 
         <div class="field">
           <label class="field-label">Your message <span class="req">*</span></label>
-          <textarea class="field-textarea" placeholder="The more specific, the faster we can route this. If it's about an article, quote the exact sentence if possible." required></textarea>
+          <textarea class="field-textarea" name="Message" placeholder="The more specific, the faster we can route this. If it's about an article, quote the exact sentence if possible." required></textarea>
         </div>
 
         <div class="field field-check">
-          <input type="checkbox" id="urgent" name="urgent">
+          <input type="checkbox" id="urgent" name="Time-sensitive" value="Yes — needs same-day response">
           <label for="urgent">This is time-sensitive and requires a same-day response (please use sparingly).</label>
         </div>
 
@@ -882,5 +908,6 @@ document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closePa
 
 </script>
 <script src="/live-header.js" defer></script>
+<script src="/contact-forms.js" defer></script>
 </body>
 </html>
