@@ -334,29 +334,29 @@ button { font-family: inherit; cursor: pointer; }
 
       <div class="stat-row">
         <div class="stat">
-          <div class="stat-label">Sources checked today</div>
-          <div class="stat-value t-mono">52,841</div>
-          <div class="stat-meta"><span class="up">▲ 4.2%</span> vs yesterday</div>
-        </div>
-        <div class="stat">
-          <div class="stat-label">Stories synthesized</div>
-          <div class="stat-value t-mono">47</div>
-          <div class="stat-meta">6 published in the last hour</div>
+          <div class="stat-label">Published stories</div>
+          <div class="stat-value t-mono" id="stat-published">—</div>
+          <div class="stat-meta" id="stat-published-meta">total in database</div>
         </div>
         <div class="stat">
           <div class="stat-label">In review queue</div>
-          <div class="stat-value t-mono" style="color:var(--warn)">3</div>
-          <div class="stat-meta">Oldest waiting 22 min</div>
+          <div class="stat-value t-mono" id="stat-pending" style="color:var(--warn)">—</div>
+          <div class="stat-meta" id="stat-pending-meta">awaiting decision</div>
         </div>
         <div class="stat">
-          <div class="stat-label">Active members</div>
-          <div class="stat-value t-mono">1,284</div>
-          <div class="stat-meta"><span class="up">▲ 18</span> this week</div>
+          <div class="stat-label">Rejected (lifetime)</div>
+          <div class="stat-value t-mono" id="stat-rejected">—</div>
+          <div class="stat-meta">held back from publication</div>
         </div>
         <div class="stat">
-          <div class="stat-label">MRR</div>
-          <div class="stat-value t-mono">$6,407</div>
-          <div class="stat-meta"><span class="up">▲ 1.4%</span> · net of churn</div>
+          <div class="stat-label">Sections active</div>
+          <div class="stat-value t-mono" id="stat-sections">—</div>
+          <div class="stat-meta">of 7 with published stories</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Latest publish</div>
+          <div class="stat-value t-mono" id="stat-latest" style="font-size:22px;letter-spacing:-0.4px">—</div>
+          <div class="stat-meta" id="stat-latest-meta">most recent story</div>
         </div>
       </div>
 
@@ -531,13 +531,7 @@ button { font-family: inherit; cursor: pointer; }
         <table class="tbl">
           <thead><tr><th>Headline</th><th>Section</th><th>Bias mix</th><th>Importance</th><th>Status</th><th>Updated</th><th></th></tr></thead>
           <tbody id="art-body">
-            <tr class="row" data-status="published"><td><div class="t-headline">G7 Nations Sign First-Ever Binding Climate Pact With Real Enforcement Teeth</div><div class="t-sub">11 sources · live feed on</div></td><td><span class="sec-tag">World</span></td><td><span class="bias-mini"><div style="width:38%;background:var(--left)"></div><div style="width:42%;background:var(--center)"></div><div style="width:20%;background:var(--right)"></div></span></td><td><span class="imp"><span class="imp-bar"><span class="imp-fill" style="width:94%"></span></span><span class="imp-num">94</span></span></td><td><span class="pill pill-live"><span class="d"></span> Breaking</span></td><td class="t-mono">8s ago</td><td><button class="btn btn-ghost btn-sm" onclick="toast('Opened in editor')">Edit</button></td></tr>
-            <tr class="row" data-status="published"><td><div class="t-headline">Senate AI Oversight Act: What the 67–33 Vote Means Going Forward</div><div class="t-sub">9 sources</div></td><td><span class="sec-tag">Politics</span></td><td><span class="bias-mini"><div style="width:33%;background:var(--left)"></div><div style="width:34%;background:var(--center)"></div><div style="width:33%;background:var(--right)"></div></span></td><td><span class="imp"><span class="imp-bar"><span class="imp-fill" style="width:88%"></span></span><span class="imp-num">88</span></span></td><td><span class="pill pill-published"><span class="d"></span> Published</span></td><td class="t-mono">4m ago</td><td><button class="btn btn-ghost btn-sm" onclick="toast('Opened in editor')">Edit</button></td></tr>
-            <tr class="row" data-status="published"><td><div class="t-headline">Dow Rises for Third Straight Week as Fed Holds Rates Through Q3</div><div class="t-sub">7 sources · re-synthesizing</div></td><td><span class="sec-tag">Business</span></td><td><span class="bias-mini"><div style="width:30%;background:var(--left)"></div><div style="width:50%;background:var(--center)"></div><div style="width:20%;background:var(--right)"></div></span></td><td><span class="imp"><span class="imp-bar"><span class="imp-fill" style="width:71%"></span></span><span class="imp-num">71</span></span></td><td><span class="pill pill-processing"><span class="d"></span> Processing</span></td><td class="t-mono">just now</td><td><button class="btn btn-ghost btn-sm" onclick="toast('Opened in editor')">Edit</button></td></tr>
-            <tr class="row" data-status="published"><td><div class="t-headline">Alzheimer's Breakthrough: Drug Slows Progression 60% — FDA Review in Q3</div><div class="t-sub">8 sources</div></td><td><span class="sec-tag">Science</span></td><td><span class="bias-mini"><div style="width:45%;background:var(--left)"></div><div style="width:40%;background:var(--center)"></div><div style="width:15%;background:var(--right)"></div></span></td><td><span class="imp"><span class="imp-bar"><span class="imp-fill" style="width:82%"></span></span><span class="imp-num">82</span></span></td><td><span class="pill pill-published"><span class="d"></span> Published</span></td><td class="t-mono">18m ago</td><td><button class="btn btn-ghost btn-sm" onclick="toast('Opened in editor')">Edit</button></td></tr>
-            <tr class="row" data-status="held"><td><div class="t-headline">Explosion at Port of Rotterdam; casualty figures vary widely</div><div class="t-sub">6 sources · in review queue</div></td><td><span class="sec-tag">World</span></td><td><span class="bias-mini"><div style="width:35%;background:var(--left)"></div><div style="width:45%;background:var(--center)"></div><div style="width:20%;background:var(--right)"></div></span></td><td><span class="imp"><span class="imp-bar"><span class="imp-fill" style="width:89%"></span></span><span class="imp-num">89</span></span></td><td><span class="pill pill-held"><span class="d"></span> Held</span></td><td class="t-mono">22m ago</td><td><button class="btn btn-ghost btn-sm" onclick="show('review')">Review</button></td></tr>
-            <tr class="row" data-status="published"><td><div class="t-headline">Apple's On-Device AI Runs Without Cloud — A Privacy Shift for Consumers</div><div class="t-sub">10 sources</div></td><td><span class="sec-tag">Tech</span></td><td><span class="bias-mini"><div style="width:33%;background:var(--left)"></div><div style="width:42%;background:var(--center)"></div><div style="width:25%;background:var(--right)"></div></span></td><td><span class="imp"><span class="imp-bar"><span class="imp-fill" style="width:64%"></span></span><span class="imp-num">64</span></span></td><td><span class="pill pill-published"><span class="d"></span> Published</span></td><td class="t-mono">41m ago</td><td><button class="btn btn-ghost btn-sm" onclick="toast('Opened in editor')">Edit</button></td></tr>
-            <tr class="row" data-status="archived"><td><div class="t-headline">Cannes Palme d'Or Awarded to Iranian First-Time Director</div><div class="t-sub">5 sources · archived</div></td><td><span class="sec-tag">Culture</span></td><td><span class="bias-mini"><div style="width:40%;background:var(--left)"></div><div style="width:45%;background:var(--center)"></div><div style="width:15%;background:var(--right)"></div></span></td><td><span class="imp"><span class="imp-bar"><span class="imp-fill" style="width:44%"></span></span><span class="imp-num">44</span></span></td><td><span class="pill pill-archived"><span class="d"></span> Archived</span></td><td class="t-mono">2d ago</td><td><button class="btn btn-ghost btn-sm" onclick="toast('Restored to front page')">Restore</button></td></tr>
+            <tr><td colspan="7" style="padding:32px;text-align:center;color:var(--mute);font-style:italic">Loading articles…</td></tr>
           </tbody>
         </table>
       </div>
@@ -997,9 +991,96 @@ setInterval(() => {
 
   // Load when DOM ready
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', loadPending);
+    document.addEventListener('DOMContentLoaded', loadAll);
   } else {
+    loadAll();
+  }
+
+  function loadAll() {
     loadPending();
+    loadOverview();
+    loadArticles();
+  }
+
+  // ----- OVERVIEW STATS -----
+  async function loadOverview() {
+    try {
+      const stats = await adminFetch('/api/admin/stats');
+      setStat('stat-published', stats.published);
+      setStat('stat-pending', stats.pending);
+      setStat('stat-rejected', stats.rejected);
+      setStat('stat-sections', (stats.sections_active || 0) + ' / 7');
+      const meta = document.getElementById('stat-published-meta');
+      if (meta && stats.published_today != null) {
+        meta.textContent = stats.published_today + ' published today';
+      }
+      const latest = document.getElementById('stat-latest');
+      const latestMeta = document.getElementById('stat-latest-meta');
+      if (latest) {
+        if (stats.latest_published_at) {
+          latest.textContent = timeAgo(stats.latest_published_at);
+          if (latestMeta) {
+            try { latestMeta.textContent = new Date(stats.latest_published_at).toLocaleString(); } catch (e) {}
+          }
+        } else {
+          latest.textContent = '—';
+          if (latestMeta) latestMeta.textContent = 'no stories yet';
+        }
+      }
+    } catch (e) {
+      // silent — leave dashes in place
+    }
+  }
+  function setStat(id, val) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = (val == null ? '—' : val);
+  }
+
+  // ----- ARTICLES LIST -----
+  function articleRowHtml(a) {
+    const sources = Array.isArray(a.sources) ? a.sources : [];
+    const updated = a.published_at || a.created_at;
+    const importance = a.importance || 'high';
+    const impWidth = importance === 'high' ? 90 : importance === 'medium' ? 55 : 25;
+    const impNum = importance === 'high' ? 90 : importance === 'medium' ? 55 : 25;
+    let pill;
+    if (a.breaking) pill = '<span class="pill pill-live"><span class="d"></span> Breaking</span>';
+    else if (a.status === 'published') pill = '<span class="pill pill-published"><span class="d"></span> Published</span>';
+    else if (a.status === 'pending') pill = '<span class="pill pill-held"><span class="d"></span> Held</span>';
+    else if (a.status === 'rejected') pill = '<span class="pill pill-archived"><span class="d"></span> Rejected</span>';
+    else pill = '<span class="pill"><span class="d"></span> ' + esc(a.status || '') + '</span>';
+    return ''
+      + '<tr class="row" data-status="' + esc(a.status) + '">'
+      +   '<td>'
+      +     '<div class="t-headline">' + esc(a.headline) + '</div>'
+      +     '<div class="t-sub">' + sources.length + ' source' + (sources.length === 1 ? '' : 's') + '</div>'
+      +   '</td>'
+      +   '<td><span class="sec-tag">' + esc(a.category || 'News') + '</span></td>'
+      +   '<td><span class="bias-mini"><div style="width:33%;background:var(--left)"></div><div style="width:34%;background:var(--center)"></div><div style="width:33%;background:var(--right)"></div></span></td>'
+      +   '<td><span class="imp"><span class="imp-bar"><span class="imp-fill" style="width:' + impWidth + '%"></span></span><span class="imp-num">' + impNum + '</span></span></td>'
+      +   '<td>' + pill + '</td>'
+      +   '<td class="t-mono">' + esc(timeAgo(updated)) + '</td>'
+      +   '<td><a href="' + ADMIN_API + '/article/' + encodeURIComponent(a.slug) + '" target="_blank" class="btn btn-ghost btn-sm">View</a></td>'
+      + '</tr>';
+  }
+
+  async function loadArticles() {
+    try {
+      const articles = await adminFetch('/api/admin/articles');
+      const tbody = document.getElementById('art-body');
+      const count = document.getElementById('art-count');
+      if (!tbody) return;
+      if (!articles.length) {
+        tbody.innerHTML = '<tr><td colspan="7" style="padding:32px;text-align:center;color:var(--mute);font-style:italic">No articles yet. Trigger a pipeline run to populate.</td></tr>';
+        if (count) count.textContent = '0 shown';
+        return;
+      }
+      tbody.innerHTML = articles.map(articleRowHtml).join('');
+      if (count) count.textContent = articles.length + ' shown';
+    } catch (e) {
+      const tbody = document.getElementById('art-body');
+      if (tbody) tbody.innerHTML = '<tr><td colspan="7" style="padding:32px;text-align:center;color:var(--warn)">Could not load articles: ' + esc(e.message) + '</td></tr>';
+    }
   }
 })();
 </script>

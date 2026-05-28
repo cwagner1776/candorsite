@@ -2641,16 +2641,39 @@ kbd {
   </div>
 </section>
 
-<!-- ═══════════════ MORE STORIES ═══════════════ -->
+<!-- ═══════════════ SECTIONS GRID ═══════════════ -->
+<style>
+  .sections-area { padding: 24px 0 48px; }
+  .sections-head { display: flex; align-items: baseline; justify-content: space-between; border-bottom: 2px solid var(--ink); padding-bottom: 12px; margin-bottom: 28px; gap: 12px; flex-wrap: wrap; }
+  .sections-head h2 { font-family: 'Fraunces', serif; font-weight: 700; font-size: 28px; letter-spacing: -0.5px; color: var(--ink); }
+  .sections-head .sub { font-family: 'Newsreader', serif; font-style: italic; font-size: 14px; color: var(--mute); }
+  .sections-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px 28px; }
+  @media (max-width: 980px) { .sections-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px) { .sections-grid { grid-template-columns: 1fr; gap: 24px; } }
+  .sec-cell { display: flex; flex-direction: column; gap: 10px; }
+  .sec-cell-head { font-family: 'Figtree', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); padding-bottom: 10px; border-bottom: 1px solid var(--ink); }
+  .sec-lead a { text-decoration: none; color: inherit; display: block; }
+  .sec-lead-hed { font-family: 'Fraunces', serif; font-weight: 600; font-size: 19px; line-height: 1.2; letter-spacing: -0.25px; color: var(--ink); margin-bottom: 6px; }
+  .sec-lead a:hover .sec-lead-hed { color: var(--accent); }
+  .sec-lead-dek { font-size: 14px; line-height: 1.45; color: var(--ink-3); margin-bottom: 8px; }
+  .sec-lead-meta { font-family: 'Figtree', sans-serif; font-size: 11px; color: var(--mute); display: flex; gap: 10px; }
+  .sec-sub { list-style: none; padding: 0; margin-top: 4px; border-top: 1px dashed var(--line); }
+  .sec-sub li { padding: 10px 0; border-bottom: 1px dashed var(--line); }
+  .sec-sub li:last-child { border-bottom: none; }
+  .sec-sub a { color: inherit; text-decoration: none; font-family: 'Figtree', sans-serif; font-size: 13.5px; line-height: 1.35; font-weight: 500; display: block; }
+  .sec-sub a:hover { color: var(--accent); }
+  .sec-empty { font-family: 'Newsreader', serif; font-style: italic; font-size: 13px; color: var(--mute); padding: 12px 0; }
+</style>
 <div class="wrap">
-  <div class="sec-header">
-    <h2>More stories</h2>
-    <span class="sub" id="grid-sub">Updated continuously · ranked by source breadth</span>
-  </div>
-
-  <div class="stories-grid" id="stories-grid">
-    <!-- populated by JS from /api/articles -->
+  <section class="sections-area">
+    <div class="sections-head">
+      <h2>Sections</h2>
+      <span class="sub">The lead story in each section, updated as the AI publishes</span>
     </div>
+    <div class="sections-grid" id="sections-grid">
+      <!-- populated by JS — one cell per section -->
+    </div>
+  </section>
 </div>
 
 <!-- ═══════════════ SUBSCRIBE STRIP ═══════════════ -->
@@ -3527,34 +3550,45 @@ document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closePa
     }).join('');
   }
 
-  // ----- MORE STORIES GRID POPULATION -----
-  function populateGrid(items) {
-    const grid = document.getElementById('stories-grid');
+  // ----- SECTIONS GRID POPULATION -----
+  function populateSections(items) {
+    const grid = document.getElementById('sections-grid');
     if (!grid) return;
-    if (!items.length) {
-      grid.innerHTML = '<p style="font-family:Newsreader,serif;font-style:italic;color:var(--mute);grid-column:1/-1;padding:32px 0;text-align:center">More stories will appear here as the AI publishes them. Trigger a manual run at <code style="font-family:monospace;background:var(--paper-2);padding:1px 6px;border-radius:2px">/run</code> to populate.</p>';
-      return;
-    }
-    grid.innerHTML = items.map(a => {
-      const sources = parse(a.sources, []);
-      const sc = sources.length;
-      const ago = timeAgo(a.published_at);
-      return '<a href="' + esc(articleUrl(a.slug)) + '" style="text-decoration:none;color:inherit;display:block">' +
-        '<article class="story-card">' +
-          '<div class="card-cat-row">' +
-            '<div class="card-cat-left">' +
-              '<span class="card-eyebrow">' + esc(a.category || 'News') + '</span>' +
-              '<span class="card-time">· ' + esc(ago) + '</span>' +
-            '</div>' +
-          '</div>' +
-          '<h3 class="card-headline">' + esc(a.headline) + '</h3>' +
-          '<p class="card-dek">' + esc(a.dek || '') + '</p>' +
-          '<div class="card-bottom">' +
-            '<div class="card-bias-mini"><div style="background:var(--left);width:33%"></div><div style="background:var(--center);width:34%"></div><div style="background:var(--right);width:33%"></div></div>' +
-            '<span class="card-sources"><b>' + sc + '</b> source' + (sc === 1 ? '' : 's') + '</span>' +
-          '</div>' +
-        '</article>' +
-      '</a>';
+    const SECTION_ORDER = ['U.S.', 'World', 'Politics', 'Business', 'Sports', 'Science', 'Tech'];
+    const bySection = {};
+    SECTION_ORDER.forEach(s => bySection[s] = []);
+    items.forEach(a => {
+      const sec = a.category;
+      if (bySection[sec]) bySection[sec].push(a);
+    });
+
+    grid.innerHTML = SECTION_ORDER.map(sec => {
+      const articles = bySection[sec];
+      if (!articles.length) {
+        return '<div class="sec-cell">'
+          + '<div class="sec-cell-head">' + esc(sec) + '</div>'
+          + '<div class="sec-empty">No story in this section yet.</div>'
+          + '</div>';
+      }
+      const lead = articles[0];
+      const more = articles.slice(1, 3);
+      const leadSources = parse(lead.sources, []);
+      const leadAgo = timeAgo(lead.published_at);
+      const moreHtml = more.length
+        ? '<ul class="sec-sub">' + more.map(m =>
+            '<li><a href="' + esc(articleUrl(m.slug)) + '">' + esc(m.headline) + '</a></li>'
+          ).join('') + '</ul>'
+        : '';
+      return ''
+        + '<div class="sec-cell">'
+        +   '<div class="sec-cell-head">' + esc(sec) + '</div>'
+        +   '<div class="sec-lead"><a href="' + esc(articleUrl(lead.slug)) + '">'
+        +     '<div class="sec-lead-hed">' + esc(lead.headline) + '</div>'
+        +     '<div class="sec-lead-dek">' + esc(lead.dek || '') + '</div>'
+        +     '<div class="sec-lead-meta"><span>' + leadSources.length + ' source' + (leadSources.length === 1 ? '' : 's') + '</span><span>' + esc(leadAgo) + '</span></div>'
+        +   '</a></div>'
+        +   moreHtml
+        + '</div>';
     }).join('');
   }
 
@@ -3587,13 +3621,13 @@ document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closePa
         const dek = document.getElementById('hero-dek');
         if (dek) dek.textContent = 'Trigger a manual pipeline run to populate the front page.';
         populateSidebar([]);
-        populateGrid([]);
+        populateSections([]);
         populateBreaking([]);
         return;
       }
       populateHero(articles[0]);
       populateSidebar(articles.slice(1, 5));
-      populateGrid(articles.slice(1));
+      populateSections(articles);
       populateBreaking(articles);
     })
     .catch(e => {
