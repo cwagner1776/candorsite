@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Account — Candor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,900&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink: #0b1220; --ink-2: #1a2233; --ink-3: #3a4358;
+  --mute: #6b7488; --mute-2: #9aa2b4;
+  --line: #e4e6ec; --line-2: #ecedf1;
+  --paper: #f7f5ef; --paper-2: #efece3; --paper-3: #e8e4d8;
+  --white: #ffffff;
+  --accent: #c8102e; --accent-dark: #9c0a23;
+  --left: #2d62b3; --center: #4a4a4a; --right: #b8451e;
+  --max: 1200px;
+}
+[data-theme="dark"] {
+  --ink: #f4f1e8; --ink-2: #e0dccf; --ink-3: #c8c4b7;
+  --mute: #a8a497; --mute-2: #8e8a7e;
+  --line: #3d3a30; --line-2: #332f25;
+  --paper: #14130e; --paper-2: #1a1812; --paper-3: #221f17;
+  --white: #1a1812;
+  --accent: #ff4d63; --accent-dark: #e6304c;
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'Newsreader', Georgia, serif; background: var(--paper); color: var(--ink); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; transition: background 0.3s, color 0.3s; }
+a { text-decoration: none; color: inherit; cursor: pointer; }
+button { cursor: pointer; font-family: inherit; border: none; background: none; color: inherit; }
+
+/* ── UTIL BAR ── */
+.util-bar { background: var(--ink); }
+[data-theme="dark"] .util-bar { background: #0a0907; border-bottom: 1px solid var(--line); }
+.util-inner { max-width: var(--max); margin: 0 auto; padding: 9px 32px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.util-left { display: flex; align-items: center; gap: 22px; }
+.util-status { display: flex; align-items: center; gap: 8px; color: #ece8d8; font-variant-caps: all-small-caps; letter-spacing: 0.1em; font-weight: 600; font-size: 14px; }
+.live-dot { width: 7px; height: 7px; border-radius: 50%; background: #2ecc71; animation: livePulse 1.8s ease-out infinite; }
+@keyframes livePulse { 0%{box-shadow:0 0 0 0 rgba(46,204,113,0.55)}70%{box-shadow:0 0 0 6px rgba(46,204,113,0)}100%{box-shadow:0 0 0 0 rgba(46,204,113,0)} }
+.util-stat { color: var(--mute-2); font-variant-caps: all-small-caps; letter-spacing: 0.08em; font-size: 14px; }
+.util-stat b { color: #ece8d8; font-weight: 700; font-variant-caps: normal; font-size: 13px; }
+.util-right { display: flex; align-items: center; gap: 14px; }
+.util-link { color: var(--mute-2); font-variant-caps: all-small-caps; letter-spacing: 0.1em; font-weight: 600; font-size: 14px; transition: color 0.15s; }
+.util-link:hover { color: #ece8d8; }
+.util-divider { width: 1px; height: 12px; background: #2a3344; }
+[data-theme="dark"] .util-divider { background: #4a5266; }
+
+/* ── MASTHEAD ── */
+.masthead { background: var(--white); border-bottom: 1px solid var(--line); }
+[data-theme="dark"] .masthead { background: var(--paper-2); }
+.mast-inner { max-width: var(--max); margin: 0 auto; padding: 22px 32px 18px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px; }
+.mast-left { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+.weather-chip { display: flex; align-items: center; gap: 8px; font-variant-caps: all-small-caps; font-weight: 500; letter-spacing: 0.06em; font-size: 14px; color: var(--mute); }
+.date-chip { font-style: italic; font-size: 13px; color: var(--mute); }
+.logo-wrap { text-align: center; }
+.logo { font-family: 'Fraunces', serif; font-weight: 700; font-size: 48px; letter-spacing: -1.6px; line-height: 1; color: var(--ink); display: inline-flex; align-items: baseline; gap: 2px; }
+.logo-mark { display: inline-block; width: 13px; height: 13px; background: var(--accent); margin-right: 5px; position: relative; top: -3px; }
+.mast-right { display: flex; align-items: center; gap: 10px; justify-content: flex-end; }
+.icon-btn { width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--line); border-radius: 50%; color: var(--ink-3); transition: all 0.2s; background: var(--white); }
+.icon-btn:hover { color: var(--ink); border-color: var(--ink); }
+.icon-btn svg { width: 15px; height: 15px; }
+[data-theme="dark"] .icon-btn { background: var(--paper-3); border-color: var(--line); }
+.avatar-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--ink); color: var(--paper);
+  font-family: 'Fraunces', serif; font-size: 14px; font-weight: 700;
+  display: inline-flex; align-items: center; justify-content: center;
+  letter-spacing: -0.4px;
+}
+
+/* ── NAV ── */
+.nav-wrap { background: var(--white); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 50; }
+[data-theme="dark"] .nav-wrap { background: var(--paper-2); }
+.nav-inner { max-width: var(--max); margin: 0 auto; padding: 0 32px; display: flex; align-items: center; overflow-x: auto; scrollbar-width: none; }
+.nav-inner::-webkit-scrollbar { display: none; }
+.nav-link { font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 16px; font-weight: 600; letter-spacing: 0.08em; color: var(--ink-3); padding: 14px 14px; border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.15s; }
+.nav-link:first-child { padding-left: 0; }
+.nav-link:hover { color: var(--ink); }
+.nav-link.active { color: var(--ink); border-bottom-color: var(--accent); }
+.nav-link.live-link::before { content: ''; display: inline-block; width: 6px; height: 6px; background: #ef3340; border-radius: 50%; margin-right: 6px; vertical-align: middle; animation: livePulse 1.8s infinite; }
+
+/* ── ACCOUNT HEADER ── */
+.acct-header { background: var(--ink); color: var(--paper); padding: 56px 32px 48px; position: relative; overflow: hidden; }
+[data-theme="dark"] .acct-header { background: #0a0907; }
+.acct-header::before {
+  content: 'YOUR ACCOUNT'; position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%); font-family: 'Fraunces', serif;
+  font-size: 220px; font-weight: 900; color: rgba(255,255,255,0.025);
+  white-space: nowrap; pointer-events: none; letter-spacing: -6px;
+}
+.acct-header-inner {
+  max-width: var(--max); margin: 0 auto; position: relative; z-index: 1;
+  display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: center;
+}
+.acct-greeting {}
+.acct-eyebrow {
+  font-variant-caps: all-small-caps; font-size: 12px; font-weight: 700;
+  letter-spacing: 0.18em; color: var(--accent); margin-bottom: 10px;
+}
+.acct-h {
+  font-family: 'Fraunces', serif; font-size: 44px; font-weight: 700;
+  letter-spacing: -1.2px; line-height: 1.05; color: var(--paper); margin-bottom: 12px;
+}
+.acct-h em { font-style: italic; font-weight: 500; color: rgba(244,241,232,0.85); }
+.acct-meta { font-size: 15px; color: rgba(244,241,232,0.65); font-family: 'Newsreader', serif; font-style: italic; }
+.acct-meta b { color: var(--paper); font-style: normal; font-family: 'Fraunces', serif; font-weight: 600; letter-spacing: -0.2px; font-size: 16px; }
+
+.acct-plan-badge {
+  display: flex; flex-direction: column; gap: 4px; align-items: flex-end;
+  padding: 18px 22px; border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.03);
+}
+.plan-badge-label { font-variant-caps: all-small-caps; font-size: 10px; font-weight: 700; letter-spacing: 0.16em; color: rgba(244,241,232,0.55); }
+.plan-badge-tier { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; color: var(--paper); letter-spacing: -0.3px; display: flex; align-items: center; gap: 8px; }
+.plan-badge-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+.plan-badge-meta { font-size: 12px; color: rgba(244,241,232,0.6); font-style: italic; }
+
+/* ── PAGE LAYOUT ── */
+.acct-wrap { max-width: var(--max); margin: 0 auto; padding: 48px 32px 80px; display: grid; grid-template-columns: 220px 1fr; gap: 56px; align-items: start; }
+
+/* ── SIDE NAV ── */
+.side-nav { position: sticky; top: 80px; }
+.side-nav-title { font-variant-caps: all-small-caps; font-size: 11px; font-weight: 700; letter-spacing: 0.18em; color: var(--mute); margin-bottom: 16px; border-bottom: 2px solid var(--ink); padding-bottom: 8px; }
+.side-link { display: flex; align-items: center; gap: 11px; font-size: 14px; color: var(--ink-3); padding: 10px 0; border-bottom: 1px solid var(--line-2); transition: color 0.15s; line-height: 1.3; font-weight: 500; }
+.side-link svg { width: 14px; height: 14px; opacity: 0.6; flex-shrink: 0; }
+.side-link:hover { color: var(--accent); }
+.side-link:hover svg { opacity: 1; color: var(--accent); }
+.side-link.active { color: var(--accent); font-weight: 700; }
+.side-link.active svg { opacity: 1; color: var(--accent); }
+.side-link.danger { color: var(--mute); }
+.side-link.danger:hover { color: var(--accent); }
+
+/* ── CONTENT ── */
+.content-col { min-width: 0; }
+.section-block { margin-bottom: 56px; scroll-margin-top: 90px; }
+.section-block:last-child { margin-bottom: 0; }
+
+.section-h-bar { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding-bottom: 14px; border-bottom: 2px solid var(--ink); margin-bottom: 28px; }
+.section-h-left {}
+.section-eyebrow { font-variant-caps: all-small-caps; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: var(--accent); margin-bottom: 6px; }
+.section-h { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 700; letter-spacing: -0.5px; color: var(--ink); line-height: 1.1; }
+.section-h-meta { font-variant-caps: all-small-caps; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; color: var(--mute); white-space: nowrap; padding-bottom: 4px; }
+
+/* ── PLAN CARD ── */
+.plan-card {
+  background: var(--white); border: 1px solid var(--line);
+  display: grid; grid-template-columns: 1.4fr 1fr; gap: 0;
+}
+[data-theme="dark"] .plan-card { background: var(--paper-2); }
+.plan-card-main { padding: 32px 36px; border-right: 1px solid var(--line); }
+.plan-card-side { padding: 32px 36px; background: var(--paper-2); }
+[data-theme="dark"] .plan-card-side { background: var(--paper-3); }
+.plan-current { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.plan-tier {
+  font-family: 'Fraunces', serif; font-size: 28px; font-weight: 700;
+  color: var(--ink); letter-spacing: -0.5px; line-height: 1;
+}
+.plan-badge {
+  font-variant-caps: all-small-caps; font-size: 10px; font-weight: 700;
+  letter-spacing: 0.14em; padding: 4px 9px; border-radius: 2px;
+  background: rgba(200,16,46,0.1); color: var(--accent);
+}
+.plan-badge.free { background: var(--paper-2); color: var(--ink-3); }
+[data-theme="dark"] .plan-badge.free { background: var(--paper-3); }
+.plan-price-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 18px; }
+.plan-price { font-family: 'Fraunces', serif; font-size: 36px; font-weight: 700; color: var(--ink); letter-spacing: -1px; line-height: 1; }
+.plan-price-meta { font-size: 14px; color: var(--mute); font-style: italic; }
+.plan-renew {
+  padding: 12px 14px; background: var(--paper-2); border-left: 3px solid var(--accent);
+  font-size: 13px; color: var(--ink-2); line-height: 1.55; margin-bottom: 18px;
+}
+[data-theme="dark"] .plan-renew { background: var(--paper-3); }
+.plan-renew b { color: var(--ink); font-family: 'Fraunces', serif; font-weight: 600; }
+.plan-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn-primary {
+  background: var(--ink); color: var(--paper);
+  font-variant-caps: all-small-caps; font-size: 12px; font-weight: 700;
+  letter-spacing: 0.12em; padding: 10px 16px; border-radius: 2px;
+  transition: background 0.15s;
+}
+.btn-primary:hover { background: var(--accent); }
+.btn-secondary {
+  background: transparent; color: var(--ink); border: 1px solid var(--line);
+  font-variant-caps: all-small-caps; font-size: 12px; font-weight: 700;
+  letter-spacing: 0.12em; padding: 10px 16px; border-radius: 2px;
+  transition: all 0.15s;
+}
+[data-theme="dark"] .btn-secondary { background: var(--paper-3); }
+.btn-secondary:hover { border-color: var(--ink); }
+.btn-danger {
+  background: transparent; color: var(--accent); border: 1px solid rgba(200,16,46,0.3);
+  font-variant-caps: all-small-caps; font-size: 12px; font-weight: 700;
+  letter-spacing: 0.12em; padding: 10px 16px; border-radius: 2px;
+  transition: all 0.15s;
+}
+.btn-danger:hover { border-color: var(--accent); background: rgba(200,16,46,0.06); }
+
+.plan-side-eyebrow { font-variant-caps: all-small-caps; font-size: 10px; font-weight: 700; letter-spacing: 0.14em; color: var(--mute); margin-bottom: 12px; }
+.plan-side-h { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 600; color: var(--ink); margin-bottom: 14px; line-height: 1.25; letter-spacing: -0.2px; }
+.plan-includes { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
+.plan-includes li {
+  display: grid; grid-template-columns: 18px 1fr; gap: 8px; list-style: none;
+  font-size: 13px; color: var(--ink-2); line-height: 1.5;
+}
+.plan-includes svg { width: 12px; height: 12px; color: var(--accent); margin-top: 4px; flex-shrink: 0; }
+.plan-upgrade-btn {
+  display: block; text-align: center; padding: 11px 18px;
+  background: var(--accent); color: var(--paper);
+  font-variant-caps: all-small-caps; font-size: 12px; font-weight: 700;
+  letter-spacing: 0.12em; border-radius: 2px; transition: background 0.15s;
+}
+.plan-upgrade-btn:hover { background: var(--accent-dark); }
+
+/* ── PROFILE CARD ── */
+.card { background: var(--white); border: 1px solid var(--line); padding: 28px 32px; }
+[data-theme="dark"] .card { background: var(--paper-2); }
+.card-row {
+  display: grid; grid-template-columns: 180px 1fr auto; gap: 24px;
+  padding: 18px 0; border-bottom: 1px solid var(--line-2);
+  align-items: center;
+}
+.card-row:first-child { padding-top: 0; }
+.card-row:last-child { border-bottom: none; padding-bottom: 0; }
+.card-row-label { font-variant-caps: all-small-caps; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; color: var(--mute); }
+.card-row-val { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 500; color: var(--ink); letter-spacing: -0.2px; line-height: 1.45; }
+.card-row-val small { display: block; font-family: 'Newsreader', serif; font-size: 13px; color: var(--mute); font-style: italic; margin-top: 3px; letter-spacing: 0; font-weight: 400; }
+.card-row-action {
+  font-variant-caps: all-small-caps; font-size: 11px; font-weight: 700;
+  letter-spacing: 0.12em; color: var(--ink-3);
+  padding: 7px 12px; border: 1px solid var(--line); background: var(--paper-2);
+  border-radius: 2px; transition: all 0.15s;
+}
+[data-theme="dark"] .card-row-action { background: var(--paper-3); }
+.card-row-action:hover { border-color: var(--ink); color: var(--ink); }
+.verified-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-variant-caps: all-small-caps; font-size: 10px; font-weight: 700;
+  letter-spacing: 0.12em; color: #1a8754;
+  margin-left: 10px;
+}
+[data-theme="dark"] .verified-tag { color: #34c77b; }
+.verified-tag svg { width: 11px; height: 11px; }
+
+/* ── INLINE EDIT FORM ── */
+.inline-form {
+  background: var(--paper-2); border-left: 3px solid var(--accent);
+  padding: 18px 22px; margin: 12px 0 6px;
+  display: none;
+}
+[data-theme="dark"] .inline-form { background: var(--paper-3); }
+.inline-form.open { display: block; }
+.inline-form-label { font-variant-caps: all-small-caps; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; color: var(--ink); margin-bottom: 8px; display: block; }
+.inline-form input, .inline-form select {
+  width: 100%; font-family: 'Newsreader', serif; font-size: 14px;
+  padding: 10px 12px; border: 1px solid var(--line); background: var(--white);
+  color: var(--ink); border-radius: 2px; outline: none; margin-bottom: 12px;
+}
+[data-theme="dark"] .inline-form input, [data-theme="dark"] .inline-form select { background: var(--paper-2); }
+.inline-form-actions { display: flex; gap: 10px; }
+
+/* ── PAYMENT METHOD ── */
+.pay-method {
+  display: grid; grid-template-columns: 48px 1fr auto; gap: 16px;
+  padding: 16px 18px; background: var(--paper-2); border: 1px solid var(--line);
+  align-items: center; margin-bottom: 12px;
+}
+[data-theme="dark"] .pay-method { background: var(--paper-3); }
+.pay-card-icon {
+  width: 42px; height: 28px; border-radius: 3px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Fraunces', serif; font-size: 10px; font-weight: 700;
+  color: #f4f1e8; letter-spacing: 0.5px;
+}
+.pay-info {}
+.pay-num { font-family: 'Fraunces', serif; font-size: 15px; font-weight: 600; color: var(--ink); letter-spacing: -0.1px; }
+.pay-meta { font-size: 12px; color: var(--mute); font-style: italic; margin-top: 2px; }
+.pay-default-tag { font-variant-caps: all-small-caps; font-size: 10px; font-weight: 700; letter-spacing: 0.14em; color: var(--accent); }
+.pay-add {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 14px; background: transparent; border: 1px dashed var(--line);
+  font-variant-caps: all-small-caps; font-size: 12px; font-weight: 700;
+  letter-spacing: 0.12em; color: var(--ink-3); border-radius: 2px;
+  transition: all 0.15s; cursor: pointer;
+}
+.pay-add:hover { border-color: var(--ink); color: var(--ink); border-style: solid; }
+.pay-add svg { width: 13px; height: 13px; }
+
+/* ── BILLING HISTORY ── */
+.bill-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.bill-table th {
+  font-variant-caps: all-small-caps; font-size: 11px; font-weight: 700;
+  letter-spacing: 0.14em; color: var(--mute); text-align: left;
+  padding: 10px 16px; border-bottom: 2px solid var(--ink); background: var(--paper-2);
+}
+[data-theme="dark"] .bill-table th { background: var(--paper-3); }
+.bill-table th:last-child { text-align: right; }
+.bill-table td { padding: 14px 16px; border-bottom: 1px solid var(--line); color: var(--ink-2); }
+.bill-table td:last-child { text-align: right; }
+.bill-table tr:last-child td { border-bottom: none; }
+.bill-table td b { color: var(--ink); font-family: 'Fraunces', serif; font-weight: 600; letter-spacing: -0.1px; }
+.status-pill {
+  display: inline-block; font-variant-caps: all-small-caps; font-size: 10px;
+  font-weight: 700; letter-spacing: 0.14em; padding: 3px 8px; border-radius: 2px;
+}
+.status-pill.paid { background: rgba(26,135,84,0.12); color: #1a8754; }
+[data-theme="dark"] .status-pill.paid { background: rgba(52,199,123,0.15); color: #34c77b; }
+.status-pill.refunded { background: var(--paper-2); color: var(--mute); }
+[data-theme="dark"] .status-pill.refunded { background: var(--paper-3); }
+.bill-receipt {
+  font-variant-caps: all-small-caps; font-size: 11px; font-weight: 700;
+  letter-spacing: 0.12em; color: var(--accent);
+  border-bottom: 1px solid rgba(200,16,46,0.3); padding-bottom: 1px;
+}
+
+/* ── PREFERENCES TOGGLE ── */
+.pref-row {
+  display: grid; grid-template-columns: 1fr auto; gap: 20px;
+  padding: 18px 0; border-bottom: 1px solid var(--line-2);
+  align-items: center;
+}
+.pref-row:first-child { padding-top: 0; }
+.pref-row:last-child { border-bottom: none; padding-bottom: 0; }
+.pref-info {}
+.pref-h { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 600; color: var(--ink); margin-bottom: 4px; letter-spacing: -0.2px; }
+.pref-p { font-size: 13px; color: var(--ink-3); line-height: 1.55; max-width: 60ch; }
+.pref-toggle {
+  position: relative; width: 44px; height: 24px;
+  background: var(--line); border-radius: 12px; transition: background 0.2s;
+  cursor: pointer; flex-shrink: 0;
+}
+.pref-toggle::after {
+  content: ''; position: absolute; top: 3px; left: 3px;
+  width: 18px; height: 18px; background: var(--paper);
+  border-radius: 50%; transition: left 0.2s;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+}
+.pref-toggle.on { background: var(--accent); }
+.pref-toggle.on::after { left: 23px; }
+
+/* ── SESSION ── */
+.session-row {
+  display: grid; grid-template-columns: 36px 1fr auto auto; gap: 16px;
+  padding: 16px 0; border-bottom: 1px solid var(--line-2);
+  align-items: center;
+}
+.session-row:first-child { padding-top: 0; }
+.session-row:last-child { border-bottom: none; padding-bottom: 0; }
+.session-icon {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--paper-2); display: flex; align-items: center; justify-content: center;
+  color: var(--ink-3); border: 1px solid var(--line);
+}
+[data-theme="dark"] .session-icon { background: var(--paper-3); }
+.session-icon svg { width: 14px; height: 14px; }
+.session-info {}
+.session-device { font-family: 'Fraunces', serif; font-size: 15px; font-weight: 600; color: var(--ink); letter-spacing: -0.2px; }
+.session-device .current-tag { font-variant-caps: all-small-caps; font-size: 10px; font-weight: 700; letter-spacing: 0.14em; color: #1a8754; margin-left: 10px; }
+[data-theme="dark"] .session-device .current-tag { color: #34c77b; }
+.session-meta { font-size: 12px; color: var(--mute); font-style: italic; margin-top: 2px; }
+.session-when { font-variant-caps: all-small-caps; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: var(--ink-3); white-space: nowrap; }
+.session-action {
+  font-variant-caps: all-small-caps; font-size: 11px; font-weight: 700;
+  letter-spacing: 0.12em; color: var(--accent);
+  border-bottom: 1px solid rgba(200,16,46,0.3); padding-bottom: 1px;
+}
+
+/* ── DANGER ZONE ── */
+.danger-zone {
+  background: var(--white); border: 1px solid var(--line);
+  border-top: 3px solid var(--accent); padding: 28px 32px;
+}
+[data-theme="dark"] .danger-zone { background: var(--paper-2); }
+.danger-row {
+  display: grid; grid-template-columns: 1fr auto; gap: 24px;
+  padding: 20px 0; border-bottom: 1px solid var(--line-2);
+  align-items: center;
+}
+.danger-row:first-child { padding-top: 0; }
+.danger-row:last-child { border-bottom: none; padding-bottom: 0; }
+.danger-h { font-family: 'Fraunces', serif; font-size: 17px; font-weight: 600; color: var(--ink); margin-bottom: 4px; letter-spacing: -0.2px; }
+.danger-p { font-size: 13px; color: var(--ink-3); line-height: 1.6; max-width: 65ch; }
+.danger-p a { color: var(--accent); border-bottom: 1px solid rgba(200,16,46,0.3); }
+
+/* ── SAVE BAR (footer of forms) ── */
+.save-bar {
+  display: flex; justify-content: flex-end; gap: 10px;
+  padding-top: 18px; margin-top: 18px; border-top: 1px solid var(--line);
+}
+
+/* ── FOOTER ── */
+.footer { background: var(--paper); border-top: 1px solid var(--line); }
+[data-theme="dark"] .footer { background: var(--paper-2); }
+.footer-main { max-width: var(--max); margin: 0 auto; padding: 40px 32px 32px; display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 48px; }
+.footer-logo { font-family: 'Fraunces', serif; font-weight: 700; font-size: 28px; letter-spacing: -1px; color: var(--ink); display: inline-flex; align-items: baseline; margin-bottom: 12px; }
+.footer-logo .mark { display: inline-block; width: 9px; height: 9px; background: var(--accent); margin-right: 5px; position: relative; top: -2px; }
+.footer-brand p { font-size: 14px; color: var(--mute); line-height: 1.55; max-width: 38ch; }
+.footer-col h4 { font-variant-caps: all-small-caps; font-size: 13px; font-weight: 700; letter-spacing: 0.14em; color: var(--ink); margin-bottom: 12px; }
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 7px; }
+.footer-col ul a { font-size: 14px; color: var(--ink-3); transition: color 0.15s; }
+.footer-col ul a:hover { color: var(--accent); }
+.footer-foot { border-top: 1px solid var(--line); padding: 18px 32px; max-width: var(--max); margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; font-style: italic; font-size: 13px; color: var(--mute); }
+.footer-foot .links { display: flex; gap: 18px; }
+.footer-foot a { font-style: normal; font-variant-caps: all-small-caps; letter-spacing: 0.08em; font-weight: 600; color: var(--mute); transition: color 0.15s; }
+.footer-foot a:hover { color: var(--ink); }
+
+/* ── MODAL ── */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(11,18,32,0.65);
+  display: none; align-items: center; justify-content: center;
+  z-index: 100; padding: 20px; backdrop-filter: blur(2px);
+}
+[data-theme="dark"] .modal-overlay { background: rgba(0,0,0,0.75); }
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--paper); border: 1px solid var(--line);
+  max-width: 500px; width: 100%; padding: 36px;
+  position: relative;
+}
+[data-theme="dark"] .modal { background: var(--paper-2); }
+.modal-eyebrow { font-variant-caps: all-small-caps; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: var(--accent); margin-bottom: 12px; }
+.modal-h { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; letter-spacing: -0.5px; color: var(--ink); margin-bottom: 14px; line-height: 1.15; }
+.modal-p { font-size: 15px; color: var(--ink-2); line-height: 1.65; margin-bottom: 20px; }
+.modal-p strong { color: var(--ink); }
+.modal-callout {
+  padding: 14px 16px; background: var(--paper-2); border-left: 3px solid var(--accent);
+  font-size: 13px; color: var(--ink-2); line-height: 1.6; margin-bottom: 20px;
+}
+[data-theme="dark"] .modal-callout { background: var(--paper-3); }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+
+@media (max-width: 900px) {
+  .acct-wrap { grid-template-columns: 1fr; gap: 32px; }
+  .side-nav { position: static; }
+  .acct-header-inner { grid-template-columns: 1fr; gap: 20px; }
+  .acct-plan-badge { align-items: flex-start; }
+  .acct-h { font-size: 32px; }
+  .plan-card { grid-template-columns: 1fr; }
+  .plan-card-main { border-right: none; border-bottom: 1px solid var(--line); }
+  .card-row { grid-template-columns: 1fr; gap: 8px; padding: 14px 0; }
+  .card-row-label { font-size: 10px; }
+  .pref-row { grid-template-columns: 1fr; gap: 12px; }
+  .pref-toggle { justify-self: flex-start; }
+  .session-row { grid-template-columns: 32px 1fr; gap: 12px; }
+  .session-when, .session-action { grid-column: 2; }
+  .danger-row { grid-template-columns: 1fr; gap: 12px; }
+  .footer-main { grid-template-columns: 1fr 1fr; gap: 32px; }
+}
+@media (max-width: 600px) {
+  .mast-inner { padding: 16px 20px; }
+  .acct-wrap { padding: 36px 20px 56px; }
+  .plan-card-main, .plan-card-side { padding: 24px 22px; }
+  .card { padding: 22px 20px; }
+  .danger-zone { padding: 22px 20px; }
+  .bill-table { font-size: 13px; }
+  .bill-table th, .bill-table td { padding: 10px 12px; }
+}
+
+/* dark-mode contrast fix: force light text on always-dark bands */
+[data-theme="dark"] .acct-header { color: #f4f1e8; }
+[data-theme="dark"] .acct-header .cta-h,
+[data-theme="dark"] .acct-header h1,
+[data-theme="dark"] .acct-header h2,
+[data-theme="dark"] .acct-header strong,
+[data-theme="dark"] .acct-header b,
+[data-theme="dark"] .acct-header .page-title,
+[data-theme="dark"] .acct-header [class*="-h"],
+[data-theme="dark"] .acct-header [class*="-name"],
+[data-theme="dark"] .acct-header [class*="-val"],
+[data-theme="dark"] .acct-header .plan-badge-tier,
+[data-theme="dark"] .acct-header [class*="-item-h"] { color: #f4f1e8 !important; }
+
+/* New logo: red underline beneath the C (replaces square mark) */
+.logo { gap: 0 !important; }
+.logo-mark { display: none !important; }
+.logo-c { position: relative; padding-bottom: 0.05em; }
+.logo-c::after { content: ''; position: absolute; left: 0.01em; right: 0.01em; bottom: 0; height: 0.045em; background: var(--accent); border-radius: 1px; }
+.footer-logo .mark { display: none !important; }
+.footer-logo-c { position: relative; padding-bottom: 0.05em; }
+.footer-logo-c::after { content: ''; position: absolute; left: 0.01em; right: 0.01em; bottom: 0; height: 0.05em; background: var(--accent); border-radius: 1px; }
+/* ═══════ PAYWALL MODAL ═══════ */
+.paywall-overlay { display: none; position: fixed; inset: 0; background: rgba(11,18,32,0.55); z-index: 2000; align-items: center; justify-content: center; padding: 24px; }
+[data-theme="dark"] .paywall-overlay { background: rgba(0,0,0,0.78); }
+.paywall-overlay.open { display: flex; }
+.paywall-modal { background: var(--white); border: 1px solid var(--line); max-width: 460px; width: 100%; padding: 36px 36px 28px; position: relative; box-shadow: var(--shadow-lg, 0 12px 40px rgba(0,0,0,0.25)); animation: paywallIn 0.2s ease; }
+[data-theme="dark"] .paywall-modal { background: var(--paper-2); }
+@keyframes paywallIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+.paywall-close { position: absolute; top: 14px; right: 16px; background: none; border: none; font-size: 28px; line-height: 1; color: var(--mute); cursor: pointer; transition: color 0.15s; }
+.paywall-close:hover { color: var(--ink); }
+.paywall-eyebrow { font-variant-caps: all-small-caps; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; color: var(--accent); margin-bottom: 10px; }
+.paywall-title { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; letter-spacing: -0.5px; line-height: 1.15; color: var(--ink); margin-bottom: 12px; }
+.paywall-body { font-family: 'Newsreader', serif; font-size: 15px; line-height: 1.6; color: var(--ink-2); margin-bottom: 20px; }
+.paywall-price { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; padding: 16px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-bottom: 18px; }
+.paywall-amount { font-family: 'Fraunces', serif; font-size: 34px; font-weight: 700; color: var(--ink); letter-spacing: -1px; line-height: 1; }
+.paywall-per { font-size: 15px; color: var(--ink-2); }
+.paywall-note { font-size: 13px; color: var(--mute); font-style: italic; margin-left: auto; }
+.paywall-perks { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; padding: 0; }
+.paywall-perks li { font-size: 14px; color: var(--ink-2); line-height: 1.5; padding-left: 24px; position: relative; }
+.paywall-perks li::before { content: '✓'; position: absolute; left: 0; top: 0; color: var(--accent); font-weight: 700; }
+.paywall-actions { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.paywall-btn-primary { display: block; text-align: center; background: var(--accent); color: #fff; font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 15px; font-weight: 700; letter-spacing: 0.08em; padding: 13px; border-radius: 2px; transition: background 0.15s; }
+.paywall-btn-primary:hover { background: var(--accent-dark); }
+.paywall-btn-secondary { display: block; text-align: center; background: transparent; color: var(--ink); border: 1px solid var(--line); font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 15px; font-weight: 700; letter-spacing: 0.08em; padding: 12px; border-radius: 2px; transition: border-color 0.15s; }
+.paywall-btn-secondary:hover { border-color: var(--ink); }
+.paywall-foot { text-align: center; font-size: 14px; color: var(--mute); font-style: italic; }
+.paywall-foot a { color: var(--accent); font-style: normal; }
+
+
+.footer-cert { display: inline-flex; align-items: center; gap: 10px; margin-top: 16px; padding: 9px 13px; background: var(--white); border: 1px solid var(--line); font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 13px; font-weight: 700; color: var(--ink); letter-spacing: 0.08em; }
+.footer-cert svg { width: 14px; height: 14px; color: #2ecc71; }
+[data-theme="dark"] .footer-cert { background: var(--paper-3); border-color: var(--line); }
+</style>
+</head>
+<body>
+
+<!-- UTIL BAR -->
+<div class="util-bar">
+  <div class="util-inner">
+    <div class="util-left">
+      <div class="util-status"><div class="live-dot"></div>Live Coverage</div>
+      <div class="util-stat"><b>2,847</b> sources indexed today</div>
+      <div class="util-stat"><b>143</b> stories rewritten</div>
+    </div>
+    <div class="util-right">
+      <a href="candor-news.html" class="util-link">← Back to Candor</a>
+      <div class="util-divider"></div>
+      <a href="candor-login.html" class="util-link">Sign out</a>
+    </div>
+  </div>
+</div>
+
+<!-- MASTHEAD -->
+<header class="masthead">
+  <div class="mast-inner">
+    <div class="mast-left">
+      <div class="weather-chip">Pasadena · 74°F · Clear</div>
+      <div class="date-chip">Monday, May 26, 2026</div>
+    </div>
+    <div class="logo-wrap">
+      <a href="candor-news.html" class="logo"><span class="logo-c">C</span>andor</a>
+    </div>
+    <div class="mast-right">
+      <button class="icon-btn" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+      <button class="icon-btn" aria-label="Saved stories">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+      </button>
+      <button class="icon-btn" aria-label="Theme" onclick="toggleTheme()">
+        <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <button class="avatar-btn">JR</button>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN NAV -->
+<nav class="nav-wrap">
+  <div class="nav-inner">
+    <a class="nav-link live-link" href="candor-news.html">Live</a>
+    <a class="nav-link" href="#">U.S.</a>
+    <a class="nav-link" href="#">World</a>
+    <a class="nav-link" href="#">Politics</a>
+    <a class="nav-link" href="#">Business</a>
+    <a class="nav-link" href="#">Sports</a>
+    <a class="nav-link" href="#">Science</a>
+    <a class="nav-link" href="#">Tech</a>
+  </div>
+</nav>
+
+<!-- ACCOUNT HEADER -->
+<section class="acct-header">
+  <div class="acct-header-inner">
+    <div class="acct-greeting">
+      <div class="acct-eyebrow">Your account</div>
+      <h1 class="acct-h">Hello, Jane.</h1>
+      <p class="acct-meta">Member since <b>February 14, 2025</b> · Last signed in 2 hours ago from Pasadena, CA</p>
+    </div>
+    <div class="acct-plan-badge">
+      <span class="plan-badge-label">Current plan</span>
+      <span class="plan-badge-tier"><span class="plan-badge-dot"></span>Candor Membership</span>
+      <span class="plan-badge-meta">Renews June 4, 2026 · $4.99/mo</span>
+    </div>
+  </div>
+</section>
+
+<!-- ACCOUNT WRAP -->
+<div class="acct-wrap">
+
+  <!-- SIDE NAV -->
+  <aside class="side-nav">
+    <div class="side-nav-title">Account</div>
+    <a class="side-link active" href="#profile">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Profile
+    </a>
+    <a class="side-link" href="#subscription">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7z"/></svg>
+      Subscription
+    </a>
+    <a class="side-link" href="#billing">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+      Billing
+    </a>
+    <a class="side-link" href="#preferences">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      Preferences
+    </a>
+    <a class="side-link" href="#security">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Security
+    </a>
+    <a class="side-link" href="#sessions">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      Devices
+    </a>
+    <a class="side-link danger" href="#danger">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Danger zone
+    </a>
+  </aside>
+
+  <!-- CONTENT -->
+  <div class="content-col">
+
+    <!-- SUBSCRIPTION FIRST (most important) -->
+    <section class="section-block" id="subscription">
+      <div class="section-h-bar">
+        <div class="section-h-left">
+          <div class="section-eyebrow">Subscription</div>
+          <h2 class="section-h">Your plan & renewal.</h2>
+        </div>
+        <div class="section-h-meta">Status · Active</div>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-card-main">
+          <div class="plan-current">
+            <div class="plan-tier">Candor Membership</div>
+            <span class="plan-badge">Active</span>
+          </div>
+          <div class="plan-price-row">
+            <span class="plan-price">$4.99</span>
+            <span class="plan-price-meta">/ month · billed monthly · cancel anytime</span>
+          </div>
+          <div class="plan-renew">
+            Renews automatically on <b>June 4, 2026</b>. We'll email you a heads-up before each charge. Charged to Visa ending in 4242.
+          </div>
+          <div class="plan-actions">
+            <button class="btn-secondary">Update payment method</button>
+            <button class="btn-danger" onclick="openModal('cancel')">Cancel membership</button>
+          </div>
+        </div>
+
+        <div class="plan-card-side">
+          <div class="plan-side-eyebrow">Your membership includes</div>
+          <div class="plan-side-h">One plan. Everything Candor offers.</div>
+          <ul class="plan-includes">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Unlimited Candor AI on every story</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Breaking-news alerts & the Daily Brief</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Full archive & Compare Coverage</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> The weekend long-read edition</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROFILE -->
+    <section class="section-block" id="profile">
+      <div class="section-h-bar">
+        <div class="section-h-left">
+          <div class="section-eyebrow">Profile</div>
+          <h2 class="section-h">Your details.</h2>
+        </div>
+        <div class="section-h-meta">Visible only to you</div>
+      </div>
+
+      <div class="card">
+        <div class="card-row">
+          <div class="card-row-label">Display name</div>
+          <div class="card-row-val">Jane Reader<small>This is what we use to address you in emails.</small></div>
+          <button class="card-row-action" onclick="toggleInline('name-form')">Edit</button>
+        </div>
+        <div class="inline-form" id="name-form">
+          <label class="inline-form-label">First name</label>
+          <input type="text" value="Jane">
+          <label class="inline-form-label">Last name</label>
+          <input type="text" value="Reader">
+          <div class="inline-form-actions">
+            <button class="btn-primary" onclick="toggleInline('name-form')">Save changes</button>
+            <button class="btn-secondary" onclick="toggleInline('name-form')">Cancel</button>
+          </div>
+        </div>
+
+        <div class="card-row">
+          <div class="card-row-label">Email address</div>
+          <div class="card-row-val">jane.reader@gmail.com
+            <span class="verified-tag">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              Verified
+            </span>
+            <small>Used for sign-in, billing receipts, and the morning brief.</small>
+          </div>
+          <button class="card-row-action" onclick="toggleInline('email-form')">Change</button>
+        </div>
+        <div class="inline-form" id="email-form">
+          <label class="inline-form-label">New email address</label>
+          <input type="email" placeholder="newemail@domain.com">
+          <label class="inline-form-label">Confirm with your password</label>
+          <input type="password" placeholder="Current password">
+          <div class="inline-form-actions">
+            <button class="btn-primary" onclick="toggleInline('email-form')">Send verification</button>
+            <button class="btn-secondary" onclick="toggleInline('email-form')">Cancel</button>
+          </div>
+        </div>
+
+        <div class="card-row">
+          <div class="card-row-label">Phone (optional)</div>
+          <div class="card-row-val" style="color:var(--mute); font-style:italic;">Not added<small>Used only for two-factor authentication.</small></div>
+          <button class="card-row-action">Add</button>
+        </div>
+
+        <div class="card-row">
+          <div class="card-row-label">Time zone</div>
+          <div class="card-row-val">Pacific Time (Los Angeles)<small>Used for the morning brief send time and timestamps in articles.</small></div>
+          <button class="card-row-action">Edit</button>
+        </div>
+
+        <div class="card-row">
+          <div class="card-row-label">Location</div>
+          <div class="card-row-val">Pasadena, CA<small>Used for local news and weather in the masthead. Approximate only.</small></div>
+          <button class="card-row-action">Edit</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- BILLING -->
+    <section class="section-block" id="billing">
+      <div class="section-h-bar">
+        <div class="section-h-left">
+          <div class="section-eyebrow">Billing</div>
+          <h2 class="section-h">Payment methods & history.</h2>
+        </div>
+        <div class="section-h-meta">All amounts in USD</div>
+      </div>
+
+      <div class="card" style="margin-bottom: 28px;">
+        <h3 style="font-family:'Fraunces',serif; font-size:16px; font-weight:600; color:var(--ink); margin-bottom:14px; letter-spacing:-0.2px;">Payment methods</h3>
+
+        <div class="pay-method">
+          <div class="pay-card-icon">VISA</div>
+          <div class="pay-info">
+            <div class="pay-num">•••• •••• •••• 4242</div>
+            <div class="pay-meta">Expires 08/28 · Jane Reader</div>
+          </div>
+          <span class="pay-default-tag">Default</span>
+        </div>
+
+        <div class="pay-method">
+          <div class="pay-card-icon" style="background:linear-gradient(135deg,#eb001b 0%,#f79e1b 100%);">MC</div>
+          <div class="pay-info">
+            <div class="pay-num">•••• •••• •••• 8821</div>
+            <div class="pay-meta">Expires 11/27 · Jane Reader</div>
+          </div>
+          <button class="card-row-action">Set default</button>
+        </div>
+
+        <button class="pay-add">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add new payment method
+        </button>
+      </div>
+
+      <div class="card">
+        <h3 style="font-family:'Fraunces',serif; font-size:16px; font-weight:600; color:var(--ink); margin-bottom:14px; letter-spacing:-0.2px;">Billing history</h3>
+        <table class="bill-table">
+          <thead>
+            <tr><th>Date</th><th>Description</th><th>Method</th><th>Status</th><th>Amount</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>May 04, 2026</td>
+              <td><b>Candor Membership</b> · Monthly · <a href="#" class="bill-receipt">Receipt</a></td>
+              <td>Visa •• 4242</td>
+              <td><span class="status-pill paid">Paid</span></td>
+              <td><b>$4.99</b></td>
+            </tr>
+            <tr>
+              <td>Apr 04, 2026</td>
+              <td><b>Candor Membership</b> · Monthly · <a href="#" class="bill-receipt">Receipt</a></td>
+              <td>Visa •• 4242</td>
+              <td><span class="status-pill paid">Paid</span></td>
+              <td><b>$4.99</b></td>
+            </tr>
+            <tr>
+              <td>Mar 04, 2026</td>
+              <td>Candor Membership · 7-day free trial · <a href="#" class="bill-receipt">Receipt</a></td>
+              <td>Visa •• 4242</td>
+              <td><span class="status-pill refunded">No charge</span></td>
+              <td>$0.00</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- PREFERENCES -->
+    <section class="section-block" id="preferences">
+      <div class="section-h-bar">
+        <div class="section-h-left">
+          <div class="section-eyebrow">Preferences</div>
+          <h2 class="section-h">Email & reading defaults.</h2>
+        </div>
+        <div class="section-h-meta">Changes save instantly</div>
+      </div>
+
+      <div class="card">
+        <div class="pref-row">
+          <div class="pref-info">
+            <div class="pref-h">Candor Daily Brief</div>
+            <p class="pref-p">One short email each morning at 6:30 AM your local time. Top stories, in plain language. No tracking pixels.</p>
+          </div>
+          <div class="pref-toggle on" onclick="this.classList.toggle('on')"></div>
+        </div>
+        <div class="pref-row">
+          <div class="pref-info">
+            <div class="pref-h">Breaking-news alerts</div>
+            <p class="pref-p">Email when a story crosses our High-impact threshold. Roughly 2–4 per week. You can adjust the threshold in advanced settings.</p>
+          </div>
+          <div class="pref-toggle on" onclick="this.classList.toggle('on')"></div>
+        </div>
+        <div class="pref-row">
+          <div class="pref-info">
+            <div class="pref-h">Weekend long-read edition</div>
+            <p class="pref-p">A curated longer piece each Saturday morning. Editorial picks, deeper context, no daily-cycle noise.</p>
+          </div>
+          <div class="pref-toggle on" onclick="this.classList.toggle('on')"></div>
+        </div>
+        <div class="pref-row">
+          <div class="pref-info">
+            <div class="pref-h">Corrections digest</div>
+            <p class="pref-p">A weekly summary of every correction we've issued, including ones on stories you've read.</p>
+          </div>
+          <div class="pref-toggle" onclick="this.classList.toggle('on')"></div>
+        </div>
+        <div class="pref-row">
+          <div class="pref-info">
+            <div class="pref-h">Updates from the team</div>
+            <p class="pref-p">Occasional emails about new features, methodology changes, transparency reports. Typically once or twice a month.</p>
+          </div>
+          <div class="pref-toggle on" onclick="this.classList.toggle('on')"></div>
+        </div>
+        <div class="pref-row">
+          <div class="pref-info">
+            <div class="pref-h">Show single-source stories</div>
+            <p class="pref-p">Include articles built from a single source outlet. These are labeled clearly and excluded by default for new accounts.</p>
+          </div>
+          <div class="pref-toggle" onclick="this.classList.toggle('on')"></div>
+        </div>
+        <div class="pref-row">
+          <div class="pref-info">
+            <div class="pref-h">Auto-expand source attribution</div>
+            <p class="pref-p">Show source bubbles inline by default rather than on hover. Useful if you frequently click through to original sources.</p>
+          </div>
+          <div class="pref-toggle" onclick="this.classList.toggle('on')"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECURITY -->
+    <section class="section-block" id="security">
+      <div class="section-h-bar">
+        <div class="section-h-left">
+          <div class="section-eyebrow">Security</div>
+          <h2 class="section-h">Password & two-factor.</h2>
+        </div>
+        <div class="section-h-meta">Last reviewed by you · 4 months ago</div>
+      </div>
+
+      <div class="card">
+        <div class="card-row">
+          <div class="card-row-label">Password</div>
+          <div class="card-row-val">•••••••••••••<small>Last changed January 17, 2026.</small></div>
+          <button class="card-row-action">Change</button>
+        </div>
+        <div class="card-row">
+          <div class="card-row-label">Two-factor auth</div>
+          <div class="card-row-val">Authenticator app
+            <span class="verified-tag">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              Enabled
+            </span>
+            <small>Required at every new sign-in. Recovery codes generated 4 months ago.</small>
+          </div>
+          <button class="card-row-action">Manage</button>
+        </div>
+        <div class="card-row">
+          <div class="card-row-label">Connected accounts</div>
+          <div class="card-row-val">Google · jane.r@gmail.com<small>You can sign in with Google as an alternative to your password.</small></div>
+          <button class="card-row-action">Disconnect</button>
+        </div>
+        <div class="card-row">
+          <div class="card-row-label">Recovery email</div>
+          <div class="card-row-val">j.reader.backup@protonmail.com<small>Used if you lose access to your primary email.</small></div>
+          <button class="card-row-action">Edit</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SESSIONS -->
+    <section class="section-block" id="sessions">
+      <div class="section-h-bar">
+        <div class="section-h-left">
+          <div class="section-eyebrow">Devices</div>
+          <h2 class="section-h">Where you're signed in.</h2>
+        </div>
+        <div class="section-h-meta">4 active sessions</div>
+      </div>
+
+      <div class="card">
+        <div class="session-row">
+          <div class="session-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <div class="session-info">
+            <div class="session-device">MacBook Pro · Safari <span class="current-tag">This device</span></div>
+            <div class="session-meta">Pasadena, CA · 192.168.x.x</div>
+          </div>
+          <div class="session-when">Active now</div>
+          <span class="session-action" style="visibility:hidden;">—</span>
+        </div>
+        <div class="session-row">
+          <div class="session-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+          </div>
+          <div class="session-info">
+            <div class="session-device">iPhone · Candor app</div>
+            <div class="session-meta">Pasadena, CA · iOS 18.2</div>
+          </div>
+          <div class="session-when">12 min ago</div>
+          <a href="#" class="session-action">Sign out</a>
+        </div>
+        <div class="session-row">
+          <div class="session-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <div class="session-info">
+            <div class="session-device">Dell laptop · Chrome</div>
+            <div class="session-meta">San Francisco, CA · Office network</div>
+          </div>
+          <div class="session-when">2 days ago</div>
+          <a href="#" class="session-action">Sign out</a>
+        </div>
+        <div class="session-row">
+          <div class="session-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="14" rx="2"/></svg>
+          </div>
+          <div class="session-info">
+            <div class="session-device">iPad · Safari</div>
+            <div class="session-meta">Pasadena, CA · iPadOS 18.1</div>
+          </div>
+          <div class="session-when">6 days ago</div>
+          <a href="#" class="session-action">Sign out</a>
+        </div>
+        <div class="save-bar">
+          <button class="btn-danger">Sign out of all other devices</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- DANGER ZONE -->
+    <section class="section-block" id="danger">
+      <div class="section-h-bar">
+        <div class="section-h-left">
+          <div class="section-eyebrow">Danger zone</div>
+          <h2 class="section-h">Actions that can't be undone.</h2>
+        </div>
+        <div class="section-h-meta">Take your time</div>
+      </div>
+
+      <div class="danger-zone">
+        <div class="danger-row">
+          <div>
+            <div class="danger-h">Pause your subscription</div>
+            <p class="danger-p">Pause billing for up to 3 months. You'll keep your account; we'll stop charging your card and resume at the same plan when you're ready.</p>
+          </div>
+          <button class="btn-secondary">Pause subscription</button>
+        </div>
+        <div class="danger-row">
+          <div>
+            <div class="danger-h">Cancel subscription</div>
+            <p class="danger-p">Cancel future billing. You'll keep your paid access until the end of your current billing period (June 4, 2026), then revert to a free account.</p>
+          </div>
+          <button class="btn-danger" onclick="openModal('cancel')">Cancel subscription</button>
+        </div>
+        <div class="danger-row">
+          <div>
+            <div class="danger-h">Download your data</div>
+            <p class="danger-p">Export your account data, saved articles, reading history, and correction submissions. Delivered as a single JSON file within 48 hours.</p>
+          </div>
+          <button class="btn-secondary">Request export</button>
+        </div>
+        <div class="danger-row">
+          <div>
+            <div class="danger-h">Delete your account</div>
+            <p class="danger-p">Permanently delete your account, all associated data, and your subscription. We can't restore deleted accounts. Read our <a href="#">data retention policy</a> before proceeding.</p>
+          </div>
+          <button class="btn-danger" onclick="openModal('delete')">Delete account</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<!-- CANCEL MODAL -->
+<div class="modal-overlay" id="cancel-modal">
+  <div class="modal">
+    <div class="modal-eyebrow">Confirm cancellation</div>
+    <h3 class="modal-h">Are you sure you want to cancel?</h3>
+    <p class="modal-p">You'll keep your <strong>Candor Membership</strong> access until <strong>June 4, 2026</strong>. After that, your account will revert to free, and you'll lose Candor AI, alerts, the archive, Compare Coverage, and the weekend long-read.</p>
+    <div class="modal-callout">
+      <strong>Before you go:</strong> If something specific isn't working, we'd genuinely like to know. Reply to any of our emails or write to <a href="mailto:editor@candornews.org" style="color:var(--accent); border-bottom:1px solid rgba(200,16,46,0.3);">editor@candornews.org</a> and we'll get back to you within 4 hours.
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('cancel')">Never mind, keep my plan</button>
+      <button class="btn-danger" onclick="closeModal('cancel')">Yes, cancel my subscription</button>
+    </div>
+  </div>
+</div>
+
+<!-- DELETE MODAL -->
+<div class="modal-overlay" id="delete-modal">
+  <div class="modal">
+    <div class="modal-eyebrow">Permanent action</div>
+    <h3 class="modal-h">Delete your Candor account?</h3>
+    <p class="modal-p">This will permanently delete your account, your reading history, saved articles, and all submitted corrections. If you have an active subscription, it will be cancelled with no refund of the unused term.</p>
+    <p class="modal-p">We don't keep backups after 30 days. After that, the deletion is irreversible.</p>
+    <div class="modal-callout">
+      Type <strong>delete my account</strong> below to confirm:
+      <input type="text" placeholder="delete my account" style="width:100%; margin-top:10px; padding:9px 12px; border:1px solid var(--line); background:var(--white); font-family:'Newsreader',serif; font-size:14px; color:var(--ink); border-radius:2px;">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('delete')">Cancel</button>
+      <button class="btn-danger" onclick="closeModal('delete')">Permanently delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-main">
+    <div class="footer-brand">
+      <div class="footer-logo"><span class="footer-logo-c">C</span>andor</div>
+      <p>AI-powered news synthesis. Every story verified across the full source spectrum — left, center, and right — so you can read with confidence.</p>
+      <div class="footer-cert">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4M21 12c0 5-3.5 8-9 9-5.5-1-9-4-9-9V5l9-3 9 3v7z"/></svg>
+        <span>Methodology · Open</span>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Coverage</h4>
+      <ul>
+        <li><a href="#">U.S. News</a></li><li><a href="#">World</a></li>
+        <li><a href="#">Politics</a></li><li><a href="#">Business</a></li>
+        <li><a href="#">Science</a></li><li><a href="#">Tech</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Trust</h4>
+      <ul>
+        <li><a href="candor-methodology.html">Methodology</a></li>
+        <li><a href="candor-sources.html">Source List</a></li>
+        <li><a href="candor-biasratings.html">Bias Ratings</a></li>
+        <li><a href="candor-corrections.html">Corrections</a></li>
+        <li><a href="candor-standards.html">Editorial Standards</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="candor-about.html">About</a></li>
+        <li><a href="candor-newsroom.html">Newsroom</a></li>
+        <li><a href="candor-careers.html">Careers</a></li>
+        <li><a href="candor-press.html">Press</a></li>
+        <li><a href="candor-contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-foot">
+    <span>© 2026 Candor News Inc. · AI-assisted summaries reviewed for factual accuracy.</span>
+    <div class="links">
+      <a href="candor-privacy.html">Privacy</a>
+      <a href="candor-terms.html">Terms</a>
+      <a href="candor-accessibility.html">Accessibility</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('theme-icon').innerHTML = isDark
+    ? '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'
+    : '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+}
+
+// Inline form toggle
+function toggleInline(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+// Modals
+function openModal(name) {
+  document.getElementById(name + '-modal').classList.add('open');
+}
+function closeModal(name) {
+  document.getElementById(name + '-modal').classList.remove('open');
+}
+document.querySelectorAll('.modal-overlay').forEach(o => {
+  o.addEventListener('click', (e) => { if (e.target === o) o.classList.remove('open'); });
+});
+
+// Side nav active state on scroll
+const sections = document.querySelectorAll('.section-block');
+const sideLinks = document.querySelectorAll('.side-link');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 140) current = s.id; });
+  sideLinks.forEach(l => { l.classList.toggle('active', l.getAttribute('href') === '#' + current); });
+});
+</script>
+
+<!-- ═══════════════ PAYWALL MODAL (universal) ═══════════════ -->
+<div class="paywall-overlay" id="paywall-overlay" onclick="if(event.target===this)closePaywall()">
+  <div class="paywall-modal" role="dialog" aria-modal="true" aria-labelledby="paywall-title">
+    <button class="paywall-close" onclick="closePaywall()" aria-label="Close">&times;</button>
+    <div class="paywall-eyebrow" id="paywall-eyebrow">Candor Membership</div>
+    <h3 class="paywall-title" id="paywall-title">This is a member feature.</h3>
+    <p class="paywall-body" id="paywall-body">The Candor AI assistant is part of Candor membership. Start a free 7-day trial to use it — no charge today, cancel anytime.</p>
+    <div class="paywall-price">
+      <span class="paywall-amount">$4.99</span>
+      <span class="paywall-per">/ month</span>
+      <span class="paywall-note">after your 7-day free trial</span>
+    </div>
+    <ul class="paywall-perks">
+      <li>Unlimited Candor AI — ask any story anything</li>
+      <li>Breaking-news alerts and the Daily Brief by email</li>
+      <li>Full archive, Compare Coverage, and the weekend long-read</li>
+    </ul>
+    <div class="paywall-actions">
+      <a href="candor-signup.html" class="paywall-btn-primary">Start 7-day free trial</a>
+      <a href="candor-signup.html" class="paywall-btn-secondary">Create a free account</a>
+    </div>
+    <div class="paywall-foot">Already a member? <a href="candor-login.html">Log in</a></div>
+  </div>
+</div>
+
+<script>
+/* ═══════ PAYWALL (member-feature gating) ═══════ */
+function showPaywall(feature) {
+  var overlay = document.getElementById('paywall-overlay');
+  if (!overlay) return;
+  var title = document.getElementById('paywall-title');
+  var body = document.getElementById('paywall-body');
+  var eyebrow = document.getElementById('paywall-eyebrow');
+  if (feature === 'alerts' || feature === 'email' || feature === 'newsletter' || feature === 'trial') {
+    eyebrow.textContent = 'Candor Membership';
+    title.textContent = 'Alerts are a member feature.';
+    body.textContent = 'Breaking-news alerts and the Daily Brief by email are part of Candor membership. Start a free 7-day trial to turn them on — no charge today, cancel anytime.';
+  } else {
+    eyebrow.textContent = 'Candor Membership';
+    title.textContent = 'Candor AI is a member feature.';
+    body.textContent = 'The Candor AI assistant is part of Candor membership. Start a free 7-day trial to ask any story anything — no charge today, cancel anytime.';
+  }
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closePaywall() {
+  var overlay = document.getElementById('paywall-overlay');
+  if (!overlay) return;
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closePaywall(); });
+
+</script>
+</body>
+</html>

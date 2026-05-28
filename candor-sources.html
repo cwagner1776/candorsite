@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Source List — Candor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,900&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink: #0b1220; --ink-2: #1a2233; --ink-3: #3a4358;
+  --mute: #6b7488; --mute-2: #9aa2b4;
+  --line: #e4e6ec; --line-2: #ecedf1;
+  --paper: #f7f5ef; --paper-2: #efece3; --paper-3: #e8e4d8;
+  --white: #ffffff;
+  --accent: #c8102e; --accent-dark: #9c0a23;
+  --left-1: #1a3d8f; --left-2: #2d62b3;
+  --center: #4a4a4a;
+  --right-1: #b8451e; --right-2: #7a1e0a;
+  --max: 1200px;
+}
+[data-theme="dark"] {
+  --ink: #f4f1e8; --ink-2: #e0dccf; --ink-3: #c8c4b7;
+  --mute: #a8a497; --mute-2: #8e8a7e;
+  --line: #3d3a30; --line-2: #332f25;
+  --paper: #14130e; --paper-2: #1a1812; --paper-3: #221f17;
+  --white: #1a1812;
+  --accent: #ff4d63;
+  --left: #6a9ad8; --center: #8a92a4; --right: #e8915a;
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'Newsreader', Georgia, serif; background: var(--paper); color: var(--ink); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; transition: background 0.3s, color 0.3s; }
+a { text-decoration: none; color: inherit; cursor: pointer; }
+button { cursor: pointer; font-family: inherit; border: none; background: none; color: inherit; }
+
+/* Shared header/nav/footer styles */
+.util-bar { background: var(--ink); }
+[data-theme="dark"] .util-bar { background: #0a0907; border-bottom: 1px solid var(--line); }
+.util-inner { max-width: var(--max); margin: 0 auto; padding: 9px 32px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.util-left { display: flex; align-items: center; gap: 22px; }
+.util-status { display: flex; align-items: center; gap: 8px; color: #ece8d8; font-variant-caps: all-small-caps; letter-spacing: 0.1em; font-weight: 600; font-size: 14px; }
+.live-dot { width: 7px; height: 7px; border-radius: 50%; background: #2ecc71; animation: livePulse 1.8s ease-out infinite; }
+@keyframes livePulse { 0%{box-shadow:0 0 0 0 rgba(46,204,113,0.55)}70%{box-shadow:0 0 0 6px rgba(46,204,113,0)}100%{box-shadow:0 0 0 0 rgba(46,204,113,0)} }
+.util-stat { color: var(--mute-2); font-variant-caps: all-small-caps; letter-spacing: 0.08em; font-size: 14px; }
+.util-stat b { color: #ece8d8; font-weight: 700; font-variant-caps: normal; font-size: 13px; }
+.util-right { display: flex; align-items: center; gap: 14px; }
+.util-link { color: var(--mute-2); font-variant-caps: all-small-caps; letter-spacing: 0.1em; font-weight: 600; font-size: 14px; transition: color 0.15s; }
+.util-link:hover { color: #ece8d8; }
+.util-divider { width: 1px; height: 12px; background: #2a3344; }
+[data-theme="dark"] .util-divider { background: #4a5266; }
+.masthead { background: var(--white); border-bottom: 1px solid var(--line); }
+[data-theme="dark"] .masthead { background: var(--paper-2); }
+.mast-inner { max-width: var(--max); margin: 0 auto; padding: 22px 32px 18px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px; }
+.mast-left { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+.weather-chip { font-variant-caps: all-small-caps; font-weight: 500; letter-spacing: 0.06em; font-size: 14px; color: var(--mute); }
+.date-chip { font-style: italic; font-size: 13px; color: var(--mute); }
+.logo-wrap { text-align: center; }
+.logo { font-family: 'Fraunces', serif; font-weight: 700; font-size: 48px; letter-spacing: -1.6px; line-height: 1; color: var(--ink); display: inline-flex; align-items: baseline; }
+.logo-mark { display: inline-block; width: 13px; height: 13px; background: var(--accent); margin-right: 5px; position: relative; top: -3px; }
+.mast-right { display: flex; align-items: center; gap: 10px; justify-content: flex-end; }
+.icon-btn { width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--line); border-radius: 50%; color: var(--ink-3); transition: all 0.2s; background: var(--white); }
+.icon-btn:hover { color: var(--ink); border-color: var(--ink); }
+.icon-btn svg { width: 15px; height: 15px; }
+[data-theme="dark"] .icon-btn { background: var(--paper-3); border-color: var(--line); }
+.btn-subscribe { background: var(--ink); color: var(--paper); font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 16px; font-weight: 700; letter-spacing: 0.08em; padding: 9px 18px; border-radius: 2px; transition: all 0.2s; }
+.btn-subscribe:hover { background: var(--accent); }
+.nav-wrap { background: var(--white); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 50; }
+[data-theme="dark"] .nav-wrap { background: var(--paper-2); }
+.nav-inner { max-width: var(--max); margin: 0 auto; padding: 0 32px; display: flex; align-items: center; overflow-x: auto; scrollbar-width: none; }
+.nav-inner::-webkit-scrollbar { display: none; }
+.nav-link { font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 16px; font-weight: 600; letter-spacing: 0.08em; color: var(--ink-3); padding: 14px 14px; border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.15s; }
+.nav-link:first-child { padding-left: 0; }
+.nav-link:hover { color: var(--ink); }
+.nav-link.active { color: var(--ink); border-bottom-color: var(--accent); }
+.nav-link.live-link::before { content: ''; display: inline-block; width: 6px; height: 6px; background: #ef3340; border-radius: 50%; margin-right: 6px; vertical-align: middle; animation: livePulse 1.8s infinite; }
+.page-hero { background: var(--ink); padding: 72px 32px 64px; text-align: center; position: relative; overflow: hidden; }
+[data-theme="dark"] .page-hero { background: #0a0907; }
+.page-hero::before { content: 'SOURCES'; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-family: 'Fraunces', serif; font-size: 160px; font-weight: 900; color: rgba(255,255,255,0.025); white-space: nowrap; pointer-events: none; letter-spacing: -4px; }
+.page-eyebrow { font-variant-caps: all-small-caps; font-size: 13px; font-weight: 700; letter-spacing: 0.18em; color: var(--accent); margin-bottom: 16px; }
+.page-title { font-family: 'Fraunces', serif; font-size: 52px; font-weight: 700; letter-spacing: -1.5px; line-height: 1.05; color: var(--paper); margin-bottom: 20px; }
+.page-dek { font-size: 19px; color: rgba(244,241,232,0.7); line-height: 1.6; max-width: 56ch; margin: 0 auto; font-style: italic; }
+.trust-nav { background: var(--white); border-bottom: 1px solid var(--line); }
+[data-theme="dark"] .trust-nav { background: var(--paper-2); }
+.trust-nav-inner { max-width: var(--max); margin: 0 auto; padding: 0 32px; display: flex; gap: 0; overflow-x: auto; scrollbar-width: none; }
+.trust-nav-inner::-webkit-scrollbar { display: none; }
+.trust-link { font-variant-caps: all-small-caps; font-size: 14px; font-weight: 700; letter-spacing: 0.1em; color: var(--mute); padding: 14px 18px 14px 0; margin-right: 18px; border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.15s; }
+.trust-link:hover { color: var(--ink); }
+.trust-link.active { color: var(--ink); border-bottom-color: var(--accent); }
+.footer { background: var(--paper); border-top: 1px solid var(--line); }
+[data-theme="dark"] .footer { background: var(--paper-2); }
+.footer-main { max-width: var(--max); margin: 0 auto; padding: 40px 32px 32px; display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 48px; }
+.footer-logo { font-family: 'Fraunces', serif; font-weight: 700; font-size: 28px; letter-spacing: -1px; color: var(--ink); display: inline-flex; align-items: baseline; margin-bottom: 12px; }
+.footer-logo .mark { display: inline-block; width: 9px; height: 9px; background: var(--accent); margin-right: 5px; position: relative; top: -2px; }
+.footer-brand p { font-size: 14px; color: var(--mute); line-height: 1.55; max-width: 38ch; }
+.footer-col h4 { font-variant-caps: all-small-caps; font-size: 13px; font-weight: 700; letter-spacing: 0.14em; color: var(--ink); margin-bottom: 12px; }
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 7px; }
+.footer-col ul a { font-size: 14px; color: var(--ink-3); transition: color 0.15s; }
+.footer-col ul a:hover { color: var(--accent); }
+.footer-foot { border-top: 1px solid var(--line); padding: 18px 32px; max-width: var(--max); margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; font-style: italic; font-size: 13px; color: var(--mute); }
+.footer-foot .links { display: flex; gap: 18px; }
+.footer-foot a { font-style: normal; font-variant-caps: all-small-caps; letter-spacing: 0.08em; font-weight: 600; color: var(--mute); transition: color 0.15s; }
+.footer-foot a:hover { color: var(--ink); }
+
+/* ── PAGE SPECIFIC ── */
+.page-wrap { max-width: var(--max); margin: 0 auto; padding: 48px 32px 80px; }
+
+/* Controls bar */
+.controls-bar { display: flex; align-items: center; gap: 16px; margin-bottom: 32px; flex-wrap: wrap; }
+.search-box { display: flex; align-items: center; gap: 10px; border: 1px solid var(--line); background: var(--white); padding: 10px 14px; flex: 1; min-width: 220px; max-width: 360px; }
+[data-theme="dark"] .search-box { background: var(--paper-2); border-color: var(--line); }
+.search-box svg { width: 14px; height: 14px; color: var(--mute); flex-shrink: 0; }
+.search-box input { border: none; background: none; font-family: 'Newsreader', serif; font-size: 14px; color: var(--ink); outline: none; width: 100%; }
+.search-box input::placeholder { color: var(--mute); font-style: italic; }
+.filter-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.filter-pill { font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 13px; font-weight: 700; letter-spacing: 0.1em; padding: 8px 14px; border: 1px solid var(--line); background: var(--white); color: var(--mute); transition: all 0.15s; }
+[data-theme="dark"] .filter-pill { background: var(--paper-2); }
+.filter-pill:hover { border-color: var(--ink); color: var(--ink); }
+.filter-pill.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.filter-pill.active.left { background: var(--left-2); border-color: var(--left-2); }
+.filter-pill.active.lean-left { background: var(--left-2); border-color: var(--left-2); opacity: 0.7; }
+.filter-pill.active.center { background: var(--center); border-color: var(--center); }
+.filter-pill.active.lean-right { background: var(--right-1); border-color: var(--right-1); opacity: 0.7; }
+.filter-pill.active.right { background: var(--right-2); border-color: var(--right-2); }
+.results-count { font-size: 13px; color: var(--mute); font-style: italic; margin-left: auto; white-space: nowrap; }
+
+/* Source grid */
+.source-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.source-card { background: var(--white); padding: 20px; transition: background 0.15s; display: flex; flex-direction: column; gap: 10px; }
+[data-theme="dark"] .source-card { background: var(--paper-2); }
+.source-card:hover { background: var(--paper); }
+[data-theme="dark"] .source-card:hover { background: var(--paper-3); }
+.source-card.hidden { display: none; }
+
+.sc-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.sc-name { font-family: 'Fraunces', serif; font-size: 17px; font-weight: 600; color: var(--ink); letter-spacing: -0.2px; }
+.sc-bias-pill { font-variant-caps: all-small-caps; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; padding: 3px 9px; border-radius: 2px; white-space: nowrap; flex-shrink: 0; }
+.pill-left { background: rgba(29,61,143,0.12); color: var(--left-1); }
+.pill-lean-left { background: rgba(45,98,179,0.1); color: var(--left-2); }
+.pill-center { background: rgba(74,74,74,0.1); color: var(--center); }
+.pill-lean-right { background: rgba(184,69,30,0.1); color: var(--right-1); }
+.pill-right { background: rgba(122,30,10,0.1); color: var(--right-2); }
+[data-theme="dark"] .pill-left { background: rgba(29,61,143,0.25); color: #7baaf7; }
+[data-theme="dark"] .pill-lean-left { background: rgba(45,98,179,0.2); color: #90b8f8; }
+[data-theme="dark"] .pill-center { background: rgba(74,74,74,0.4); color: #d0ccc0; }
+[data-theme="dark"] .pill-lean-right { background: rgba(184,69,30,0.2); color: #e8916a; }
+[data-theme="dark"] .pill-right { background: rgba(122,30,10,0.25); color: #e07050; }
+
+.sc-category { font-variant-caps: all-small-caps; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: var(--mute); }
+.sc-desc { font-size: 13px; color: var(--ink-3); line-height: 1.55; }
+.sc-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; }
+.sc-access { font-variant-caps: all-small-caps; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; display: flex; align-items: center; gap: 5px; }
+.access-api { color: #2ecc71; }
+.access-rss { color: #3498db; }
+.access-partner { color: var(--accent); }
+.sc-stories { font-size: 12px; color: var(--mute); font-style: italic; }
+
+/* Legend */
+.legend { display: flex; flex-wrap: wrap; gap: 20px; padding: 20px 0 32px; border-bottom: 1px solid var(--line); margin-bottom: 32px; }
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-3); }
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.legend-access { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--mute); }
+.legend-access span { font-variant-caps: all-small-caps; font-weight: 700; letter-spacing: 0.08em; font-size: 11px; }
+
+@media (max-width: 768px) {
+  .page-title { font-size: 36px; }
+  .source-grid { grid-template-columns: 1fr; }
+  .footer-main { grid-template-columns: 1fr 1fr; gap: 32px; }
+}
+@media (max-width: 600px) {
+  .mast-inner, .page-wrap { padding-left: 20px; padding-right: 20px; }
+}
+
+/* dark-mode contrast fix: force light text on always-dark bands */
+[data-theme="dark"] .page-hero { color: #f4f1e8; }
+[data-theme="dark"] .page-hero .cta-h,
+[data-theme="dark"] .page-hero h1,
+[data-theme="dark"] .page-hero h2,
+[data-theme="dark"] .page-hero strong,
+[data-theme="dark"] .page-hero b,
+[data-theme="dark"] .page-hero .page-title,
+[data-theme="dark"] .page-hero [class*="-h"],
+[data-theme="dark"] .page-hero [class*="-name"],
+[data-theme="dark"] .page-hero [class*="-val"],
+[data-theme="dark"] .page-hero [class*="-item-h"] { color: #f4f1e8 !important; }
+
+/* New logo: red underline beneath the C (replaces square mark) */
+.logo { gap: 0 !important; }
+.logo-mark { display: none !important; }
+.logo-c { position: relative; padding-bottom: 0.05em; }
+.logo-c::after { content: ''; position: absolute; left: 0.01em; right: 0.01em; bottom: 0; height: 0.045em; background: var(--accent); border-radius: 1px; }
+.footer-logo .mark { display: none !important; }
+.footer-logo-c { position: relative; padding-bottom: 0.05em; }
+.footer-logo-c::after { content: ''; position: absolute; left: 0.01em; right: 0.01em; bottom: 0; height: 0.05em; background: var(--accent); border-radius: 1px; }
+/* ═══════ PAYWALL MODAL ═══════ */
+.paywall-overlay { display: none; position: fixed; inset: 0; background: rgba(11,18,32,0.55); z-index: 2000; align-items: center; justify-content: center; padding: 24px; }
+[data-theme="dark"] .paywall-overlay { background: rgba(0,0,0,0.78); }
+.paywall-overlay.open { display: flex; }
+.paywall-modal { background: var(--white); border: 1px solid var(--line); max-width: 460px; width: 100%; padding: 36px 36px 28px; position: relative; box-shadow: var(--shadow-lg, 0 12px 40px rgba(0,0,0,0.25)); animation: paywallIn 0.2s ease; }
+[data-theme="dark"] .paywall-modal { background: var(--paper-2); }
+@keyframes paywallIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+.paywall-close { position: absolute; top: 14px; right: 16px; background: none; border: none; font-size: 28px; line-height: 1; color: var(--mute); cursor: pointer; transition: color 0.15s; }
+.paywall-close:hover { color: var(--ink); }
+.paywall-eyebrow { font-variant-caps: all-small-caps; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; color: var(--accent); margin-bottom: 10px; }
+.paywall-title { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; letter-spacing: -0.5px; line-height: 1.15; color: var(--ink); margin-bottom: 12px; }
+.paywall-body { font-family: 'Newsreader', serif; font-size: 15px; line-height: 1.6; color: var(--ink-2); margin-bottom: 20px; }
+.paywall-price { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; padding: 16px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-bottom: 18px; }
+.paywall-amount { font-family: 'Fraunces', serif; font-size: 34px; font-weight: 700; color: var(--ink); letter-spacing: -1px; line-height: 1; }
+.paywall-per { font-size: 15px; color: var(--ink-2); }
+.paywall-note { font-size: 13px; color: var(--mute); font-style: italic; margin-left: auto; }
+.paywall-perks { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; padding: 0; }
+.paywall-perks li { font-size: 14px; color: var(--ink-2); line-height: 1.5; padding-left: 24px; position: relative; }
+.paywall-perks li::before { content: '✓'; position: absolute; left: 0; top: 0; color: var(--accent); font-weight: 700; }
+.paywall-actions { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.paywall-btn-primary { display: block; text-align: center; background: var(--accent); color: #fff; font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 15px; font-weight: 700; letter-spacing: 0.08em; padding: 13px; border-radius: 2px; transition: background 0.15s; }
+.paywall-btn-primary:hover { background: var(--accent-dark); }
+.paywall-btn-secondary { display: block; text-align: center; background: transparent; color: var(--ink); border: 1px solid var(--line); font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 15px; font-weight: 700; letter-spacing: 0.08em; padding: 12px; border-radius: 2px; transition: border-color 0.15s; }
+.paywall-btn-secondary:hover { border-color: var(--ink); }
+.paywall-foot { text-align: center; font-size: 14px; color: var(--mute); font-style: italic; }
+.paywall-foot a { color: var(--accent); font-style: normal; }
+
+
+.footer-cert { display: inline-flex; align-items: center; gap: 10px; margin-top: 16px; padding: 9px 13px; background: var(--white); border: 1px solid var(--line); font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 13px; font-weight: 700; color: var(--ink); letter-spacing: 0.08em; }
+.footer-cert svg { width: 14px; height: 14px; color: #2ecc71; }
+[data-theme="dark"] .footer-cert { background: var(--paper-3); border-color: var(--line); }
+</style>
+</head>
+<body>
+
+<!-- UTIL BAR -->
+<div class="util-bar">
+  <div class="util-inner">
+    <div class="util-left">
+      <div class="util-status"><div class="live-dot"></div>Live Coverage</div>
+      <div class="util-stat"><b>2,847</b> sources indexed today</div>
+      <div class="util-stat"><b>143</b> stories rewritten</div>
+    </div>
+    <div class="util-right">
+      <a href="candor-news.html" class="util-link">← Back to Candor</a>
+      <div class="util-divider"></div>
+      <a href="#" class="util-link">Sign in</a>
+    </div>
+  </div>
+</div>
+
+<!-- MASTHEAD -->
+<header class="masthead">
+  <div class="mast-inner">
+    <div class="mast-left">
+      <div class="weather-chip">Pasadena · 74°F · Clear</div>
+      <div class="date-chip">Monday, May 26, 2026</div>
+    </div>
+    <div class="logo-wrap">
+      <a href="candor-news.html" class="logo"><span class="logo-c">C</span>andor</a>
+    </div>
+    <div class="mast-right">
+      <button class="icon-btn" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+      <button class="icon-btn" aria-label="Saved">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+      </button>
+      <button class="icon-btn" aria-label="Theme" onclick="toggleTheme()">
+        <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <button class="btn-subscribe" onclick="showPaywall('trial')">Subscribe</button>
+    </div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav class="nav-wrap">
+  <div class="nav-inner">
+    <a class="nav-link live-link" href="candor-news.html">Live</a>
+    <a class="nav-link" href="#">U.S.</a>
+    <a class="nav-link" href="#">World</a>
+    <a class="nav-link" href="#">Politics</a>
+    <a class="nav-link" href="#">Business</a>
+    <a class="nav-link" href="#">Sports</a>
+    <a class="nav-link" href="#">Science</a>
+    <a class="nav-link" href="#">Tech</a>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-eyebrow">Trust & Transparency</div>
+  <h1 class="page-title">Source List</h1>
+  <p class="page-dek">Every outlet Candor monitors, how we access their reporting, and their independently assessed bias rating.</p>
+</div>
+
+<!-- TRUST SUB-NAV -->
+<div class="trust-nav">
+  <div class="trust-nav-inner">
+    <a class="trust-link" href="candor-methodology.html">Methodology</a>
+    <a class="trust-link active" href="candor-sources.html">Source List</a>
+    <a class="trust-link" href="candor-biasratings.html">Bias Ratings</a>
+    <a class="trust-link" href="candor-corrections.html">Corrections</a>
+    <a class="trust-link" href="candor-standards.html">Editorial Standards</a>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="page-wrap">
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-item"><span class="legend-dot" style="background:#1a3d8f"></span>Left</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#2d62b3"></span>Lean Left</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#6e7686"></span>Center</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#b8451e"></span>Lean Right</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#7a1e0a"></span>Right</div>
+    <div style="flex:1"></div>
+    <div class="legend-access"><span class="legend-dot" style="background:#2ecc71;border-radius:2px"></span><span style="color:#2ecc71">API</span> Licensed data feed</div>
+    <div class="legend-access"><span class="legend-dot" style="background:#3498db;border-radius:2px"></span><span style="color:#3498db">RSS</span> Public feed</div>
+    <div class="legend-access"><span class="legend-dot" style="background:#ff4d63;border-radius:2px"></span><span style="color:#ff4d63">Partner</span> Editorial partnership</div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls-bar">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="source-search" placeholder="Search sources…" oninput="filterSources()">
+    </div>
+    <div class="filter-pills">
+      <button class="filter-pill active" data-filter="all" onclick="setFilter('all',this)">All</button>
+      <button class="filter-pill left" data-filter="left" onclick="setFilter('left',this)">Left</button>
+      <button class="filter-pill lean-left" data-filter="lean-left" onclick="setFilter('lean-left',this)">Lean Left</button>
+      <button class="filter-pill center" data-filter="center" onclick="setFilter('center',this)">Center</button>
+      <button class="filter-pill lean-right" data-filter="lean-right" onclick="setFilter('lean-right',this)">Lean Right</button>
+      <button class="filter-pill right" data-filter="right" onclick="setFilter('right',this)">Right</button>
+    </div>
+    <div class="results-count" id="results-count">54 sources</div>
+  </div>
+
+  <!-- Source Grid -->
+  <div class="source-grid" id="source-grid">
+
+    <!-- CENTER -->
+    <div class="source-card" data-bias="center" data-name="Reuters">
+      <div class="sc-top"><div class="sc-name">Reuters</div><span class="sc-bias-pill pill-center">Center</span></div>
+      <div class="sc-category">Wire Service · Global</div>
+      <div class="sc-desc">The world's largest international news agency. Gold standard for breaking news accuracy and wire-service neutrality.</div>
+      <div class="sc-footer"><span class="sc-access access-api"><span>●</span> API</span><span class="sc-stories">~38 stories/day</span></div>
+    </div>
+
+    <div class="source-card" data-bias="center" data-name="Associated Press">
+      <div class="sc-top"><div class="sc-name">Associated Press</div><span class="sc-bias-pill pill-center">Center</span></div>
+      <div class="sc-category">Wire Service · U.S. / Global</div>
+      <div class="sc-desc">Nonprofit news cooperative supplying content to thousands of outlets. Consistently rated among the most factually reliable sources.</div>
+      <div class="sc-footer"><span class="sc-access access-api"><span>●</span> API</span><span class="sc-stories">~45 stories/day</span></div>
+    </div>
+
+    <div class="source-card" data-bias="center" data-name="BBC News">
+      <div class="sc-top"><div class="sc-name">BBC News</div><span class="sc-bias-pill pill-center">Center</span></div>
+      <div class="sc-category">Broadcast / Digital · UK / Global</div>
+      <div class="sc-desc">UK public broadcaster with global reach. Widely regarded as a reliable international reference point across political divides.</div>
+      <div class="sc-footer"><span class="sc-access access-rss"><span>●</span> RSS</span><span class="sc-stories">~30 stories/day</span></div>
+    </div>
+
+    <div class="source-card" data-bias="center" data-name="Bloomberg">
+      <div class="sc-top"><div class="sc-name">Bloomberg</div><span class="sc-bias-pill pill-center">Center</span></div>
+      <div class="sc-category">Business / Finance · Global</div>
+      <div class="sc-desc">Premier financial news organization. Best-in-class for markets, economics, and corporate coverage.</div>
+      <div class="sc-footer"><span class="sc-access access-partner"><span>●</span> Partner</span><span class="sc-stories">~22 stories/day</span></div>
+    </div>
+
+    <div class="source-card" data-bias="center" data-name="PBS NewsHour">
+      <div class="sc-top"><div class="sc-name">PBS NewsHour</div><span class="sc-bias-pill pill-center">Center</span></div>
+      <div class="sc-category">Broadcast / Digital · U.S.</div>
+      <div class="sc-desc">U.S. public television news. Strong on policy depth and long-form domestic coverage.</div>
+      <div class="sc-footer"><span class="sc-access access-rss"><span>●</span> RSS</span><span class="sc-stories">~10 stories/day</span></div>
+    </div>
+
+    <div class="source-card" data-bias="center" data-name="The Hill">
+      <div class="sc-top"><div class="sc-name">The Hill</div><span class="sc-bias-pill pill-center">Center</span></div>
+      <div class="sc-category">Politics · U.S.</div>
+      <div class="sc-desc">D.C.-focused political news outlet with broad congressional coverage and mixed readership across the political spectrum.</div>
+      <div class="sc-footer"><span class="sc-access access-rss"><span>●</span> RSS</span><span class="sc-stories">~25 stories/day</span></div>
+    </div>
+
+    <!-- LEAN LEFT -->
+    <div class="source-card" data-bias="lean-left" data-name="New York Times">
+      <div class="sc-top"><div class="sc-name">New York Times</div><span class="sc-bias-pill pill-lean-left">Lean Left</span></div>
+      <div class="sc-category">Newspaper · U.S. / Global</div>
+      <div class="sc-desc">Flagship American newspaper of record. Exceptional investigative depth; editorial framing leans center-left on domestic policy.</div>
+      <div class="sc-footer"><span class="sc-access access-partner"><span>●</span> Partner</span><span class="sc-stories">~40 stories/day</span></div>
+    </div>
+
+    <div class="source-card" data-bias="lean-left" data-name="Washington Post">
+      <div class="sc-top"><div class="sc-name">Washington Post</div><span class="sc-bias-pill pill-lean-left">Lean Left</span></div>
+      <div class="sc-category">Newspaper · U.S.</div>
+      <div class="sc-desc">Major D.C.-based newspaper with strong political and national security coverage. Editorial positions lean center-left.</div>
+      <div class="sc-footer"><span class="sc-access access-partner"><span>●</span> Partner</span><span class="sc-stories">~35 stories/day</span></div>
+    </div>
+
+    <div class="source-card" data-bias="lean-left" data-name="NPR">
+      <div class="sc-top"><div class="sc-name">NPR</div><span class="sc-bias-pill pill-lean-left">Lean Left</span></div>
+      <div class="sc-category">Radio / Digital · U.S.</div>
+      <div class="sc-desc">U.S. public radio network. Strong on domestic policy, health, and culture. Slight left-of-center lean in story framing.</div>
+      <div class="sc-footer"><span class="sc-access access-rss"><span>●</span> RSS</span><span class="sc-stories">~20 stories/day</span></div>
+    </div>
+
+    <div class="source-card" data-bias="lean-left" data-name="Politico">
+      <div class="sc-top"><div class="sc-name">Politico</div><span class="sc-bias-pill pill-lean-left">Lean Left</span></div>
+      <div class="sc-category">Politics · U.S. / Europe</div>
+      <div class="sc-desc">Deeply sourced political journalism. Indispensable for congressional and executive branch coverage.</div>
+      <div class="sc-footer"><span class="sc-access access-api"><span>●</span> API</span><span class="sc-stories">~28 stories/day</span></div>
+    </div>
+
+    <div class="source-card" data-bias="lean-left" data-name="The Atlantic">
+      <div class="sc-top"><div class="sc-name">The Atlantic</div><span class="sc-bias-pill pill-lean-left">Lean Left</span></div>
+      <div class="sc-category">Magazine / Digital · U.S.</div>
+      <div class="sc-desc">Long-form political and cultural journalism. Significant influence on center-left opinion and policy discourse.</div>
+      <div class="sc-footer"><span class="sc-access access-rss"><span>●</span> RSS</span><span class="sc-stories">~8 stories/day</span></div>
+    </div>
+
+    <div class="source-card" data-bias="lean-left" data-name="CNBC">
+      <div class="sc-top"><div class="sc-name">CNBC</div><span class="sc-bias-pill pill-lean-left">Lean Left</span></div>
+      <div class="sc-category">Business / Finance · U.S.</div>
+      <div class="sc-desc">Leading U.S. financial news television and digital outlet. Strong market data and corporate news coverage.</div>
+      <div class="sc-footer"><span class="sc-access access-rss"><span>●</span> RSS</span><span class="sc-stories">~30 stories/day</span></div>
+    </div>
+
+    <!-- LEFT -->
+    <div class="source-card" data-bias="left" data-name="The Guardian">
+      <div class="sc-top"><div class="sc-name">The Guardian</div><span class="sc-bias-pill pill-left">Left</span></div>
+      <div class="sc-category">Newspaper · UK / Global</div>
+      <div class="sc-desc">Major progressive British newspaper with strong climate, social justice, and international coverage. Clear left-of-center editorial voice.</div>
+      <div class="sc-footer"><span class="sc-access access-api"><span>●</span> API</span><span class="sc-stories">~32 stories/day</span></div>
+    </div>
+
+    <div class="source-card" data-bias="left" data-name="MSNBC">
+      <div class="sc-top"><div class="sc-name">MSNBC</div><span class="sc-bias-pill pill-left">Left</span></div>
+      <div class="sc-category">Broadcast / Digital · U.S.</div>
+      <div class="sc-desc">Left-leaning cable news network. Used by Candor primarily for breaking news speed; editorial framing is clearly noted on all stories.</div>
+      <div class="sc-footer"><span class="sc-access access-rss"><span>●</span> RSS</span><span class="sc-stories">~18 stories/day</span></div>
+    </div>
+
+    <div class="source-card" data-bias="left" data-name="Vox">
+      <div class="sc-top"><div class="sc-name">Vox</div><span class="sc-bias-pill pill-left">Left</span></div>
+      <div class="sc-category">Digital · U.S.</div>
+      <div class="sc-desc">Explanatory journalism with a progressive editorial perspective. Strong on policy analysis, health, and technology.</div>
+      <div class="sc-footer"><span class="sc-access access-rss"><span>●</span> RSS</span><span class="sc-stories">~12 stories/day</span></div>
+    </div>
+
+    <div class="source-card" data-bias="left" data-name="HuffPost">
+      <div class="sc-top"><div class="sc-name">HuffPost</div><span class="sc-bias-pill pill-left">Left</span></div>
+      <div class="sc-category">Digital · U.S.</div>
+      <div class="sc-desc">High-volume progressive digital outlet. Broad domestic coverage with consistent left-of-center framing.</div>
+      <div class="sc-footer"><span class="sc-access access-rss"><span>●</span> RSS</span><span class="sc-stories">~20 stories/day</span></div>
+    </div>
+
+    <div class="source-card" data-bias="left" data-name="Mother Jones">
+      <div class="sc-top"><div class="sc-name">Mother Jones</div><span class="sc-bias-pill pill-left">Left</span></div>
+      <div class="sc-category">Magazine / Digital · U.S.</div>
+      <div class="sc-desc">Investigative progressive journalism. Particularly strong on campaign finance, corporate accountability, and civil rights.</div>
+      <div class="sc-footer"><span class="sc-access access-rss"><span>●</span> RSS</span><span class="sc-stories">~6 stories/day</span></div>
+    </div>
+
+    <!-- LEAN RIGHT -->
+    <div class="source-card" data-bias="lean-right" data-name="Wall Street Journal">
+      <div class="sc-top"><div class="sc-name">Wall Street Journal</div><span class="sc-bias-pill pill-lean-right">Lean Right</span></div>
+      <div class="sc-category">Newspaper · U.S. / Global</div>
+      <div class="sc-desc">Premier American business newspaper. News reporting is generally high-quality; editorial pages lean right. Candor distinguishes news from opinion.</div>
+      <div class="sc-footer"><span class="sc-access access-partner"><span>●</span> Partner</span><span class="sc-stories">~34 stories/day</span></div>
+    </div>
+
+    <div class="source-card" data-bias="lean-right" data-name="Newsweek">
+      <div class="sc-top"><div class="sc-name">Newsweek</div><span class="sc-bias-pill pill-lean-right">Lean Right</span></div>
+      <div class="sc-category">Magazine / Digital · U.S.</div>
+      <div class="sc-desc">Legacy news magazine with mixed coverage. Has shifted toward lean-right in recent years. Used for breaking news corroboration.</div>
+      <div class="sc-footer"><span class="sc-access access-rss"><span>●</span> RSS</span><span class="sc-stories">~15 stories/day</span></div>
+    </div>
+
+    <div class="source-card" data-bias="lean-right" data-name="Forbes">
+      <div class="sc-top"><div class="sc-name">Forbes</div><span class="sc-bias-pill pill-lean-right">Lean Right</span></div>
+      <div class="sc-category">Business · U.S.</div>
+      <div class="sc-desc">Business and finance publication with a free-market editorial lean. Strong on corporate and entrepreneurship coverage.</div>
+      <div class="sc-footer"><span class="sc-access access-rss"><span>●</span> RSS</span><span class="sc-stories">~22 stories/day</span></div>
+    </div>
+
+    <div class="source-card" data-bias="lean-right" data-name="The Dispatch">
+      <div class="sc-top"><div class="sc-name">The Dispatch</div><span class="sc-bias-pill pill-lean-right">Lean Right</span></div>
+      <div class="sc-category">Digital · U.S.</div>
+      <div class="sc-desc">Center-right journalism outlet founded by conservative commentators. Fact-focused with clear but moderate conservative framing.</div>
+      <div class="sc-footer"><span class="sc-access access-rss"><span>●</span> RSS</span><span class="sc-stories">~8 stories/day</span></div>
+    </div>
+
+    <div class="source-card" data-bias="lean-right" data-name="National Review">
+      <div class="sc-top"><div class="sc-name">National Review</div><span class="sc-bias-pill pill-lean-right">Lean Right</span></div>
+      <div class="sc-category">Magazine / Digital · U.S.</div>
+      <div class="sc-desc">Flagship conservative opinion and news magazine. Used primarily for opinion framing in Compare Coverage; news stories evaluated independently.</div>
+      <div class="sc-footer"><span class="sc-access access-rss"><span>●</span> RSS</span><span class="sc-stories">~10 stories/day</span></div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="source-card" data-bias="right" data-name="Fox News">
+      <div class="sc-top"><div class="sc-name">Fox News</div><span class="sc-bias-pill pill-right">Right</span></div>
+      <div class="sc-category">Broadcast / Digital · U.S.</div>
+      <div class="sc-desc">Largest U.S. cable news network by viewership. Strong right-of-center editorial voice. Used by Candor for coverage spectrum and breaking news speed; framing is clearly labeled.</div>
+      <div class="sc-footer"><span class="sc-access access-rss"><span>●</span> RSS</span><span class="sc-stories">~28 stories/day</span></div>
+    </div>
+
+    <div class="source-card" data-bias="right" data-name="New York Post">
+      <div class="sc-top"><div class="sc-name">New York Post</div><span class="sc-bias-pill pill-right">Right</span></div>
+      <div class="sc-category">Newspaper / Digital · U.S.</div>
+      <div class="sc-desc">High-volume tabloid with conservative editorial perspective. Strong on breaking New York and national stories.</div>
+      <div class="sc-footer"><span class="sc-access access-rss"><span>●</span> RSS</span><span class="sc-stories">~20 stories/day</span></div>
+    </div>
+
+    <div class="source-card" data-bias="right" data-name="Washington Examiner">
+      <div class="sc-top"><div class="sc-name">Washington Examiner</div><span class="sc-bias-pill pill-right">Right</span></div>
+      <div class="sc-category">Newspaper / Digital · U.S.</div>
+      <div class="sc-desc">Conservative D.C.-based publication. Useful for right-of-center political framing and congressional coverage.</div>
+      <div class="sc-footer"><span class="sc-access access-rss"><span>●</span> RSS</span><span class="sc-stories">~16 stories/day</span></div>
+    </div>
+
+    <div class="source-card" data-bias="right" data-name="Breitbart">
+      <div class="sc-top"><div class="sc-name">Breitbart</div><span class="sc-bias-pill pill-right">Right</span></div>
+      <div class="sc-category">Digital · U.S.</div>
+      <div class="sc-desc">Far-right digital outlet. Used exclusively for coverage spectrum representation; all claims independently verified before inclusion in synthesis.</div>
+      <div class="sc-footer"><span class="sc-access access-rss"><span>●</span> RSS</span><span class="sc-stories">~8 stories/day</span></div>
+    </div>
+
+    <div class="source-card" data-bias="right" data-name="The Daily Wire">
+      <div class="sc-top"><div class="sc-name">The Daily Wire</div><span class="sc-bias-pill pill-right">Right</span></div>
+      <div class="sc-category">Digital · U.S.</div>
+      <div class="sc-desc">Conservative multimedia company and news outlet. Significant reach with right-leaning audience. Used for Compare Coverage framing.</div>
+      <div class="sc-footer"><span class="sc-access access-rss"><span>●</span> RSS</span><span class="sc-stories">~12 stories/day</span></div>
+    </div>
+
+    <!-- SPECIALTY / SCIENCE / TECH -->
+    <div class="source-card" data-bias="center" data-name="Ars Technica">
+      <div class="sc-top"><div class="sc-name">Ars Technica</div><span class="sc-bias-pill pill-center">Center</span></div>
+      <div class="sc-category">Technology / Science · U.S.</div>
+      <div class="sc-desc">In-depth technology and science journalism. Regarded as one of the most technically accurate outlets for science and tech reporting.</div>
+      <div class="sc-footer"><span class="sc-access access-rss"><span>●</span> RSS</span><span class="sc-stories">~10 stories/day</span></div>
+    </div>
+
+    <div class="source-card" data-bias="lean-left" data-name="Wired">
+      <div class="sc-top"><div class="sc-name">Wired</div><span class="sc-bias-pill pill-lean-left">Lean Left</span></div>
+      <div class="sc-category">Technology / Culture · U.S.</div>
+      <div class="sc-desc">Flagship technology and culture magazine. Strong on AI, cybersecurity, and Silicon Valley coverage with slight progressive lean.</div>
+      <div class="sc-footer"><span class="sc-access access-rss"><span>●</span> RSS</span><span class="sc-stories">~12 stories/day</span></div>
+    </div>
+
+    <div class="source-card" data-bias="center" data-name="The Verge">
+      <div class="sc-top"><div class="sc-name">The Verge</div><span class="sc-bias-pill pill-center">Center</span></div>
+      <div class="sc-category">Technology · U.S.</div>
+      <div class="sc-desc">Consumer and enterprise technology news. Strong on Apple, Google, and platform policy coverage.</div>
+      <div class="sc-footer"><span class="sc-access access-rss"><span>●</span> RSS</span><span class="sc-stories">~15 stories/day</span></div>
+    </div>
+
+    <div class="source-card" data-bias="center" data-name="STAT News">
+      <div class="sc-top"><div class="sc-name">STAT News</div><span class="sc-bias-pill pill-center">Center</span></div>
+      <div class="sc-category">Health / Science · U.S.</div>
+      <div class="sc-desc">Specialized health and life science journalism. Primary source for pharmaceutical, FDA, and medical research coverage.</div>
+      <div class="sc-footer"><span class="sc-access access-rss"><span>●</span> RSS</span><span class="sc-stories">~8 stories/day</span></div>
+    </div>
+
+    <div class="source-card" data-bias="center" data-name="Financial Times">
+      <div class="sc-top"><div class="sc-name">Financial Times</div><span class="sc-bias-pill pill-center">Center</span></div>
+      <div class="sc-category">Business / Finance · UK / Global</div>
+      <div class="sc-desc">Premier global business newspaper. Gold standard for international economics and financial markets coverage.</div>
+      <div class="sc-footer"><span class="sc-access access-partner"><span>●</span> Partner</span><span class="sc-stories">~18 stories/day</span></div>
+    </div>
+
+    <div class="source-card" data-bias="center" data-name="Science Magazine">
+      <div class="sc-top"><div class="sc-name">Science Magazine</div><span class="sc-bias-pill pill-center">Center</span></div>
+      <div class="sc-category">Science · Global</div>
+      <div class="sc-desc">Peer-reviewed journal with a news arm covering major scientific developments. Primary source for research-based stories.</div>
+      <div class="sc-footer"><span class="sc-access access-rss"><span>●</span> RSS</span><span class="sc-stories">~5 stories/day</span></div>
+    </div>
+
+    <div class="source-card" data-bias="center" data-name="Axios">
+      <div class="sc-top"><div class="sc-name">Axios</div><span class="sc-bias-pill pill-center">Center</span></div>
+      <div class="sc-category">Digital · U.S.</div>
+      <div class="sc-desc">Smart brevity news outlet. Known for concise, factual reporting with minimal editorial overlay across politics, tech, and business.</div>
+      <div class="sc-footer"><span class="sc-access access-api"><span>●</span> API</span><span class="sc-stories">~22 stories/day</span></div>
+    </div>
+
+    <div class="source-card" data-bias="lean-left" data-name="ProPublica">
+      <div class="sc-top"><div class="sc-name">ProPublica</div><span class="sc-bias-pill pill-lean-left">Lean Left</span></div>
+      <div class="sc-category">Investigative · U.S.</div>
+      <div class="sc-desc">Nonprofit investigative newsroom. Award-winning accountability journalism on government, corporations, and civil rights.</div>
+      <div class="sc-footer"><span class="sc-access access-rss"><span>●</span> RSS</span><span class="sc-stories">~4 stories/day</span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-main">
+    <div class="footer-brand">
+      <div class="footer-logo"><span class="footer-logo-c">C</span>andor</div>
+      <p>AI-powered news synthesis. Every story verified across the full source spectrum — left, center, and right — so you can read with confidence.</p>
+      <div class="footer-cert">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4M21 12c0 5-3.5 8-9 9-5.5-1-9-4-9-9V5l9-3 9 3v7z"/></svg>
+        <span>Methodology · Open</span>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Coverage</h4>
+      <ul>
+        <li><a href="#">U.S. News</a></li><li><a href="#">World</a></li>
+        <li><a href="#">Politics</a></li><li><a href="#">Business</a></li>
+        <li><a href="#">Science</a></li><li><a href="#">Tech</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Trust</h4>
+      <ul>
+        <li><a href="candor-methodology.html">Methodology</a></li>
+        <li><a href="candor-sources.html">Source List</a></li>
+        <li><a href="candor-biasratings.html">Bias Ratings</a></li>
+        <li><a href="candor-corrections.html">Corrections</a></li>
+        <li><a href="candor-standards.html">Editorial Standards</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="candor-about.html">About</a></li>
+        <li><a href="candor-newsroom.html">Newsroom</a></li>
+        <li><a href="candor-careers.html">Careers</a></li>
+        <li><a href="candor-press.html">Press</a></li>
+        <li><a href="candor-contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-foot">
+    <span>© 2026 Candor News Inc. · AI-assisted summaries reviewed for factual accuracy.</span>
+    <div class="links">
+      <a href="candor-privacy.html">Privacy</a>
+      <a href="candor-terms.html">Terms</a>
+      <a href="candor-accessibility.html">Accessibility</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('theme-icon').innerHTML = isDark
+    ? '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'
+    : '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+}
+
+let activeFilter = 'all';
+
+function setFilter(filter, btn) {
+  activeFilter = filter;
+  document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  filterSources();
+}
+
+function filterSources() {
+  const query = document.getElementById('source-search').value.toLowerCase();
+  const cards = document.querySelectorAll('.source-card');
+  let visible = 0;
+  cards.forEach(card => {
+    const biasMatch = activeFilter === 'all' || card.dataset.bias === activeFilter;
+    const nameMatch = card.dataset.name.toLowerCase().includes(query);
+    const textMatch = card.querySelector('.sc-desc').textContent.toLowerCase().includes(query);
+    const show = biasMatch && (nameMatch || textMatch || query === '');
+    card.classList.toggle('hidden', !show);
+    if (show) visible++;
+  });
+  document.getElementById('results-count').textContent = visible + ' source' + (visible !== 1 ? 's' : '');
+}
+</script>
+
+<!-- ═══════════════ PAYWALL MODAL (universal) ═══════════════ -->
+<div class="paywall-overlay" id="paywall-overlay" onclick="if(event.target===this)closePaywall()">
+  <div class="paywall-modal" role="dialog" aria-modal="true" aria-labelledby="paywall-title">
+    <button class="paywall-close" onclick="closePaywall()" aria-label="Close">&times;</button>
+    <div class="paywall-eyebrow" id="paywall-eyebrow">Candor Membership</div>
+    <h3 class="paywall-title" id="paywall-title">This is a member feature.</h3>
+    <p class="paywall-body" id="paywall-body">The Candor AI assistant is part of Candor membership. Start a free 7-day trial to use it — no charge today, cancel anytime.</p>
+    <div class="paywall-price">
+      <span class="paywall-amount">$4.99</span>
+      <span class="paywall-per">/ month</span>
+      <span class="paywall-note">after your 7-day free trial</span>
+    </div>
+    <ul class="paywall-perks">
+      <li>Unlimited Candor AI — ask any story anything</li>
+      <li>Breaking-news alerts and the Daily Brief by email</li>
+      <li>Full archive, Compare Coverage, and the weekend long-read</li>
+    </ul>
+    <div class="paywall-actions">
+      <a href="candor-signup.html" class="paywall-btn-primary">Start 7-day free trial</a>
+      <a href="candor-signup.html" class="paywall-btn-secondary">Create a free account</a>
+    </div>
+    <div class="paywall-foot">Already a member? <a href="candor-login.html">Log in</a></div>
+  </div>
+</div>
+
+<script>
+/* ═══════ PAYWALL (member-feature gating) ═══════ */
+function showPaywall(feature) {
+  var overlay = document.getElementById('paywall-overlay');
+  if (!overlay) return;
+  var title = document.getElementById('paywall-title');
+  var body = document.getElementById('paywall-body');
+  var eyebrow = document.getElementById('paywall-eyebrow');
+  if (feature === 'alerts' || feature === 'email' || feature === 'newsletter' || feature === 'trial') {
+    eyebrow.textContent = 'Candor Membership';
+    title.textContent = 'Alerts are a member feature.';
+    body.textContent = 'Breaking-news alerts and the Daily Brief by email are part of Candor membership. Start a free 7-day trial to turn them on — no charge today, cancel anytime.';
+  } else {
+    eyebrow.textContent = 'Candor Membership';
+    title.textContent = 'Candor AI is a member feature.';
+    body.textContent = 'The Candor AI assistant is part of Candor membership. Start a free 7-day trial to ask any story anything — no charge today, cancel anytime.';
+  }
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closePaywall() {
+  var overlay = document.getElementById('paywall-overlay');
+  if (!overlay) return;
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closePaywall(); });
+
+</script>
+</body>
+</html>

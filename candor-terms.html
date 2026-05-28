@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terms of Service — Candor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,900&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink: #0b1220; --ink-2: #1a2233; --ink-3: #3a4358;
+  --mute: #6b7488; --mute-2: #9aa2b4;
+  --line: #e4e6ec; --line-2: #ecedf1;
+  --paper: #f7f5ef; --paper-2: #efece3; --paper-3: #e8e4d8;
+  --white: #ffffff;
+  --accent: #c8102e; --accent-dark: #9c0a23;
+  --left: #2d62b3; --center: #4a4a4a; --right: #b8451e;
+  --max: 1200px;
+}
+[data-theme="dark"] {
+  --ink: #f4f1e8; --ink-2: #e0dccf; --ink-3: #c8c4b7;
+  --mute: #a8a497; --mute-2: #8e8a7e;
+  --line: #3d3a30; --line-2: #332f25;
+  --paper: #14130e; --paper-2: #1a1812; --paper-3: #221f17;
+  --white: #1a1812;
+  --accent: #ff4d63; --accent-dark: #e6304c;
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'Newsreader', Georgia, serif; background: var(--paper); color: var(--ink); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; transition: background 0.3s, color 0.3s; }
+a { text-decoration: none; color: inherit; cursor: pointer; }
+button { cursor: pointer; font-family: inherit; border: none; background: none; color: inherit; }
+
+/* ── UTIL BAR ── */
+.util-bar { background: var(--ink); }
+[data-theme="dark"] .util-bar { background: #0a0907; border-bottom: 1px solid var(--line); }
+.util-inner { max-width: var(--max); margin: 0 auto; padding: 9px 32px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.util-left { display: flex; align-items: center; gap: 22px; }
+.util-status { display: flex; align-items: center; gap: 8px; color: #ece8d8; font-variant-caps: all-small-caps; letter-spacing: 0.1em; font-weight: 600; font-size: 14px; }
+.live-dot { width: 7px; height: 7px; border-radius: 50%; background: #2ecc71; animation: livePulse 1.8s ease-out infinite; }
+@keyframes livePulse { 0%{box-shadow:0 0 0 0 rgba(46,204,113,0.55)}70%{box-shadow:0 0 0 6px rgba(46,204,113,0)}100%{box-shadow:0 0 0 0 rgba(46,204,113,0)} }
+.util-stat { color: var(--mute-2); font-variant-caps: all-small-caps; letter-spacing: 0.08em; font-size: 14px; }
+.util-stat b { color: #ece8d8; font-weight: 700; font-variant-caps: normal; font-size: 13px; }
+.util-right { display: flex; align-items: center; gap: 14px; }
+.util-link { color: var(--mute-2); font-variant-caps: all-small-caps; letter-spacing: 0.1em; font-weight: 600; font-size: 14px; transition: color 0.15s; }
+.util-link:hover { color: #ece8d8; }
+.util-divider { width: 1px; height: 12px; background: #2a3344; }
+[data-theme="dark"] .util-divider { background: #4a5266; }
+
+/* ── MASTHEAD ── */
+.masthead { background: var(--white); border-bottom: 1px solid var(--line); }
+[data-theme="dark"] .masthead { background: var(--paper-2); }
+.mast-inner { max-width: var(--max); margin: 0 auto; padding: 22px 32px 18px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px; }
+.mast-left { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+.weather-chip { display: flex; align-items: center; gap: 8px; font-variant-caps: all-small-caps; font-weight: 500; letter-spacing: 0.06em; font-size: 14px; color: var(--mute); }
+.date-chip { font-style: italic; font-size: 13px; color: var(--mute); }
+.logo-wrap { text-align: center; }
+.logo { font-family: 'Fraunces', serif; font-weight: 700; font-size: 48px; letter-spacing: -1.6px; line-height: 1; color: var(--ink); display: inline-flex; align-items: baseline; gap: 2px; }
+.logo-mark { display: inline-block; width: 13px; height: 13px; background: var(--accent); margin-right: 5px; position: relative; top: -3px; }
+.mast-right { display: flex; align-items: center; gap: 10px; justify-content: flex-end; }
+.icon-btn { width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--line); border-radius: 50%; color: var(--ink-3); transition: all 0.2s; background: var(--white); }
+.icon-btn:hover { color: var(--ink); border-color: var(--ink); }
+.icon-btn svg { width: 15px; height: 15px; }
+[data-theme="dark"] .icon-btn { background: var(--paper-3); border-color: var(--line); }
+.btn-subscribe { background: var(--ink); color: var(--paper); font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 16px; font-weight: 700; letter-spacing: 0.08em; padding: 9px 18px; border-radius: 2px; transition: all 0.2s; }
+.btn-subscribe:hover { background: var(--accent); }
+
+/* ── NAV ── */
+.nav-wrap { background: var(--white); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 50; }
+[data-theme="dark"] .nav-wrap { background: var(--paper-2); }
+.nav-inner { max-width: var(--max); margin: 0 auto; padding: 0 32px; display: flex; align-items: center; overflow-x: auto; scrollbar-width: none; }
+.nav-inner::-webkit-scrollbar { display: none; }
+.nav-link { font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 16px; font-weight: 600; letter-spacing: 0.08em; color: var(--ink-3); padding: 14px 14px; border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.15s; }
+.nav-link:first-child { padding-left: 0; }
+.nav-link:hover { color: var(--ink); }
+.nav-link.active { color: var(--ink); border-bottom-color: var(--accent); }
+.nav-link.live-link::before { content: ''; display: inline-block; width: 6px; height: 6px; background: #ef3340; border-radius: 50%; margin-right: 6px; vertical-align: middle; animation: livePulse 1.8s infinite; }
+
+/* ── PAGE HERO ── */
+.page-hero { background: var(--ink); color: var(--paper); padding: 72px 32px 64px; text-align: center; position: relative; overflow: hidden; }
+[data-theme="dark"] .page-hero { background: #0a0907; }
+.page-hero::before { content: 'TERMS'; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-family: 'Fraunces', serif; font-size: 200px; font-weight: 900; color: rgba(255,255,255,0.025); white-space: nowrap; pointer-events: none; letter-spacing: -4px; }
+.page-eyebrow { font-variant-caps: all-small-caps; font-size: 13px; font-weight: 700; letter-spacing: 0.18em; color: var(--accent); margin-bottom: 16px; }
+.page-title { font-family: 'Fraunces', serif; font-size: 52px; font-weight: 700; letter-spacing: -1.5px; line-height: 1.05; color: var(--paper); margin-bottom: 20px; }
+.page-dek { font-size: 19px; color: rgba(244,241,232,0.7); line-height: 1.6; max-width: 56ch; margin: 0 auto; font-style: italic; }
+
+/* ── TRUST NAV ── */
+.trust-nav { background: var(--white); border-bottom: 1px solid var(--line); }
+[data-theme="dark"] .trust-nav { background: var(--paper-2); }
+.trust-nav-inner { max-width: var(--max); margin: 0 auto; padding: 0 32px; display: flex; gap: 0; overflow-x: auto; scrollbar-width: none; }
+.trust-nav-inner::-webkit-scrollbar { display: none; }
+.trust-link { font-variant-caps: all-small-caps; font-size: 14px; font-weight: 700; letter-spacing: 0.1em; color: var(--mute); padding: 14px 18px 14px 0; margin-right: 18px; border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.15s; }
+.trust-link:hover { color: var(--ink); }
+.trust-link.active { color: var(--ink); border-bottom-color: var(--accent); }
+
+/* ── LAYOUT ── */
+.page-wrap { max-width: var(--max); margin: 0 auto; padding: 64px 32px; display: grid; grid-template-columns: 220px 1fr; gap: 64px; align-items: start; }
+
+/* ── STICKY SIDEBAR TOC ── */
+.toc { position: sticky; top: 80px; }
+.toc-title { font-variant-caps: all-small-caps; font-size: 11px; font-weight: 700; letter-spacing: 0.18em; color: var(--mute); margin-bottom: 16px; border-bottom: 2px solid var(--ink); padding-bottom: 8px; }
+.toc-link { display: block; font-size: 13px; color: var(--ink-3); padding: 7px 0; border-bottom: 1px solid var(--line-2); transition: color 0.15s; line-height: 1.3; }
+.toc-link:hover { color: var(--accent); }
+.toc-link.active { color: var(--accent); font-weight: 600; }
+
+/* ── CONTENT ── */
+.content-col { min-width: 0; }
+.section-block { margin-bottom: 72px; scroll-margin-top: 90px; }
+.section-num { font-variant-caps: all-small-caps; font-size: 12px; font-weight: 700; letter-spacing: 0.18em; color: var(--accent); margin-bottom: 10px; }
+.section-h { font-family: 'Fraunces', serif; font-size: 32px; font-weight: 700; letter-spacing: -0.6px; line-height: 1.15; color: var(--ink); margin-bottom: 20px; }
+.section-body { font-size: 17px; color: var(--ink-2); line-height: 1.75; }
+.section-body p { margin-bottom: 20px; }
+.section-body p:last-child { margin-bottom: 0; }
+.section-body strong { color: var(--ink); font-weight: 700; }
+.section-body em { color: var(--ink); font-style: italic; }
+.section-body a { color: var(--accent); border-bottom: 1px solid rgba(200,16,46,0.3); transition: border-color 0.15s; }
+.section-body a:hover { border-color: var(--accent); }
+
+/* Callout */
+.callout { background: var(--white); border: 1px solid var(--line); border-left: 3px solid var(--accent); padding: 20px 24px; margin: 28px 0; }
+[data-theme="dark"] .callout { background: var(--paper-2); }
+.callout-label { font-variant-caps: all-small-caps; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: var(--accent); margin-bottom: 8px; }
+.callout p { font-size: 15px; color: var(--ink-2); line-height: 1.6; margin: 0; }
+
+/* Pledge list */
+.pledge { display: flex; flex-direction: column; gap: 0; margin: 24px 0; counter-reset: pledges; }
+.pledge-item { display: grid; grid-template-columns: 40px 1fr; gap: 20px; padding: 20px 0; border-bottom: 1px solid var(--line); align-items: start; counter-increment: pledges; }
+.pledge-item:last-child { border-bottom: none; }
+.pledge-mark { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; color: var(--accent); line-height: 1; letter-spacing: -1px; }
+.pledge-mark::before { content: counter(pledges, decimal-leading-zero); }
+.pledge-h { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 600; color: var(--ink); margin-bottom: 6px; letter-spacing: -0.2px; }
+.pledge-p { font-size: 15px; color: var(--ink-3); line-height: 1.65; }
+
+/* Do/Don't grid */
+.do-dont { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); margin: 28px 0; }
+.dd-col { background: var(--white); padding: 22px 24px; }
+[data-theme="dark"] .dd-col { background: var(--paper-2); }
+.dd-label { font-variant-caps: all-small-caps; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; margin-bottom: 14px; display: inline-flex; align-items: center; gap: 8px; }
+.dd-do .dd-label { color: #1a8754; }
+[data-theme="dark"] .dd-do .dd-label { color: #34c77b; }
+.dd-dont .dd-label { color: var(--accent); }
+.dd-label::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+.dd-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.dd-list li { font-size: 14px; color: var(--ink-2); line-height: 1.55; padding-left: 18px; position: relative; }
+.dd-list li::before { position: absolute; left: 0; top: 0; font-weight: 700; }
+.dd-do .dd-list li::before { content: '+'; color: #1a8754; }
+.dd-dont .dd-list li::before { content: '×'; color: var(--accent); }
+
+/* Bias table */
+.std-table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 15px; }
+.std-table th { font-variant-caps: all-small-caps; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; color: var(--mute); text-align: left; padding: 10px 16px; border-bottom: 2px solid var(--ink); background: var(--paper-2); }
+[data-theme="dark"] .std-table th { background: var(--paper-3); }
+.std-table td { padding: 13px 16px; border-bottom: 1px solid var(--line); color: var(--ink-2); vertical-align: top; line-height: 1.5; }
+.std-table tr:last-child td { border-bottom: none; }
+.std-table td:first-child { font-weight: 600; color: var(--ink); white-space: nowrap; }
+
+/* Team grid */
+.team-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); margin: 28px 0; }
+.team-card { background: var(--white); padding: 22px 24px; }
+[data-theme="dark"] .team-card { background: var(--paper-2); }
+.team-name { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 600; color: var(--ink); margin-bottom: 3px; letter-spacing: -0.2px; }
+.team-role { font-variant-caps: all-small-caps; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; color: var(--accent); margin-bottom: 10px; }
+.team-bio { font-size: 14px; color: var(--ink-3); line-height: 1.6; }
+
+/* Sign-off block */
+.signoff { background: var(--paper-2); border-left: 3px solid var(--ink); padding: 28px 32px; margin: 32px 0 0; font-style: italic; font-size: 16px; color: var(--ink-2); line-height: 1.7; }
+[data-theme="dark"] .signoff { background: var(--paper-3); border-left-color: var(--ink-2); }
+.signoff-author { display: block; margin-top: 16px; font-style: normal; font-variant-caps: all-small-caps; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; color: var(--mute); }
+.signoff-author b { color: var(--ink); font-variant-caps: normal; font-weight: 700; letter-spacing: 0; font-family: 'Fraunces', serif; font-size: 15px; }
+
+/* ── FOOTER ── */
+.footer { background: var(--paper); border-top: 1px solid var(--line); }
+[data-theme="dark"] .footer { background: var(--paper-2); }
+.footer-main { max-width: var(--max); margin: 0 auto; padding: 40px 32px 32px; display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 48px; }
+.footer-logo { font-family: 'Fraunces', serif; font-weight: 700; font-size: 28px; letter-spacing: -1px; color: var(--ink); display: inline-flex; align-items: baseline; margin-bottom: 12px; }
+.footer-logo .mark { display: inline-block; width: 9px; height: 9px; background: var(--accent); margin-right: 5px; position: relative; top: -2px; }
+.footer-brand p { font-size: 14px; color: var(--mute); line-height: 1.55; max-width: 38ch; }
+.footer-col h4 { font-variant-caps: all-small-caps; font-size: 13px; font-weight: 700; letter-spacing: 0.14em; color: var(--ink); margin-bottom: 12px; }
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 7px; }
+.footer-col ul a { font-size: 14px; color: var(--ink-3); transition: color 0.15s; }
+.footer-col ul a:hover { color: var(--accent); }
+.footer-foot { border-top: 1px solid var(--line); padding: 18px 32px; max-width: var(--max); margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; font-style: italic; font-size: 13px; color: var(--mute); }
+.footer-foot .links { display: flex; gap: 18px; }
+.footer-foot a { font-style: normal; font-variant-caps: all-small-caps; letter-spacing: 0.08em; font-weight: 600; color: var(--mute); transition: color 0.15s; }
+.footer-foot a:hover { color: var(--ink); }
+
+@media (max-width: 900px) {
+  .page-wrap { grid-template-columns: 1fr; gap: 40px; }
+  .toc { display: none; }
+  .page-title { font-size: 36px; }
+  .do-dont { grid-template-columns: 1fr; }
+  .team-grid { grid-template-columns: 1fr; }
+  .footer-main { grid-template-columns: 1fr 1fr; gap: 32px; }
+}
+@media (max-width: 600px) {
+  .mast-inner { padding: 16px 20px; }
+  .page-wrap { padding: 40px 20px; }
+}
+
+/* dark-mode contrast fix: force light text on always-dark bands */
+[data-theme="dark"] .page-hero { color: #f4f1e8; }
+[data-theme="dark"] .page-hero .cta-h,
+[data-theme="dark"] .page-hero h1,
+[data-theme="dark"] .page-hero h2,
+[data-theme="dark"] .page-hero strong,
+[data-theme="dark"] .page-hero b,
+[data-theme="dark"] .page-hero .page-title,
+[data-theme="dark"] .page-hero [class*="-h"],
+[data-theme="dark"] .page-hero [class*="-name"],
+[data-theme="dark"] .page-hero [class*="-val"],
+[data-theme="dark"] .page-hero [class*="-item-h"] { color: #f4f1e8 !important; }
+
+/* New logo: red underline beneath the C (replaces square mark) */
+.logo { gap: 0 !important; }
+.logo-mark { display: none !important; }
+.logo-c { position: relative; padding-bottom: 0.05em; }
+.logo-c::after { content: ''; position: absolute; left: 0.01em; right: 0.01em; bottom: 0; height: 0.045em; background: var(--accent); border-radius: 1px; }
+.footer-logo .mark { display: none !important; }
+.footer-logo-c { position: relative; padding-bottom: 0.05em; }
+.footer-logo-c::after { content: ''; position: absolute; left: 0.01em; right: 0.01em; bottom: 0; height: 0.05em; background: var(--accent); border-radius: 1px; }
+/* ═══════ PAYWALL MODAL ═══════ */
+.paywall-overlay { display: none; position: fixed; inset: 0; background: rgba(11,18,32,0.55); z-index: 2000; align-items: center; justify-content: center; padding: 24px; }
+[data-theme="dark"] .paywall-overlay { background: rgba(0,0,0,0.78); }
+.paywall-overlay.open { display: flex; }
+.paywall-modal { background: var(--white); border: 1px solid var(--line); max-width: 460px; width: 100%; padding: 36px 36px 28px; position: relative; box-shadow: var(--shadow-lg, 0 12px 40px rgba(0,0,0,0.25)); animation: paywallIn 0.2s ease; }
+[data-theme="dark"] .paywall-modal { background: var(--paper-2); }
+@keyframes paywallIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+.paywall-close { position: absolute; top: 14px; right: 16px; background: none; border: none; font-size: 28px; line-height: 1; color: var(--mute); cursor: pointer; transition: color 0.15s; }
+.paywall-close:hover { color: var(--ink); }
+.paywall-eyebrow { font-variant-caps: all-small-caps; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; color: var(--accent); margin-bottom: 10px; }
+.paywall-title { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; letter-spacing: -0.5px; line-height: 1.15; color: var(--ink); margin-bottom: 12px; }
+.paywall-body { font-family: 'Newsreader', serif; font-size: 15px; line-height: 1.6; color: var(--ink-2); margin-bottom: 20px; }
+.paywall-price { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; padding: 16px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-bottom: 18px; }
+.paywall-amount { font-family: 'Fraunces', serif; font-size: 34px; font-weight: 700; color: var(--ink); letter-spacing: -1px; line-height: 1; }
+.paywall-per { font-size: 15px; color: var(--ink-2); }
+.paywall-note { font-size: 13px; color: var(--mute); font-style: italic; margin-left: auto; }
+.paywall-perks { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; padding: 0; }
+.paywall-perks li { font-size: 14px; color: var(--ink-2); line-height: 1.5; padding-left: 24px; position: relative; }
+.paywall-perks li::before { content: '✓'; position: absolute; left: 0; top: 0; color: var(--accent); font-weight: 700; }
+.paywall-actions { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.paywall-btn-primary { display: block; text-align: center; background: var(--accent); color: #fff; font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 15px; font-weight: 700; letter-spacing: 0.08em; padding: 13px; border-radius: 2px; transition: background 0.15s; }
+.paywall-btn-primary:hover { background: var(--accent-dark); }
+.paywall-btn-secondary { display: block; text-align: center; background: transparent; color: var(--ink); border: 1px solid var(--line); font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 15px; font-weight: 700; letter-spacing: 0.08em; padding: 12px; border-radius: 2px; transition: border-color 0.15s; }
+.paywall-btn-secondary:hover { border-color: var(--ink); }
+.paywall-foot { text-align: center; font-size: 14px; color: var(--mute); font-style: italic; }
+.paywall-foot a { color: var(--accent); font-style: normal; }
+
+
+.footer-cert { display: inline-flex; align-items: center; gap: 10px; margin-top: 16px; padding: 9px 13px; background: var(--white); border: 1px solid var(--line); font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 13px; font-weight: 700; color: var(--ink); letter-spacing: 0.08em; }
+.footer-cert svg { width: 14px; height: 14px; color: #2ecc71; }
+[data-theme="dark"] .footer-cert { background: var(--paper-3); border-color: var(--line); }
+</style>
+</head>
+<body>
+
+<!-- UTIL BAR -->
+<div class="util-bar">
+  <div class="util-inner">
+    <div class="util-left">
+      <div class="util-status"><div class="live-dot"></div>Live Coverage</div>
+      <div class="util-stat"><b>2,847</b> sources indexed today</div>
+      <div class="util-stat"><b>143</b> stories rewritten</div>
+    </div>
+    <div class="util-right">
+      <a href="candor-news.html" class="util-link">← Back to Candor</a>
+      <div class="util-divider"></div>
+      <a href="#" class="util-link">Sign in</a>
+    </div>
+  </div>
+</div>
+
+<!-- MASTHEAD -->
+<header class="masthead">
+  <div class="mast-inner">
+    <div class="mast-left">
+      <div class="weather-chip">Pasadena · 74°F · Clear</div>
+      <div class="date-chip">Monday, May 26, 2026</div>
+    </div>
+    <div class="logo-wrap">
+      <a href="candor-news.html" class="logo"><span class="logo-c">C</span>andor</a>
+    </div>
+    <div class="mast-right">
+      <button class="icon-btn" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+      <button class="icon-btn" aria-label="Saved stories">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+      </button>
+      <button class="icon-btn" aria-label="Theme" onclick="toggleTheme()">
+        <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <button class="btn-subscribe" onclick="showPaywall('trial')">Subscribe</button>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN NAV -->
+<nav class="nav-wrap">
+  <div class="nav-inner">
+    <a class="nav-link live-link" href="candor-news.html">Live</a>
+    <a class="nav-link" href="#">U.S.</a>
+    <a class="nav-link" href="#">World</a>
+    <a class="nav-link" href="#">Politics</a>
+    <a class="nav-link" href="#">Business</a>
+    <a class="nav-link" href="#">Sports</a>
+    <a class="nav-link" href="#">Science</a>
+    <a class="nav-link" href="#">Tech</a>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-eyebrow">Legal & Trust</div>
+  <h1 class="page-title">Terms of Service</h1>
+  <p class="page-dek">The agreement between you and Candor. The rules are simple because our product is honest.</p>
+</div>
+
+<div class="page-wrap">
+  <aside class="toc">
+    <div class="toc-title">On this page</div>
+    <a class="toc-link active" href="#accept">Acceptance</a>
+    <a class="toc-link" href="#use">Using Candor</a>
+    <a class="toc-link" href="#accounts">Accounts</a>
+    <a class="toc-link" href="#subscriptions">Subscriptions</a>
+    <a class="toc-link" href="#content">Our content & yours</a>
+    <a class="toc-link" href="#ai">AI-generated summaries</a>
+    <a class="toc-link" href="#liability">Disclaimers</a>
+    <a class="toc-link" href="#changes">Changes</a>
+    <a class="toc-link" href="#contact">Contact</a>
+  </aside>
+  <div class="content-col">
+
+    <div class="section-block" id="accept">
+      <div class="section-num">§ 01</div>
+      <h2 class="section-h">Acceptance of these terms</h2>
+      <div class="section-body">
+<p>By using Candor, you agree to these Terms. If you don't agree, please don't use the service. These Terms were last updated on May 27, 2026.</p>
+      </div>
+    </div>
+
+    <div class="section-block" id="use">
+      <div class="section-num">§ 02</div>
+      <h2 class="section-h">Using Candor</h2>
+      <div class="section-body">
+<p>You may read, share, and reference Candor's journalism freely for personal, non-commercial use. You agree not to misuse the service — that means no scraping at scale, no attempting to break authentication, and no using Candor to build a competing dataset without written permission.</p>
+      </div>
+    </div>
+
+    <div class="section-block" id="accounts">
+      <div class="section-num">§ 03</div>
+      <h2 class="section-h">Your account</h2>
+      <div class="section-body">
+<p>You are responsible for keeping your login credentials secure and for activity under your account. Tell us promptly if you suspect unauthorized access. You must be at least 16 years old to create an account.</p>
+      </div>
+    </div>
+
+    <div class="section-block" id="subscriptions">
+      <div class="section-num">§ 04</div>
+      <h2 class="section-h">Subscriptions & billing</h2>
+      <div class="section-body">
+<p>Paid subscriptions renew automatically at the end of each term until cancelled. You can cancel anytime from your <a href="candor-account.html">account settings</a>; access continues until the end of the period you've paid for.</p>
+<div class="callout"><div class="callout-label">Refunds</div><p>If Candor isn't right for you, contact us within 14 days of a charge for a full refund, no questions asked.</p></div>
+      </div>
+    </div>
+
+    <div class="section-block" id="content">
+      <div class="section-num">§ 05</div>
+      <h2 class="section-h">Our content and yours</h2>
+      <div class="section-body">
+<p>Candor's articles, summaries, and design are owned by Candor News Inc. and protected by copyright. Anything you submit — a correction, a message, feedback — remains yours, but you grant us permission to use it to operate and improve the service.</p>
+      </div>
+    </div>
+
+    <div class="section-block" id="ai">
+      <div class="section-num">§ 06</div>
+      <h2 class="section-h">AI-generated summaries</h2>
+      <div class="section-body">
+<p>Candor uses AI to synthesize reporting from across the source spectrum. Every summary is reviewed against its sources, but AI systems can still make mistakes. Summaries are a starting point, not a substitute for the original reporting we always link to. If you spot an error, our <a href="candor-corrections.html">corrections process</a> is public and fast.</p>
+      </div>
+    </div>
+
+    <div class="section-block" id="liability">
+      <div class="section-num">§ 07</div>
+      <h2 class="section-h">Disclaimers & limitation of liability</h2>
+      <div class="section-body">
+<p>Candor is provided "as is." While we work hard on accuracy, we don't warrant that the service will be uninterrupted or error-free. To the fullest extent permitted by law, Candor News Inc. is not liable for indirect or consequential damages arising from your use of the service.</p>
+      </div>
+    </div>
+
+    <div class="section-block" id="changes">
+      <div class="section-num">§ 08</div>
+      <h2 class="section-h">Changes to these terms</h2>
+      <div class="section-body">
+<p>We may update these Terms as the product evolves. If we make a material change, we'll notify account holders by email before it takes effect. Continued use after a change means you accept the revised Terms.</p>
+      </div>
+    </div>
+
+    <div class="section-block" id="contact">
+      <div class="section-num">§ 09</div>
+      <h2 class="section-h">Contact</h2>
+      <div class="section-body">
+<p>Questions about these Terms? Reach us through the <a href="candor-contact.html">contact page</a>.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+<footer class="footer">
+  <div class="footer-main">
+    <div class="footer-brand">
+      <div class="footer-logo"><span class="footer-logo-c">C</span>andor</div>
+      <p>AI-powered news synthesis. Every story verified across the full source spectrum — left, center, and right — so you can read with confidence.</p>
+      <div class="footer-cert">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4M21 12c0 5-3.5 8-9 9-5.5-1-9-4-9-9V5l9-3 9 3v7z"/></svg>
+        <span>Methodology · Open</span>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Coverage</h4>
+      <ul>
+        <li><a href="#">U.S. News</a></li><li><a href="#">World</a></li>
+        <li><a href="#">Politics</a></li><li><a href="#">Business</a></li>
+        <li><a href="#">Science</a></li><li><a href="#">Tech</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Trust</h4>
+      <ul>
+        <li><a href="candor-methodology.html">Methodology</a></li>
+        <li><a href="candor-sources.html">Source List</a></li>
+        <li><a href="candor-biasratings.html">Bias Ratings</a></li>
+        <li><a href="candor-corrections.html">Corrections</a></li>
+        <li><a href="candor-standards.html">Editorial Standards</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="candor-about.html">About</a></li>
+        <li><a href="candor-newsroom.html">Newsroom</a></li>
+        <li><a href="candor-careers.html">Careers</a></li>
+        <li><a href="candor-press.html">Press</a></li>
+        <li><a href="candor-contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-foot">
+    <span>© 2026 Candor News Inc. · AI-assisted summaries reviewed for factual accuracy.</span>
+    <div class="links">
+      <a href="candor-privacy.html">Privacy</a>
+      <a href="candor-terms.html">Terms</a>
+      <a href="candor-accessibility.html">Accessibility</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('theme-icon').innerHTML = isDark
+    ? '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'
+    : '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+}
+
+// Highlight active TOC link on scroll
+const sections = document.querySelectorAll('.section-block');
+const tocLinks = document.querySelectorAll('.toc-link');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+  tocLinks.forEach(l => { l.classList.toggle('active', l.getAttribute('href') === '#' + current); });
+});
+</script>
+
+<!-- ═══════════════ PAYWALL MODAL (universal) ═══════════════ -->
+<div class="paywall-overlay" id="paywall-overlay" onclick="if(event.target===this)closePaywall()">
+  <div class="paywall-modal" role="dialog" aria-modal="true" aria-labelledby="paywall-title">
+    <button class="paywall-close" onclick="closePaywall()" aria-label="Close">&times;</button>
+    <div class="paywall-eyebrow" id="paywall-eyebrow">Candor Membership</div>
+    <h3 class="paywall-title" id="paywall-title">This is a member feature.</h3>
+    <p class="paywall-body" id="paywall-body">The Candor AI assistant is part of Candor membership. Start a free 7-day trial to use it — no charge today, cancel anytime.</p>
+    <div class="paywall-price">
+      <span class="paywall-amount">$4.99</span>
+      <span class="paywall-per">/ month</span>
+      <span class="paywall-note">after your 7-day free trial</span>
+    </div>
+    <ul class="paywall-perks">
+      <li>Unlimited Candor AI — ask any story anything</li>
+      <li>Breaking-news alerts and the Daily Brief by email</li>
+      <li>Full archive, Compare Coverage, and the weekend long-read</li>
+    </ul>
+    <div class="paywall-actions">
+      <a href="candor-signup.html" class="paywall-btn-primary">Start 7-day free trial</a>
+      <a href="candor-signup.html" class="paywall-btn-secondary">Create a free account</a>
+    </div>
+    <div class="paywall-foot">Already a member? <a href="candor-login.html">Log in</a></div>
+  </div>
+</div>
+
+<script>
+/* ═══════ PAYWALL (member-feature gating) ═══════ */
+function showPaywall(feature) {
+  var overlay = document.getElementById('paywall-overlay');
+  if (!overlay) return;
+  var title = document.getElementById('paywall-title');
+  var body = document.getElementById('paywall-body');
+  var eyebrow = document.getElementById('paywall-eyebrow');
+  if (feature === 'alerts' || feature === 'email' || feature === 'newsletter' || feature === 'trial') {
+    eyebrow.textContent = 'Candor Membership';
+    title.textContent = 'Alerts are a member feature.';
+    body.textContent = 'Breaking-news alerts and the Daily Brief by email are part of Candor membership. Start a free 7-day trial to turn them on — no charge today, cancel anytime.';
+  } else {
+    eyebrow.textContent = 'Candor Membership';
+    title.textContent = 'Candor AI is a member feature.';
+    body.textContent = 'The Candor AI assistant is part of Candor membership. Start a free 7-day trial to ask any story anything — no charge today, cancel anytime.';
+  }
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closePaywall() {
+  var overlay = document.getElementById('paywall-overlay');
+  if (!overlay) return;
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closePaywall(); });
+
+</script>
+</body>
+</html>

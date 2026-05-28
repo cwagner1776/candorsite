@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Candor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,900&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600&family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0b1220; --ink-2: #1a2233; --ink-3: #3a4358;
+  --mute: #6b7488; --mute-2: #9aa2b4;
+  --line: #e4e6ec; --line-2: #ecedf1;
+  --paper: #f7f5ef; --paper-2: #efece3; --paper-3: #e8e4d8;
+  --white: #ffffff;
+  --accent: #c8102e; --accent-dark: #9c0a23;
+  --left: #2d62b3; --center: #4a4a4a; --right: #b8451e;
+  --ok: #1a8754; --warn: #b8860b; --danger: #c8102e;
+  --max: 1320px;
+  --sans: 'Figtree', system-ui, sans-serif;
+  --serif: 'Newsreader', serif;
+  --display: 'Fraunces', serif;
+}
+[data-theme="dark"] {
+  --ink: #f4f1e8; --ink-2: #e0dccf; --ink-3: #c8c4b7;
+  --mute: #a8a497; --mute-2: #8e8a7e;
+  --line: #3d3a30; --line-2: #332f25;
+  --paper: #14130e; --paper-2: #1a1812; --paper-3: #221f17;
+  --white: #1a1812;
+  --accent: #ff4d63; --accent-dark: #e6304c;
+  --left: #6a9ad8; --center: #8a92a4; --right: #e8915a;
+  --ok: #34c77b; --warn: #d9a826; --danger: #ff4d63;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: var(--sans); background: var(--paper); color: var(--ink); -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; }
+::selection { background: var(--accent); color: #fff; }
+
+/* ════ TOP BAR ════ */
+.topbar { background: #0a0907; color: #f4f1e8; display: flex; align-items: center; gap: 20px; padding: 0 22px; height: 52px; position: sticky; top: 0; z-index: 50; }
+.tb-logo { font-family: var(--display); font-weight: 700; font-size: 22px; letter-spacing: -0.8px; display: flex; align-items: baseline; }
+.tb-logo .c { position: relative; padding-bottom: 0.05em; }
+.tb-logo .c::after { content: ''; position: absolute; left: 0.01em; right: 0.01em; bottom: 0; height: 0.05em; background: var(--accent); border-radius: 1px; }
+.tb-badge { font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #0a0907; background: var(--accent); padding: 3px 8px; border-radius: 3px; }
+.tb-live { display: flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 600; color: #a8a497; margin-left: 4px; }
+.tb-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); animation: pulse 1.8s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+.tb-right { margin-left: auto; display: flex; align-items: center; gap: 16px; font-size: 13px; color: #c8c4b7; }
+.tb-right a:hover { color: #fff; }
+.tb-icon { background: none; border: 1px solid rgba(255,255,255,0.18); color: #d8d4c7; width: 32px; height: 32px; border-radius: 6px; display: grid; place-items: center; transition: all 0.15s; }
+.tb-icon:hover { border-color: rgba(255,255,255,0.4); color: #fff; }
+.tb-icon svg { width: 15px; height: 15px; }
+.tb-user { display: flex; align-items: center; gap: 9px; }
+.tb-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 13px; }
+
+/* ════ LAYOUT ════ */
+.shell { display: grid; grid-template-columns: 232px 1fr; min-height: calc(100vh - 52px); }
+.side { background: var(--white); border-right: 1px solid var(--line); padding: 20px 0; position: sticky; top: 52px; height: calc(100vh - 52px); overflow-y: auto; }
+[data-theme="dark"] .side { background: var(--paper-2); }
+.side-group { margin-bottom: 22px; }
+.side-label { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mute); padding: 0 22px; margin-bottom: 8px; }
+.nav-item { display: flex; align-items: center; gap: 11px; padding: 9px 22px; font-size: 14px; font-weight: 500; color: var(--ink-3); border-left: 2px solid transparent; transition: all 0.12s; width: 100%; background: none; border-top: none; border-right: none; border-bottom: none; text-align: left; }
+.nav-item svg { width: 17px; height: 17px; flex-shrink: 0; opacity: 0.8; }
+.nav-item:hover { background: var(--paper-2); color: var(--ink); }
+[data-theme="dark"] .nav-item:hover { background: var(--paper-3); }
+.nav-item.active { color: var(--accent); border-left-color: var(--accent); font-weight: 700; background: var(--paper-2); }
+[data-theme="dark"] .nav-item.active { background: var(--paper-3); }
+.nav-count { margin-left: auto; font-size: 11px; font-weight: 700; background: var(--accent); color: #fff; min-width: 20px; height: 18px; padding: 0 5px; border-radius: 9px; display: grid; place-items: center; }
+.nav-count.muted { background: var(--paper-3); color: var(--mute); }
+[data-theme="dark"] .nav-count.muted { background: var(--line); color: var(--ink-3); }
+
+.main { padding: 30px 36px 80px; max-width: var(--max); width: 100%; }
+.page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-bottom: 26px; flex-wrap: wrap; }
+.page-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 7px; }
+.page-title { font-family: var(--display); font-size: 30px; font-weight: 700; letter-spacing: -0.8px; line-height: 1.05; }
+.page-sub { font-family: var(--serif); font-size: 15px; color: var(--mute); margin-top: 6px; }
+.view { display: none; }
+.view.active { display: block; animation: fade 0.25s ease; }
+@keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ════ CARDS / STATS ════ */
+.stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 14px; margin-bottom: 26px; }
+.stat { background: var(--white); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; position: relative; overflow: hidden; }
+[data-theme="dark"] .stat { background: var(--paper-2); }
+.stat-label { font-size: 12px; font-weight: 600; color: var(--mute); letter-spacing: 0.02em; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.stat-value { font-family: var(--display); font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 1; }
+.stat-meta { font-size: 12px; color: var(--mute); margin-top: 8px; }
+.stat-meta .up { color: var(--ok); font-weight: 600; }
+.stat-meta .down { color: var(--danger); font-weight: 600; }
+.stat-spark { position: absolute; right: 14px; bottom: 12px; opacity: 0.5; }
+
+.panel { background: var(--white); border: 1px solid var(--line); border-radius: 10px; margin-bottom: 22px; overflow: hidden; }
+[data-theme="dark"] .panel { background: var(--paper-2); }
+.panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 20px; border-bottom: 1px solid var(--line); }
+.panel-title { font-family: var(--display); font-size: 17px; font-weight: 600; letter-spacing: -0.3px; }
+.panel-title small { font-family: var(--sans); font-size: 12px; font-weight: 500; color: var(--mute); margin-left: 8px; }
+.panel-body { padding: 4px 0; }
+.panel-foot { padding: 12px 20px; border-top: 1px solid var(--line); font-size: 13px; color: var(--mute); }
+
+/* ════ TABLES ════ */
+.tbl { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.tbl th { text-align: left; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mute); padding: 11px 20px; border-bottom: 1px solid var(--line); background: var(--paper-2); }
+[data-theme="dark"] .tbl th { background: var(--paper-3); }
+.tbl td { padding: 13px 20px; border-bottom: 1px solid var(--line-2); color: var(--ink-2); vertical-align: middle; }
+.tbl tr:last-child td { border-bottom: none; }
+.tbl tr.row:hover td { background: var(--paper-2); }
+[data-theme="dark"] .tbl tr.row:hover td { background: var(--paper-3); }
+.tbl .t-strong { color: var(--ink); font-weight: 600; }
+.tbl .t-mono { font-family: 'Figtree', monospace; font-variant-numeric: tabular-nums; font-feature-settings: 'tnum'; }
+.t-headline { color: var(--ink); font-weight: 600; max-width: 420px; }
+.t-sub { font-size: 12px; color: var(--mute); margin-top: 2px; }
+
+/* badges / pills */
+.pill { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; letter-spacing: 0.03em; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
+.pill .d { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.pill-live { color: var(--accent); background: rgba(200,16,46,0.1); }
+.pill-published { color: var(--ok); background: rgba(26,135,84,0.12); }
+.pill-held { color: var(--warn); background: rgba(184,134,11,0.14); }
+.pill-archived { color: var(--mute); background: var(--paper-3); }
+[data-theme="dark"] .pill-archived { background: var(--line); }
+.pill-processing { color: var(--left); background: rgba(45,98,179,0.12); }
+.pill-ok { color: var(--ok); background: rgba(26,135,84,0.12); }
+.pill-warn { color: var(--warn); background: rgba(184,134,11,0.14); }
+.pill-down { color: var(--danger); background: rgba(200,16,46,0.1); }
+.pill-free { color: var(--mute); background: var(--paper-3); }
+[data-theme="dark"] .pill-free { background: var(--line); }
+.pill-member { color: var(--accent); background: rgba(200,16,46,0.1); }
+.pill-trial { color: var(--left); background: rgba(45,98,179,0.12); }
+[data-theme="dark"] .pill-member { background: rgba(255,77,99,0.14); }
+[data-theme="dark"] .pill-trial { background: rgba(106,154,216,0.16); }
+
+.sec-tag { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--mute); }
+
+/* bias bar */
+.bias-mini { display: inline-flex; width: 70px; height: 7px; border-radius: 4px; overflow: hidden; vertical-align: middle; }
+.bias-mini div { height: 100%; }
+
+/* importance meter */
+.imp { display: inline-flex; align-items: center; gap: 8px; }
+.imp-bar { width: 52px; height: 6px; border-radius: 3px; background: var(--paper-3); overflow: hidden; }
+[data-theme="dark"] .imp-bar { background: var(--line); }
+.imp-fill { height: 100%; background: var(--accent); }
+.imp-num { font-weight: 700; font-variant-numeric: tabular-nums; min-width: 22px; }
+
+/* buttons */
+.btn { font-family: var(--sans); font-size: 13px; font-weight: 600; padding: 7px 14px; border-radius: 7px; border: 1px solid var(--line); background: var(--white); color: var(--ink); transition: all 0.12s; display: inline-flex; align-items: center; gap: 6px; }
+[data-theme="dark"] .btn { background: var(--paper-3); }
+.btn:hover { border-color: var(--ink-3); }
+.btn svg { width: 14px; height: 14px; }
+.btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-dark); border-color: var(--accent-dark); }
+.btn-ok { background: var(--ok); border-color: var(--ok); color: #fff; }
+.btn-ok:hover { filter: brightness(0.92); }
+.btn-ghost { background: none; border-color: transparent; color: var(--mute); padding: 7px 10px; }
+.btn-ghost:hover { color: var(--ink); background: var(--paper-2); }
+[data-theme="dark"] .btn-ghost:hover { background: var(--paper-3); }
+.btn-sm { font-size: 12px; padding: 5px 11px; }
+.btn-danger { color: var(--danger); }
+.btn-danger:hover { border-color: var(--danger); }
+
+/* review queue cards */
+.rev { border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; margin: 0 20px 14px; background: var(--paper); }
+[data-theme="dark"] .rev { background: var(--paper-3); }
+.rev:first-child { margin-top: 16px; }
+.rev-top { display: flex; align-items: flex-start; gap: 14px; justify-content: space-between; }
+.rev-flag { display: inline-flex; align-items: center; gap: 7px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--warn); background: rgba(184,134,11,0.13); padding: 4px 11px; border-radius: 20px; margin-bottom: 11px; }
+.rev-flag.crit { color: var(--danger); background: rgba(200,16,46,0.1); }
+.rev-h { font-family: var(--display); font-size: 18px; font-weight: 600; letter-spacing: -0.3px; line-height: 1.25; margin-bottom: 7px; }
+.rev-detail { font-family: var(--serif); font-size: 14px; color: var(--ink-2); line-height: 1.5; margin-bottom: 12px; }
+.rev-meta { display: flex; flex-wrap: wrap; gap: 16px; font-size: 12px; color: var(--mute); margin-bottom: 14px; }
+.rev-meta b { color: var(--ink-2); font-weight: 600; }
+.rev-actions { display: flex; gap: 9px; flex-wrap: wrap; }
+.rev.resolved { opacity: 0.5; }
+.rev.resolved .rev-actions { display: none; }
+.rev-resolved-tag { font-size: 12px; font-weight: 700; color: var(--ok); }
+
+/* source health grid */
+.src-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 12px; padding: 16px 20px; }
+.src { border: 1px solid var(--line); border-radius: 9px; padding: 14px; background: var(--paper); }
+[data-theme="dark"] .src { background: var(--paper-3); }
+.src-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 9px; }
+.src-name { font-weight: 700; font-size: 14px; }
+.src-stat { font-size: 12px; color: var(--mute); display: flex; justify-content: space-between; padding: 2px 0; }
+.src-stat b { color: var(--ink-2); font-weight: 600; }
+
+/* pipeline flow */
+.flow { display: flex; align-items: stretch; gap: 0; padding: 20px; overflow-x: auto; }
+.flow-step { flex: 1; min-width: 130px; text-align: center; position: relative; padding: 0 8px; }
+.flow-step::after { content: '→'; position: absolute; right: -7px; top: 26px; color: var(--mute-2); font-size: 16px; }
+.flow-step:last-child::after { display: none; }
+.flow-ico { width: 54px; height: 54px; border-radius: 12px; background: var(--paper-2); border: 1px solid var(--line); display: grid; place-items: center; margin: 0 auto 10px; color: var(--accent); }
+[data-theme="dark"] .flow-ico { background: var(--paper-3); }
+.flow-ico svg { width: 24px; height: 24px; }
+.flow-ico.active { background: var(--accent); color: #fff; border-color: var(--accent); animation: glow 2s infinite; }
+@keyframes glow { 0%,100% { box-shadow: 0 0 0 0 rgba(200,16,46,0.3); } 50% { box-shadow: 0 0 0 6px rgba(200,16,46,0); } }
+.flow-name { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+.flow-svc { font-size: 11px; color: var(--mute); }
+
+/* log feed */
+.log { font-family: 'Figtree', monospace; font-size: 12.5px; padding: 14px 20px; max-height: 280px; overflow-y: auto; line-height: 1.9; }
+.log-line { display: flex; gap: 12px; }
+.log-time { color: var(--mute-2); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.log-tag { font-weight: 700; white-space: nowrap; min-width: 74px; }
+.log-tag.t-ok { color: var(--ok); } .log-tag.t-info { color: var(--left); } .log-tag.t-warn { color: var(--warn); } .log-tag.t-err { color: var(--danger); }
+.log-msg { color: var(--ink-2); }
+
+/* two-col */
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.cols-2-1 { display: grid; grid-template-columns: 2fr 1fr; gap: 22px; }
+
+/* mini chart bars */
+.chart { display: flex; align-items: flex-end; gap: 6px; height: 120px; padding: 16px 20px 8px; }
+.chart-bar { flex: 1; background: var(--accent); border-radius: 4px 4px 0 0; min-height: 4px; position: relative; transition: opacity 0.15s; opacity: 0.85; }
+.chart-bar:hover { opacity: 1; }
+.chart-bar span { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 10px; font-weight: 700; color: var(--mute); }
+.chart-labels { display: flex; gap: 6px; padding: 0 20px 14px; }
+.chart-labels span { flex: 1; text-align: center; font-size: 10px; color: var(--mute); }
+
+/* revenue donut-ish */
+.rev-split { padding: 18px 20px; }
+.rev-split-bar { height: 30px; border-radius: 6px; overflow: hidden; display: flex; margin-bottom: 14px; }
+.rev-split-bar div { height: 100%; display: grid; place-items: center; font-size: 11px; font-weight: 700; color: #fff; }
+.rev-legend { display: flex; gap: 20px; font-size: 13px; }
+.rev-legend span { display: flex; align-items: center; gap: 7px; color: var(--ink-2); }
+.rev-legend .d { width: 10px; height: 10px; border-radius: 3px; }
+
+.search-bar { display: flex; align-items: center; gap: 8px; background: var(--white); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; font-size: 13px; }
+[data-theme="dark"] .search-bar { background: var(--paper-2); }
+.search-bar input { border: none; background: none; outline: none; flex: 1; font-family: var(--sans); font-size: 13px; color: var(--ink); }
+.search-bar svg { width: 15px; height: 15px; color: var(--mute); }
+
+.filter-tabs { display: flex; gap: 4px; }
+.filter-tab { font-size: 13px; font-weight: 600; padding: 6px 13px; border-radius: 7px; color: var(--mute); border: 1px solid transparent; background: none; }
+.filter-tab:hover { color: var(--ink); }
+.filter-tab.active { background: var(--ink); color: var(--paper); }
+[data-theme="dark"] .filter-tab.active { background: var(--accent); color: #fff; }
+
+.toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px); background: #0a0907; color: #f4f1e8; padding: 12px 22px; border-radius: 8px; font-size: 13.5px; font-weight: 600; opacity: 0; pointer-events: none; transition: all 0.3s; z-index: 200; box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+.empty { text-align: center; padding: 48px; color: var(--mute); font-family: var(--serif); font-style: italic; }
+
+@media (max-width: 1000px) {
+  .shell { grid-template-columns: 1fr; }
+  .side { position: static; height: auto; display: flex; overflow-x: auto; border-right: none; border-bottom: 1px solid var(--line); }
+  .side-group { display: flex; align-items: center; margin-bottom: 0; }
+  .side-label { display: none; }
+  .cols, .cols-2-1 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="tb-logo"><span class="c">C</span>andor</div>
+  <span class="tb-badge">Admin</span>
+  <div class="tb-live"><span class="tb-dot"></span> Pipeline live · last run 38s ago</div>
+  <div class="tb-right">
+    <a href="candor-news.html">View site ↗</a>
+    <button class="tb-icon" onclick="toggleTheme()" aria-label="Theme"><svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+    <div class="tb-user"><div class="tb-avatar">CW</div><span>Carson W.</span></div>
+  </div>
+</div>
+
+<div class="shell">
+  <!-- SIDEBAR -->
+  <aside class="side">
+    <div class="side-group">
+      <div class="side-label">Operations</div>
+      <button class="nav-item active" data-view="overview">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+        Overview
+      </button>
+      <button class="nav-item" data-view="review">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Review Queue <span class="nav-count" id="rev-count">3</span>
+      </button>
+      <button class="nav-item" data-view="pipeline">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        Pipeline
+      </button>
+      <button class="nav-item" data-view="sources">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        Source Health
+      </button>
+    </div>
+    <div class="side-group">
+      <div class="side-label">Content</div>
+      <button class="nav-item" data-view="articles">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        Articles
+      </button>
+      <button class="nav-item" data-view="alerts">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        Alerts
+      </button>
+    </div>
+    <div class="side-group">
+      <div class="side-label">Business</div>
+      <button class="nav-item" data-view="subscribers">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Subscribers
+      </button>
+      <button class="nav-item" data-view="revenue">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        Revenue
+      </button>
+    </div>
+    <div class="side-group">
+      <div class="side-label">System</div>
+      <button class="nav-item" data-view="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Settings
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- ═══════ OVERVIEW ═══════ -->
+    <section class="view active" id="view-overview">
+      <div class="page-head">
+        <div>
+          <div class="page-eyebrow">Operations</div>
+          <h1 class="page-title">Good morning, Carson.</h1>
+          <p class="page-sub">Wednesday, May 27, 2026 · The pipeline has run 284 times today.</p>
+        </div>
+        <button class="btn btn-primary" onclick="toast('Pipeline run triggered manually')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg> Run pipeline now</button>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat">
+          <div class="stat-label">Sources checked today</div>
+          <div class="stat-value t-mono">52,841</div>
+          <div class="stat-meta"><span class="up">▲ 4.2%</span> vs yesterday</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Stories synthesized</div>
+          <div class="stat-value t-mono">47</div>
+          <div class="stat-meta">6 published in the last hour</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">In review queue</div>
+          <div class="stat-value t-mono" style="color:var(--warn)">3</div>
+          <div class="stat-meta">Oldest waiting 22 min</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Active members</div>
+          <div class="stat-value t-mono">1,284</div>
+          <div class="stat-meta"><span class="up">▲ 18</span> this week</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">MRR</div>
+          <div class="stat-value t-mono">$6,407</div>
+          <div class="stat-meta"><span class="up">▲ 1.4%</span> · net of churn</div>
+        </div>
+      </div>
+
+      <div class="cols-2-1">
+        <div class="panel">
+          <div class="panel-head">
+            <div class="panel-title">Live activity <small>auto-refreshing</small></div>
+            <span class="pill pill-live"><span class="d"></span> Streaming</span>
+          </div>
+          <div class="log" id="activity-log">
+            <!-- filled by JS -->
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><div class="panel-title">Today at a glance</div></div>
+          <div style="padding:16px 20px;">
+            <div class="src-stat" style="font-size:13.5px;padding:8px 0;border-bottom:1px solid var(--line-2)"><span>Avg. synthesis time</span><b>5.8 min</b></div>
+            <div class="src-stat" style="font-size:13.5px;padding:8px 0;border-bottom:1px solid var(--line-2)"><span>Stories auto-published</span><b>41 of 47</b></div>
+            <div class="src-stat" style="font-size:13.5px;padding:8px 0;border-bottom:1px solid var(--line-2)"><span>Sent to review</span><b>6 (12.8%)</b></div>
+            <div class="src-stat" style="font-size:13.5px;padding:8px 0;border-bottom:1px solid var(--line-2)"><span>Breaking alerts fired</span><b>2</b></div>
+            <div class="src-stat" style="font-size:13.5px;padding:8px 0;border-bottom:1px solid var(--line-2)"><span>Claude API spend today</span><b>$0.81</b></div>
+            <div class="src-stat" style="font-size:13.5px;padding:8px 0"><span>Pipeline errors</span><b style="color:var(--ok)">0</b></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">Stories synthesized · last 7 days</div>
+          <span style="font-size:13px;color:var(--mute)">312 total</span>
+        </div>
+        <div class="chart">
+          <div class="chart-bar" style="height:60%"><span>38</span></div>
+          <div class="chart-bar" style="height:72%"><span>44</span></div>
+          <div class="chart-bar" style="height:54%"><span>33</span></div>
+          <div class="chart-bar" style="height:84%"><span>51</span></div>
+          <div class="chart-bar" style="height:68%"><span>42</span></div>
+          <div class="chart-bar" style="height:90%"><span>55</span></div>
+          <div class="chart-bar" style="height:78%;background:var(--accent-dark)"><span>47</span></div>
+        </div>
+        <div class="chart-labels"><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span></div>
+      </div>
+    </section>
+
+    <!-- ═══════ REVIEW QUEUE ═══════ -->
+    <section class="view" id="view-review">
+      <div class="page-head">
+        <div>
+          <div class="page-eyebrow">Editorial</div>
+          <h1 class="page-title">Review queue</h1>
+          <p class="page-sub">Stories the sensitivity check flagged for a human decision before they publish.</p>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">Held for review <small id="held-label">3 pending</small></div>
+          <div class="filter-tabs">
+            <button class="filter-tab active">Pending</button>
+            <button class="filter-tab" onclick="toast('Showing resolved items')">Resolved</button>
+          </div>
+        </div>
+        <div class="panel-body" id="review-list">
+          <!-- review cards -->
+          <div class="rev" data-id="r1">
+            <div class="rev-flag crit"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Unconfirmed death toll</div>
+            <div class="rev-h">Explosion at Port of Rotterdam; casualty figures vary widely across sources</div>
+            <div class="rev-detail">Three outlets report different casualty counts (Reuters: "at least 4," AP: "up to 12," local source: "dozens feared"). The sensitivity check held this because sources directly contradict each other on a core fact involving loss of life.</div>
+            <div class="rev-meta"><span>Section <b>World</b></span><span>Importance <b>89</b></span><span>Sources <b>6</b></span><span>Held <b>22 min ago</b></span><span>Confidence <b>Low</b></span></div>
+            <div class="rev-actions">
+              <button class="btn btn-ok btn-sm" onclick="resolveReview('r1','approved')">Approve & publish</button>
+              <button class="btn btn-sm" onclick="toast('Opened in editor')">Edit synthesis</button>
+              <button class="btn btn-sm" onclick="toast('Will re-check when more sources arrive')">Hold for more sources</button>
+              <button class="btn btn-sm btn-danger" onclick="resolveReview('r1','rejected')">Reject</button>
+            </div>
+          </div>
+          <div class="rev" data-id="r2">
+            <div class="rev-flag"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Allegations against named private individual</div>
+            <div class="rev-h">Tech executive named in unverified misconduct report circulating on two outlets</div>
+            <div class="rev-detail">A named, non-public figure is the subject of allegations sourced to a single outlet and an anonymous post. Held pending verification that at least one further reputable source corroborates before any synthesis publishes.</div>
+            <div class="rev-meta"><span>Section <b>Business</b></span><span>Importance <b>61</b></span><span>Sources <b>2</b></span><span>Held <b>14 min ago</b></span><span>Confidence <b>Low</b></span></div>
+            <div class="rev-actions">
+              <button class="btn btn-ok btn-sm" onclick="resolveReview('r2','approved')">Approve & publish</button>
+              <button class="btn btn-sm" onclick="toast('Opened in editor')">Edit synthesis</button>
+              <button class="btn btn-sm" onclick="toast('Will re-check when more sources arrive')">Hold for more sources</button>
+              <button class="btn btn-sm btn-danger" onclick="resolveReview('r2','rejected')">Reject</button>
+            </div>
+          </div>
+          <div class="rev" data-id="r3">
+            <div class="rev-flag"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Single anonymous source only</div>
+            <div class="rev-h">Reported cabinet reshuffle attributed to one unnamed official</div>
+            <div class="rev-detail">The entire story rests on a single anonymous source from one outlet. Per editorial standards, synthesis of major-public-interest claims on a lone anonymous source requires Editor-in-Chief sign-off and a confidence cap.</div>
+            <div class="rev-meta"><span>Section <b>Politics</b></span><span>Importance <b>73</b></span><span>Sources <b>1</b></span><span>Held <b>9 min ago</b></span><span>Confidence <b>Low</b></span></div>
+            <div class="rev-actions">
+              <button class="btn btn-ok btn-sm" onclick="resolveReview('r3','approved')">Approve (capped confidence)</button>
+              <button class="btn btn-sm" onclick="toast('Opened in editor')">Edit synthesis</button>
+              <button class="btn btn-sm" onclick="toast('Will re-check when more sources arrive')">Hold for more sources</button>
+              <button class="btn btn-sm btn-danger" onclick="resolveReview('r3','rejected')">Reject</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════ PIPELINE ═══════ -->
+    <section class="view" id="view-pipeline">
+      <div class="page-head">
+        <div>
+          <div class="page-eyebrow">Operations</div>
+          <h1 class="page-title">Pipeline</h1>
+          <p class="page-sub">The autonomous worker runs every 5 minutes. Here's the live state of each stage.</p>
+        </div>
+        <span class="pill pill-ok"><span class="d"></span> All systems operational</span>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><div class="panel-title">Processing flow</div><small style="color:var(--mute)">Currently: synthesizing "Fed rate decision"</small></div>
+        <div class="flow">
+          <div class="flow-step"><div class="flow-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg></div><div class="flow-name">Ingest</div><div class="flow-svc">Perigon API</div></div>
+          <div class="flow-step"><div class="flow-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"/></svg></div><div class="flow-name">Cluster</div><div class="flow-svc">Railway worker</div></div>
+          <div class="flow-step"><div class="flow-ico active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 6v6l4 2"/></svg></div><div class="flow-name">Synthesize</div><div class="flow-svc">Claude API</div></div>
+          <div class="flow-step"><div class="flow-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><div class="flow-name">Sensitivity</div><div class="flow-svc">Claude API</div></div>
+          <div class="flow-step"><div class="flow-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-3"/></svg></div><div class="flow-name">Score</div><div class="flow-svc">Claude API</div></div>
+          <div class="flow-step"><div class="flow-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></div><div class="flow-name">Store</div><div class="flow-svc">Supabase</div></div>
+          <div class="flow-step"><div class="flow-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></div><div class="flow-name">Publish</div><div class="flow-svc">Cloudflare CDN</div></div>
+        </div>
+      </div>
+
+      <div class="cols">
+        <div class="panel">
+          <div class="panel-head"><div class="panel-title">Worker stats</div></div>
+          <div style="padding:16px 20px;">
+            <div class="src-stat" style="font-size:13.5px;padding:9px 0;border-bottom:1px solid var(--line-2)"><span>Status</span><b style="color:var(--ok)">Running</b></div>
+            <div class="src-stat" style="font-size:13.5px;padding:9px 0;border-bottom:1px solid var(--line-2)"><span>Last run</span><b>38 seconds ago</b></div>
+            <div class="src-stat" style="font-size:13.5px;padding:9px 0;border-bottom:1px solid var(--line-2)"><span>Next run</span><b id="next-run">in 4m 22s</b></div>
+            <div class="src-stat" style="font-size:13.5px;padding:9px 0;border-bottom:1px solid var(--line-2)"><span>Stories in queue</span><b>2</b></div>
+            <div class="src-stat" style="font-size:13.5px;padding:9px 0;border-bottom:1px solid var(--line-2)"><span>Currently processing</span><b>Fed rate decision</b></div>
+            <div class="src-stat" style="font-size:13.5px;padding:9px 0;border-bottom:1px solid var(--line-2)"><span>Uptime (30d)</span><b>99.94%</b></div>
+            <div class="src-stat" style="font-size:13.5px;padding:9px 0"><span>Errors today</span><b style="color:var(--ok)">0</b></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><div class="panel-title">Infrastructure</div></div>
+          <table class="tbl">
+            <tbody>
+              <tr class="row"><td class="t-strong">Railway worker</td><td><span class="pill pill-ok"><span class="d"></span> Healthy</span></td></tr>
+              <tr class="row"><td class="t-strong">Perigon API</td><td><span class="pill pill-ok"><span class="d"></span> Healthy</span></td></tr>
+              <tr class="row"><td class="t-strong">Claude API</td><td><span class="pill pill-ok"><span class="d"></span> Healthy</span></td></tr>
+              <tr class="row"><td class="t-strong">Supabase</td><td><span class="pill pill-ok"><span class="d"></span> Healthy</span></td></tr>
+              <tr class="row"><td class="t-strong">Cloudflare CDN</td><td><span class="pill pill-ok"><span class="d"></span> Healthy</span></td></tr>
+              <tr class="row"><td class="t-strong">Resend (email)</td><td><span class="pill pill-warn"><span class="d"></span> Degraded</span></td></tr>
+              <tr class="row"><td class="t-strong">Stripe</td><td><span class="pill pill-ok"><span class="d"></span> Healthy</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════ SOURCE HEALTH ═══════ -->
+    <section class="view" id="view-sources">
+      <div class="page-head">
+        <div>
+          <div class="page-eyebrow">Operations</div>
+          <h1 class="page-title">Source health</h1>
+          <p class="page-sub">Ingestion volume and reliability across the outlets Perigon feeds us.</p>
+        </div>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><div class="stat-label">Outlets indexed</div><div class="stat-value t-mono">52,841</div><div class="stat-meta">via Perigon</div></div>
+        <div class="stat"><div class="stat-label">In Candor network</div><div class="stat-value t-mono">54</div><div class="stat-meta">bias-rated & weighted</div></div>
+        <div class="stat"><div class="stat-label">Articles ingested today</div><div class="stat-value t-mono">11,902</div><div class="stat-meta">across all sections</div></div>
+        <div class="stat"><div class="stat-label">Sources currently down</div><div class="stat-value t-mono" style="color:var(--warn)">1</div><div class="stat-meta">The Dispatch (feed stale 3h)</div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div class="panel-title">Network outlets <small>by feed activity, last hour</small></div></div>
+        <div class="src-grid">
+          <div class="src"><div class="src-top"><span class="src-name">Reuters</span><span class="pill pill-ok"><span class="d"></span> Live</span></div><div class="src-stat"><span>Bias</span><b>Center</b></div><div class="src-stat"><span>Articles/hr</span><b>38</b></div><div class="src-stat"><span>Last seen</span><b>1m ago</b></div></div>
+          <div class="src"><div class="src-top"><span class="src-name">Associated Press</span><span class="pill pill-ok"><span class="d"></span> Live</span></div><div class="src-stat"><span>Bias</span><b>Center</b></div><div class="src-stat"><span>Articles/hr</span><b>41</b></div><div class="src-stat"><span>Last seen</span><b>just now</b></div></div>
+          <div class="src"><div class="src-top"><span class="src-name">BBC News</span><span class="pill pill-ok"><span class="d"></span> Live</span></div><div class="src-stat"><span>Bias</span><b>Center</b></div><div class="src-stat"><span>Articles/hr</span><b>29</b></div><div class="src-stat"><span>Last seen</span><b>2m ago</b></div></div>
+          <div class="src"><div class="src-top"><span class="src-name">Bloomberg</span><span class="pill pill-ok"><span class="d"></span> Live</span></div><div class="src-stat"><span>Bias</span><b>Center</b></div><div class="src-stat"><span>Articles/hr</span><b>22</b></div><div class="src-stat"><span>Last seen</span><b>1m ago</b></div></div>
+          <div class="src"><div class="src-top"><span class="src-name">The Guardian</span><span class="pill pill-ok"><span class="d"></span> Live</span></div><div class="src-stat"><span>Bias</span><b>Lean Left</b></div><div class="src-stat"><span>Articles/hr</span><b>26</b></div><div class="src-stat"><span>Last seen</span><b>3m ago</b></div></div>
+          <div class="src"><div class="src-top"><span class="src-name">Wall Street Journal</span><span class="pill pill-ok"><span class="d"></span> Live</span></div><div class="src-stat"><span>Bias</span><b>Lean Right</b></div><div class="src-stat"><span>Articles/hr</span><b>19</b></div><div class="src-stat"><span>Last seen</span><b>2m ago</b></div></div>
+          <div class="src"><div class="src-top"><span class="src-name">The Dispatch</span><span class="pill pill-warn"><span class="d"></span> Stale</span></div><div class="src-stat"><span>Bias</span><b>Lean Right</b></div><div class="src-stat"><span>Articles/hr</span><b>0</b></div><div class="src-stat"><span>Last seen</span><b style="color:var(--warn)">3h ago</b></div></div>
+          <div class="src"><div class="src-top"><span class="src-name">NPR</span><span class="pill pill-ok"><span class="d"></span> Live</span></div><div class="src-stat"><span>Bias</span><b>Lean Left</b></div><div class="src-stat"><span>Articles/hr</span><b>17</b></div><div class="src-stat"><span>Last seen</span><b>1m ago</b></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════ ARTICLES ═══════ -->
+    <section class="view" id="view-articles">
+      <div class="page-head">
+        <div>
+          <div class="page-eyebrow">Content</div>
+          <h1 class="page-title">Articles</h1>
+          <p class="page-sub">Every synthesized story, ranked by importance. Re-rank, retire, or open in the editor.</p>
+        </div>
+        <div class="search-bar" style="min-width:240px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><input placeholder="Search headlines…" oninput="filterArticles(this.value)"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">Synthesized stories <small id="art-count">7 shown</small></div>
+          <div class="filter-tabs" id="art-filters">
+            <button class="filter-tab active" data-f="all">All</button>
+            <button class="filter-tab" data-f="published">Published</button>
+            <button class="filter-tab" data-f="held">Held</button>
+            <button class="filter-tab" data-f="archived">Archived</button>
+          </div>
+        </div>
+        <table class="tbl">
+          <thead><tr><th>Headline</th><th>Section</th><th>Bias mix</th><th>Importance</th><th>Status</th><th>Updated</th><th></th></tr></thead>
+          <tbody id="art-body">
+            <tr class="row" data-status="published"><td><div class="t-headline">G7 Nations Sign First-Ever Binding Climate Pact With Real Enforcement Teeth</div><div class="t-sub">11 sources · live feed on</div></td><td><span class="sec-tag">World</span></td><td><span class="bias-mini"><div style="width:38%;background:var(--left)"></div><div style="width:42%;background:var(--center)"></div><div style="width:20%;background:var(--right)"></div></span></td><td><span class="imp"><span class="imp-bar"><span class="imp-fill" style="width:94%"></span></span><span class="imp-num">94</span></span></td><td><span class="pill pill-live"><span class="d"></span> Breaking</span></td><td class="t-mono">8s ago</td><td><button class="btn btn-ghost btn-sm" onclick="toast('Opened in editor')">Edit</button></td></tr>
+            <tr class="row" data-status="published"><td><div class="t-headline">Senate AI Oversight Act: What the 67–33 Vote Means Going Forward</div><div class="t-sub">9 sources</div></td><td><span class="sec-tag">Politics</span></td><td><span class="bias-mini"><div style="width:33%;background:var(--left)"></div><div style="width:34%;background:var(--center)"></div><div style="width:33%;background:var(--right)"></div></span></td><td><span class="imp"><span class="imp-bar"><span class="imp-fill" style="width:88%"></span></span><span class="imp-num">88</span></span></td><td><span class="pill pill-published"><span class="d"></span> Published</span></td><td class="t-mono">4m ago</td><td><button class="btn btn-ghost btn-sm" onclick="toast('Opened in editor')">Edit</button></td></tr>
+            <tr class="row" data-status="published"><td><div class="t-headline">Dow Rises for Third Straight Week as Fed Holds Rates Through Q3</div><div class="t-sub">7 sources · re-synthesizing</div></td><td><span class="sec-tag">Business</span></td><td><span class="bias-mini"><div style="width:30%;background:var(--left)"></div><div style="width:50%;background:var(--center)"></div><div style="width:20%;background:var(--right)"></div></span></td><td><span class="imp"><span class="imp-bar"><span class="imp-fill" style="width:71%"></span></span><span class="imp-num">71</span></span></td><td><span class="pill pill-processing"><span class="d"></span> Processing</span></td><td class="t-mono">just now</td><td><button class="btn btn-ghost btn-sm" onclick="toast('Opened in editor')">Edit</button></td></tr>
+            <tr class="row" data-status="published"><td><div class="t-headline">Alzheimer's Breakthrough: Drug Slows Progression 60% — FDA Review in Q3</div><div class="t-sub">8 sources</div></td><td><span class="sec-tag">Science</span></td><td><span class="bias-mini"><div style="width:45%;background:var(--left)"></div><div style="width:40%;background:var(--center)"></div><div style="width:15%;background:var(--right)"></div></span></td><td><span class="imp"><span class="imp-bar"><span class="imp-fill" style="width:82%"></span></span><span class="imp-num">82</span></span></td><td><span class="pill pill-published"><span class="d"></span> Published</span></td><td class="t-mono">18m ago</td><td><button class="btn btn-ghost btn-sm" onclick="toast('Opened in editor')">Edit</button></td></tr>
+            <tr class="row" data-status="held"><td><div class="t-headline">Explosion at Port of Rotterdam; casualty figures vary widely</div><div class="t-sub">6 sources · in review queue</div></td><td><span class="sec-tag">World</span></td><td><span class="bias-mini"><div style="width:35%;background:var(--left)"></div><div style="width:45%;background:var(--center)"></div><div style="width:20%;background:var(--right)"></div></span></td><td><span class="imp"><span class="imp-bar"><span class="imp-fill" style="width:89%"></span></span><span class="imp-num">89</span></span></td><td><span class="pill pill-held"><span class="d"></span> Held</span></td><td class="t-mono">22m ago</td><td><button class="btn btn-ghost btn-sm" onclick="show('review')">Review</button></td></tr>
+            <tr class="row" data-status="published"><td><div class="t-headline">Apple's On-Device AI Runs Without Cloud — A Privacy Shift for Consumers</div><div class="t-sub">10 sources</div></td><td><span class="sec-tag">Tech</span></td><td><span class="bias-mini"><div style="width:33%;background:var(--left)"></div><div style="width:42%;background:var(--center)"></div><div style="width:25%;background:var(--right)"></div></span></td><td><span class="imp"><span class="imp-bar"><span class="imp-fill" style="width:64%"></span></span><span class="imp-num">64</span></span></td><td><span class="pill pill-published"><span class="d"></span> Published</span></td><td class="t-mono">41m ago</td><td><button class="btn btn-ghost btn-sm" onclick="toast('Opened in editor')">Edit</button></td></tr>
+            <tr class="row" data-status="archived"><td><div class="t-headline">Cannes Palme d'Or Awarded to Iranian First-Time Director</div><div class="t-sub">5 sources · archived</div></td><td><span class="sec-tag">Culture</span></td><td><span class="bias-mini"><div style="width:40%;background:var(--left)"></div><div style="width:45%;background:var(--center)"></div><div style="width:15%;background:var(--right)"></div></span></td><td><span class="imp"><span class="imp-bar"><span class="imp-fill" style="width:44%"></span></span><span class="imp-num">44</span></span></td><td><span class="pill pill-archived"><span class="d"></span> Archived</span></td><td class="t-mono">2d ago</td><td><button class="btn btn-ghost btn-sm" onclick="toast('Restored to front page')">Restore</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ═══════ ALERTS ═══════ -->
+    <section class="view" id="view-alerts">
+      <div class="page-head">
+        <div>
+          <div class="page-eyebrow">Content</div>
+          <h1 class="page-title">Breaking alerts</h1>
+          <p class="page-sub">Emails fire automatically when importance &gt; 85 and breaking = true. Members only.</p>
+        </div>
+        <button class="btn btn-primary" onclick="toast('Manual alert composer opened')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Compose manual alert</button>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><div class="stat-label">Alerts sent today</div><div class="stat-value t-mono">2</div><div class="stat-meta">to members only</div></div>
+        <div class="stat"><div class="stat-label">Recipients reached</div><div class="stat-value t-mono">1,284</div><div class="stat-meta">active members</div></div>
+        <div class="stat"><div class="stat-label">Avg. open rate</div><div class="stat-value t-mono">61%</div><div class="stat-meta"><span class="up">▲ 3%</span> vs 30-day avg</div></div>
+        <div class="stat"><div class="stat-label">Resend quota</div><div class="stat-value t-mono">2,568<span style="font-size:15px;color:var(--mute)"> / 3,000</span></div><div class="stat-meta">resets in 4 days</div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div class="panel-title">Recent alerts</div></div>
+        <table class="tbl">
+          <thead><tr><th>Headline</th><th>Trigger</th><th>Recipients</th><th>Opens</th><th>Sent</th></tr></thead>
+          <tbody>
+            <tr class="row"><td class="t-strong">G7 Signs Binding Climate Pact With Enforcement</td><td>Importance 94 · breaking</td><td class="t-mono">1,284</td><td class="t-mono">812 (63%)</td><td class="t-mono">8s ago</td></tr>
+            <tr class="row"><td class="t-strong">Senate Passes AI Oversight Act 67–33</td><td>Importance 88 · breaking</td><td class="t-mono">1,281</td><td class="t-mono">744 (58%)</td><td class="t-mono">3h ago</td></tr>
+            <tr class="row"><td class="t-strong">Alzheimer's Drug Shows 60% Slowdown in Trial</td><td>Manual · editor</td><td class="t-mono">1,279</td><td class="t-mono">901 (70%)</td><td class="t-mono">Yesterday</td></tr>
+          </tbody>
+        </table>
+        <div class="panel-foot">Free readers never receive alert emails. Members manage their own alert preferences in their account.</div>
+      </div>
+    </section>
+
+    <!-- ═══════ SUBSCRIBERS ═══════ -->
+    <section class="view" id="view-subscribers">
+      <div class="page-head">
+        <div>
+          <div class="page-eyebrow">Business</div>
+          <h1 class="page-title">Subscribers</h1>
+          <p class="page-sub">Free accounts and Candor Members. One plan: $4.99/month after a 7-day free trial.</p>
+        </div>
+        <div class="search-bar" style="min-width:220px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><input placeholder="Search by email…"></div>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><div class="stat-label">Total accounts</div><div class="stat-value t-mono">38,402</div><div class="stat-meta"><span class="up">▲ 1,205</span> this month</div></div>
+        <div class="stat"><div class="stat-label">Paying members</div><div class="stat-value t-mono">1,284</div><div class="stat-meta">3.3% of accounts</div></div>
+        <div class="stat"><div class="stat-label">On free trial</div><div class="stat-value t-mono">96</div><div class="stat-meta">~68% historically convert</div></div>
+        <div class="stat"><div class="stat-label">Monthly churn</div><div class="stat-value t-mono">2.8%</div><div class="stat-meta"><span class="down">▲ 0.3%</span> vs last month</div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div class="panel-title">Recent accounts</div>
+          <div class="filter-tabs"><button class="filter-tab active">All</button><button class="filter-tab" onclick="toast('Filtered to members')">Members</button><button class="filter-tab" onclick="toast('Filtered to trials')">Trials</button></div>
+        </div>
+        <table class="tbl">
+          <thead><tr><th>Email</th><th>Name</th><th>Plan</th><th>Status</th><th>Joined</th><th>Last active</th></tr></thead>
+          <tbody>
+            <tr class="row"><td class="t-mono t-strong">d.osei@gmail.com</td><td>Daniel Osei</td><td><span class="pill pill-member">Member</span></td><td>Active</td><td class="t-mono">May 26</td><td class="t-mono">2h ago</td></tr>
+            <tr class="row"><td class="t-mono t-strong">priya.n@outlook.com</td><td>Priya Nair</td><td><span class="pill pill-trial">Trial</span></td><td>Day 3 of 7</td><td class="t-mono">May 24</td><td class="t-mono">1h ago</td></tr>
+            <tr class="row"><td class="t-mono t-strong">marcus.webb@proton.me</td><td>Marcus Webb</td><td><span class="pill pill-member">Member</span></td><td>Active</td><td class="t-mono">May 22</td><td class="t-mono">just now</td></tr>
+            <tr class="row"><td class="t-mono t-strong">jlin2024@gmail.com</td><td>Jasmine Lin</td><td><span class="pill pill-free">Free</span></td><td>—</td><td class="t-mono">May 21</td><td class="t-mono">5h ago</td></tr>
+            <tr class="row"><td class="t-mono t-strong">t.alvarez@icloud.com</td><td>Tomas Alvarez</td><td><span class="pill pill-member">Member</span></td><td>Active</td><td class="t-mono">May 19</td><td class="t-mono">1d ago</td></tr>
+            <tr class="row"><td class="t-mono t-strong">h.kowalski@gmail.com</td><td>Hanna Kowalski</td><td><span class="pill pill-trial">Trial</span></td><td>Day 6 of 7</td><td class="t-mono">May 21</td><td class="t-mono">3h ago</td></tr>
+            <tr class="row"><td class="t-mono t-strong">reed.fisher@gmail.com</td><td>Reed Fisher</td><td><span class="pill pill-free">Free</span></td><td>—</td><td class="t-mono">May 18</td><td class="t-mono">2d ago</td></tr>
+            <tr class="row"><td class="t-mono t-strong">s.devi@yahoo.com</td><td>Sana Devi</td><td><span class="pill pill-member">Member</span></td><td>Past due</td><td class="t-mono">Apr 30</td><td class="t-mono">6h ago</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ═══════ REVENUE ═══════ -->
+    <section class="view" id="view-revenue">
+      <div class="page-head">
+        <div>
+          <div class="page-eyebrow">Business</div>
+          <h1 class="page-title">Revenue</h1>
+          <p class="page-sub">Stripe handles billing; this is the read-out. Membership is $4.99/month.</p>
+        </div>
+        <a class="btn" href="#" onclick="toast('Opening Stripe dashboard'); return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6M10 14L21 3"/></svg> Open in Stripe</a>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><div class="stat-label">MRR</div><div class="stat-value t-mono">$6,407</div><div class="stat-meta"><span class="up">▲ 1.4%</span> month-over-month</div></div>
+        <div class="stat"><div class="stat-label">Net new MRR</div><div class="stat-value t-mono">$90</div><div class="stat-meta">+18 members, −2.8% churn</div></div>
+        <div class="stat"><div class="stat-label">ARR (run rate)</div><div class="stat-value t-mono">$76.9K</div><div class="stat-meta">at current MRR</div></div>
+        <div class="stat"><div class="stat-label">Infra cost</div><div class="stat-value t-mono">$39<span style="font-size:15px;color:var(--mute)">/mo</span></div><div class="stat-meta">covered by 8 members</div></div>
+      </div>
+      <div class="cols">
+        <div class="panel">
+          <div class="panel-head"><div class="panel-title">MRR · last 6 months</div></div>
+          <div class="chart">
+            <div class="chart-bar" style="height:38%"><span>$2.4k</span></div>
+            <div class="chart-bar" style="height:52%"><span>$3.3k</span></div>
+            <div class="chart-bar" style="height:64%"><span>$4.1k</span></div>
+            <div class="chart-bar" style="height:78%"><span>$5.0k</span></div>
+            <div class="chart-bar" style="height:92%"><span>$5.9k</span></div>
+            <div class="chart-bar" style="height:100%;background:var(--accent-dark)"><span>$6.4k</span></div>
+          </div>
+          <div class="chart-labels"><span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><div class="panel-title">Where MRR goes</div></div>
+          <div class="rev-split">
+            <div class="rev-split-bar">
+              <div style="width:91%;background:var(--ok)">Profit / runway 91%</div>
+              <div style="width:9%;background:var(--mute)"></div>
+            </div>
+            <div class="rev-legend">
+              <span><span class="d" style="background:var(--ok)"></span> Profit & runway · $6,368</span>
+              <span><span class="d" style="background:var(--mute)"></span> Infrastructure · $39</span>
+            </div>
+            <p style="font-size:13px;color:var(--mute);font-family:var(--serif);margin-top:16px;line-height:1.5;">Stripe fees (2.9% + 30¢) are deducted per transaction before payout. At 1,284 members that's roughly $410/mo in processing, netting payout around $5,997.</p>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div class="panel-title">Recent transactions</div><small style="color:var(--mute)">via Stripe</small></div>
+        <table class="tbl">
+          <thead><tr><th>Date</th><th>Customer</th><th>Event</th><th>Amount</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr class="row"><td class="t-mono">May 27</td><td class="t-strong">marcus.webb@proton.me</td><td>Trial → Member</td><td class="t-mono">$4.99</td><td><span class="pill pill-published">Paid</span></td></tr>
+            <tr class="row"><td class="t-mono">May 27</td><td class="t-strong">t.alvarez@icloud.com</td><td>Renewal</td><td class="t-mono">$4.99</td><td><span class="pill pill-published">Paid</span></td></tr>
+            <tr class="row"><td class="t-mono">May 26</td><td class="t-strong">d.osei@gmail.com</td><td>Trial → Member</td><td class="t-mono">$4.99</td><td><span class="pill pill-published">Paid</span></td></tr>
+            <tr class="row"><td class="t-mono">May 26</td><td class="t-strong">s.devi@yahoo.com</td><td>Renewal</td><td class="t-mono">$4.99</td><td><span class="pill pill-down">Failed</span></td></tr>
+            <tr class="row"><td class="t-mono">May 25</td><td class="t-strong">old.account@gmail.com</td><td>Cancellation</td><td class="t-mono">—</td><td><span class="pill pill-archived">Churned</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ═══════ SETTINGS ═══════ -->
+    <section class="view" id="view-settings">
+      <div class="page-head">
+        <div>
+          <div class="page-eyebrow">System</div>
+          <h1 class="page-title">Settings</h1>
+          <p class="page-sub">Pipeline tuning, thresholds, and the editorial sensitivity checklist.</p>
+        </div>
+      </div>
+      <div class="cols">
+        <div class="panel">
+          <div class="panel-head"><div class="panel-title">Pipeline thresholds</div></div>
+          <div style="padding:18px 20px;">
+            <label class="set-row" style="display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--line-2);font-size:14px;"><span>Run frequency</span><b>Every 5 minutes</b></label>
+            <label class="set-row" style="display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--line-2);font-size:14px;"><span>Breaking-alert importance threshold</span><b>≥ 85</b></label>
+            <label class="set-row" style="display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--line-2);font-size:14px;"><span>Front-page demotion</span><b>6h no new source</b></label>
+            <label class="set-row" style="display:flex;justify-content:space-between;align-items:center;padding:11px 0;font-size:14px;"><span>Auto-archive</span><b>48h after demotion</b></label>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><div class="panel-title">Sensitivity checklist <small>triggers human review</small></div></div>
+          <div style="padding:14px 20px;">
+            <div class="set-flag" style="display:flex;align-items:center;gap:10px;padding:9px 0;font-size:13.5px;color:var(--ink-2);"><span class="pill pill-warn" style="min-width:54px;justify-content:center">ON</span> Unconfirmed death toll</div>
+            <div class="set-flag" style="display:flex;align-items:center;gap:10px;padding:9px 0;font-size:13.5px;color:var(--ink-2);"><span class="pill pill-warn" style="min-width:54px;justify-content:center">ON</span> Allegations against a named private individual</div>
+            <div class="set-flag" style="display:flex;align-items:center;gap:10px;padding:9px 0;font-size:13.5px;color:var(--ink-2);"><span class="pill pill-warn" style="min-width:54px;justify-content:center">ON</span> Contested election results</div>
+            <div class="set-flag" style="display:flex;align-items:center;gap:10px;padding:9px 0;font-size:13.5px;color:var(--ink-2);"><span class="pill pill-warn" style="min-width:54px;justify-content:center">ON</span> Content involving minors</div>
+            <div class="set-flag" style="display:flex;align-items:center;gap:10px;padding:9px 0;font-size:13.5px;color:var(--ink-2);"><span class="pill pill-warn" style="min-width:54px;justify-content:center">ON</span> Sources contradict on core facts</div>
+            <div class="set-flag" style="display:flex;align-items:center;gap:10px;padding:9px 0;font-size:13.5px;color:var(--ink-2);"><span class="pill pill-warn" style="min-width:54px;justify-content:center">ON</span> Single anonymous source only</div>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div class="panel-title">Connected services</div></div>
+        <table class="tbl">
+          <tbody>
+            <tr class="row"><td class="t-strong">Perigon</td><td>News ingestion</td><td class="t-mono">$9/mo</td><td><span class="pill pill-ok"><span class="d"></span> Connected</span></td></tr>
+            <tr class="row"><td class="t-strong">Claude API</td><td>Synthesis, sensitivity, scoring, chatbot</td><td class="t-mono">~$25/mo</td><td><span class="pill pill-ok"><span class="d"></span> Connected</span></td></tr>
+            <tr class="row"><td class="t-strong">Supabase</td><td>Database + Auth</td><td class="t-mono">Free tier</td><td><span class="pill pill-ok"><span class="d"></span> Connected</span></td></tr>
+            <tr class="row"><td class="t-strong">Railway</td><td>Worker hosting</td><td class="t-mono">$5/mo</td><td><span class="pill pill-ok"><span class="d"></span> Connected</span></td></tr>
+            <tr class="row"><td class="t-strong">Cloudflare</td><td>Hosting + CDN + domain</td><td class="t-mono">~$10/yr</td><td><span class="pill pill-ok"><span class="d"></span> Connected</span></td></tr>
+            <tr class="row"><td class="t-strong">Resend</td><td>Breaking-news email</td><td class="t-mono">Free tier</td><td><span class="pill pill-warn"><span class="d"></span> Degraded</span></td></tr>
+            <tr class="row"><td class="t-strong">Stripe</td><td>Payments</td><td class="t-mono">2.9% + 30¢</td><td><span class="pill pill-ok"><span class="d"></span> Connected</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── Theme ──
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('theme-icon').innerHTML = isDark
+    ? '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'
+    : '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+}
+
+// ── Navigation ──
+function show(view) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + view).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.view === view));
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => show(item.dataset.view));
+});
+
+// ── Toast ──
+let toastTimer;
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+// ── Review queue actions ──
+function resolveReview(id, decision) {
+  const card = document.querySelector('.rev[data-id="' + id + '"]');
+  if (!card) return;
+  card.classList.add('resolved');
+  const tag = document.createElement('span');
+  tag.className = 'rev-resolved-tag';
+  tag.textContent = decision === 'approved' ? '✓ Approved & published' : '✕ Rejected';
+  card.querySelector('.rev-meta').appendChild(tag);
+  toast(decision === 'approved' ? 'Story approved and published' : 'Story rejected');
+  // update counts
+  const pending = document.querySelectorAll('.rev:not(.resolved)').length;
+  document.getElementById('rev-count').textContent = pending;
+  document.getElementById('held-label').textContent = pending + ' pending';
+  if (pending === 0) {
+    document.getElementById('rev-count').classList.add('muted');
+    document.getElementById('review-list').insertAdjacentHTML('beforeend', '<div class="empty">Queue is clear. Every flagged story has been resolved.</div>');
+  }
+}
+
+// ── Articles filter ──
+function filterArticleRows(status, query) {
+  const rows = document.querySelectorAll('#art-body tr');
+  let shown = 0;
+  rows.forEach(r => {
+    const matchStatus = status === 'all' || r.dataset.status === status;
+    const matchQuery = !query || r.querySelector('.t-headline').textContent.toLowerCase().includes(query.toLowerCase());
+    const show = matchStatus && matchQuery;
+    r.style.display = show ? '' : 'none';
+    if (show) shown++;
+  });
+  document.getElementById('art-count').textContent = shown + ' shown';
+}
+let artStatus = 'all', artQuery = '';
+document.querySelectorAll('#art-filters .filter-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('#art-filters .filter-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    artStatus = tab.dataset.f;
+    filterArticleRows(artStatus, artQuery);
+  });
+});
+function filterArticles(q) { artQuery = q; filterArticleRows(artStatus, artQuery); }
+
+// ── Live activity log (simulated stream) ──
+const logSamples = [
+  ['t-info', 'INGEST', 'Perigon returned 214 new articles across 9 sections'],
+  ['t-ok', 'CLUSTER', 'Grouped 6 articles → "Fed rate decision"'],
+  ['t-info', 'SYNTH', 'Claude synthesizing cluster (7 sources)…'],
+  ['t-ok', 'PUBLISH', '"Dow Rises Third Straight Week" → live (importance 71)'],
+  ['t-warn', 'REVIEW', 'Held "Port of Rotterdam" — sources contradict on death toll'],
+  ['t-ok', 'SCORE', 'Re-ranked front page · 6 stories repositioned'],
+  ['t-info', 'ALERT', 'Breaking threshold met (94) → 1,284 members notified'],
+  ['t-ok', 'RETIRE', '"Cannes Palme d\'Or" demoted after 6h quiet'],
+  ['t-info', 'INGEST', 'Perigon returned 188 new articles'],
+  ['t-ok', 'SYNTH', 'Re-synthesized "G7 Climate Pact" with 11 sources']
+];
+function timeStr(offsetSec) {
+  const d = new Date(Date.now() - offsetSec * 1000);
+  return d.toLocaleTimeString('en-US', { hour12: false });
+}
+function renderLog() {
+  const el = document.getElementById('activity-log');
+  if (!el) return;
+  let html = '';
+  for (let i = 0; i < logSamples.length; i++) {
+    const [cls, tag, msg] = logSamples[i];
+    html += '<div class="log-line"><span class="log-time">' + timeStr(i * 47 + 3) + '</span><span class="log-tag ' + cls + '">' + tag + '</span><span class="log-msg">' + msg + '</span></div>';
+  }
+  el.innerHTML = html;
+}
+renderLog();
+
+// prepend a fresh line periodically to feel live
+const liveLines = [
+  ['t-info', 'INGEST', 'Perigon returned ' + (180 + Math.floor(Math.random()*60)) + ' new articles'],
+  ['t-ok', 'SYNTH', 'Claude synthesis complete · confidence 0.91'],
+  ['t-ok', 'PUBLISH', 'New story live on front page'],
+  ['t-info', 'SCORE', 'Importance scores refreshed for 12 active stories']
+];
+setInterval(() => {
+  const el = document.getElementById('activity-log');
+  if (!el) return;
+  const pick = liveLines[Math.floor(Math.random() * liveLines.length)];
+  const line = '<div class="log-line"><span class="log-time">' + timeStr(0) + '</span><span class="log-tag ' + pick[0] + '">' + pick[1] + '</span><span class="log-msg">' + pick[2] + '</span></div>';
+  el.insertAdjacentHTML('afterbegin', line);
+  while (el.children.length > 12) el.removeChild(el.lastChild);
+}, 6000);
+
+// ── Next-run countdown ──
+let secs = 262;
+setInterval(() => {
+  secs = secs <= 0 ? 300 : secs - 1;
+  const m = Math.floor(secs / 60), s = secs % 60;
+  const el = document.getElementById('next-run');
+  if (el) el.textContent = 'in ' + m + 'm ' + (s < 10 ? '0' : '') + s + 's';
+}, 1000);
+</script>
+</body>
+</html>

@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Candor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,900&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink: #0b1220; --ink-2: #1a2233; --ink-3: #3a4358;
+  --mute: #6b7488; --mute-2: #9aa2b4;
+  --line: #e4e6ec; --line-2: #ecedf1;
+  --paper: #f7f5ef; --paper-2: #efece3; --paper-3: #e8e4d8;
+  --white: #ffffff;
+  --accent: #c8102e; --accent-dark: #9c0a23;
+  --left: #2d62b3; --center: #4a4a4a; --right: #b8451e;
+  --max: 1200px;
+}
+[data-theme="dark"] {
+  --ink: #f4f1e8; --ink-2: #e0dccf; --ink-3: #c8c4b7;
+  --mute: #a8a497; --mute-2: #8e8a7e;
+  --line: #3d3a30; --line-2: #332f25;
+  --paper: #14130e; --paper-2: #1a1812; --paper-3: #221f17;
+  --white: #1a1812;
+  --accent: #ff4d63; --accent-dark: #e6304c;
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'Newsreader', Georgia, serif; background: var(--paper); color: var(--ink); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; transition: background 0.3s, color 0.3s; }
+a { text-decoration: none; color: inherit; cursor: pointer; }
+button { cursor: pointer; font-family: inherit; border: none; background: none; color: inherit; }
+
+/* ── UTIL BAR ── */
+.util-bar { background: var(--ink); }
+[data-theme="dark"] .util-bar { background: #0a0907; border-bottom: 1px solid var(--line); }
+.util-inner { max-width: var(--max); margin: 0 auto; padding: 9px 32px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.util-left { display: flex; align-items: center; gap: 22px; }
+.util-status { display: flex; align-items: center; gap: 8px; color: #ece8d8; font-variant-caps: all-small-caps; letter-spacing: 0.1em; font-weight: 600; font-size: 14px; }
+.live-dot { width: 7px; height: 7px; border-radius: 50%; background: #2ecc71; animation: livePulse 1.8s ease-out infinite; }
+@keyframes livePulse { 0%{box-shadow:0 0 0 0 rgba(46,204,113,0.55)}70%{box-shadow:0 0 0 6px rgba(46,204,113,0)}100%{box-shadow:0 0 0 0 rgba(46,204,113,0)} }
+.util-stat { color: var(--mute-2); font-variant-caps: all-small-caps; letter-spacing: 0.08em; font-size: 14px; }
+.util-stat b { color: #ece8d8; font-weight: 700; font-variant-caps: normal; font-size: 13px; }
+.util-right { display: flex; align-items: center; gap: 14px; }
+.util-link { color: var(--mute-2); font-variant-caps: all-small-caps; letter-spacing: 0.1em; font-weight: 600; font-size: 14px; transition: color 0.15s; }
+.util-link:hover { color: #ece8d8; }
+.util-divider { width: 1px; height: 12px; background: #2a3344; }
+[data-theme="dark"] .util-divider { background: #4a5266; }
+
+/* ── MASTHEAD ── */
+.masthead { background: var(--white); border-bottom: 1px solid var(--line); }
+[data-theme="dark"] .masthead { background: var(--paper-2); }
+.mast-inner { max-width: var(--max); margin: 0 auto; padding: 22px 32px 18px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px; }
+.mast-left { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+.weather-chip { display: flex; align-items: center; gap: 8px; font-variant-caps: all-small-caps; font-weight: 500; letter-spacing: 0.06em; font-size: 14px; color: var(--mute); }
+.date-chip { font-style: italic; font-size: 13px; color: var(--mute); }
+.logo-wrap { text-align: center; }
+.logo { font-family: 'Fraunces', serif; font-weight: 700; font-size: 48px; letter-spacing: -1.6px; line-height: 1; color: var(--ink); display: inline-flex; align-items: baseline; gap: 2px; }
+.logo-mark { display: inline-block; width: 13px; height: 13px; background: var(--accent); margin-right: 5px; position: relative; top: -3px; }
+.mast-right { display: flex; align-items: center; gap: 10px; justify-content: flex-end; }
+.icon-btn { width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--line); border-radius: 50%; color: var(--ink-3); transition: all 0.2s; background: var(--white); }
+.icon-btn:hover { color: var(--ink); border-color: var(--ink); }
+.icon-btn svg { width: 15px; height: 15px; }
+[data-theme="dark"] .icon-btn { background: var(--paper-3); border-color: var(--line); }
+.btn-subscribe { background: var(--ink); color: var(--paper); font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 16px; font-weight: 700; letter-spacing: 0.08em; padding: 9px 18px; border-radius: 2px; transition: all 0.2s; }
+.btn-subscribe:hover { background: var(--accent); }
+
+/* ── NAV ── */
+.nav-wrap { background: var(--white); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 50; }
+[data-theme="dark"] .nav-wrap { background: var(--paper-2); }
+.nav-inner { max-width: var(--max); margin: 0 auto; padding: 0 32px; display: flex; align-items: center; overflow-x: auto; scrollbar-width: none; }
+.nav-inner::-webkit-scrollbar { display: none; }
+.nav-link { font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 16px; font-weight: 600; letter-spacing: 0.08em; color: var(--ink-3); padding: 14px 14px; border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.15s; }
+.nav-link:first-child { padding-left: 0; }
+.nav-link:hover { color: var(--ink); }
+.nav-link.active { color: var(--ink); border-bottom-color: var(--accent); }
+.nav-link.live-link::before { content: ''; display: inline-block; width: 6px; height: 6px; background: #ef3340; border-radius: 50%; margin-right: 6px; vertical-align: middle; animation: livePulse 1.8s infinite; }
+
+/* ── HERO ── */
+.about-hero { background: var(--ink); color: var(--paper); position: relative; overflow: hidden; }
+[data-theme="dark"] .about-hero { background: #0a0907; }
+.about-hero::before { content: 'WHY WE EXIST'; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-family: 'Fraunces', serif; font-size: 220px; font-weight: 900; color: rgba(255,255,255,0.025); white-space: nowrap; pointer-events: none; letter-spacing: -4px; }
+.about-hero-inner { max-width: var(--max); margin: 0 auto; padding: 96px 32px 88px; position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+.hero-eyebrow { font-variant-caps: all-small-caps; font-size: 13px; font-weight: 700; letter-spacing: 0.18em; color: var(--accent); margin-bottom: 18px; }
+.hero-title { font-family: 'Fraunces', serif; font-size: 64px; font-weight: 700; letter-spacing: -2px; line-height: 1.02; color: var(--paper); margin-bottom: 24px; }
+.hero-title em { font-style: italic; font-weight: 500; color: rgba(244,241,232,0.85); }
+.hero-dek { font-size: 20px; color: rgba(244,241,232,0.7); line-height: 1.6; font-style: italic; font-family: 'Newsreader', serif; }
+.hero-right { font-size: 16px; color: rgba(244,241,232,0.75); line-height: 1.75; border-left: 2px solid var(--accent); padding-left: 28px; }
+.hero-right p { margin-bottom: 16px; }
+.hero-right p:last-child { margin-bottom: 0; }
+.hero-right strong { color: var(--paper); font-weight: 600; }
+
+/* ── BIG STATS ── */
+.big-stats { background: var(--white); border-bottom: 1px solid var(--line); }
+[data-theme="dark"] .big-stats { background: var(--paper-2); }
+.big-stats-inner { max-width: var(--max); margin: 0 auto; padding: 48px 32px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
+.big-stat { border-left: 1px solid var(--line); padding-left: 24px; }
+.big-stat:first-child { border-left: none; padding-left: 0; }
+.big-stat-num { font-family: 'Fraunces', serif; font-size: 52px; font-weight: 700; letter-spacing: -1.8px; color: var(--ink); line-height: 1; margin-bottom: 8px; }
+.big-stat-num small { font-size: 24px; color: var(--accent); font-weight: 600; letter-spacing: -0.5px; }
+.big-stat-label { font-variant-caps: all-small-caps; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; color: var(--mute); line-height: 1.3; }
+
+/* ── PAGE WRAP ── */
+.page-wrap { max-width: var(--max); margin: 0 auto; padding: 80px 32px; }
+
+/* ── SECTION ── */
+.sec { margin-bottom: 96px; }
+.sec:last-child { margin-bottom: 0; }
+.sec-num { font-variant-caps: all-small-caps; font-size: 12px; font-weight: 700; letter-spacing: 0.18em; color: var(--accent); margin-bottom: 14px; }
+.sec-h { font-family: 'Fraunces', serif; font-size: 40px; font-weight: 700; letter-spacing: -1px; line-height: 1.1; color: var(--ink); margin-bottom: 24px; max-width: 22ch; }
+.sec-h em { font-style: italic; font-weight: 500; color: var(--accent); }
+
+/* ── ORIGIN STORY ── */
+.story-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 80px; align-items: start; }
+.story-aside {}
+.story-aside .sec-h { font-size: 36px; }
+.story-aside-meta { font-variant-caps: all-small-caps; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; color: var(--mute); padding-top: 16px; border-top: 1px solid var(--line); }
+.story-aside-meta div { margin-bottom: 4px; }
+.story-aside-meta b { color: var(--ink); font-variant-caps: normal; font-weight: 700; letter-spacing: -0.2px; font-family: 'Fraunces', serif; font-size: 15px; }
+.story-body { font-size: 18px; color: var(--ink-2); line-height: 1.75; font-family: 'Newsreader', serif; }
+.story-body p { margin-bottom: 22px; }
+.story-body p:first-of-type::first-letter {
+  font-family: 'Fraunces', serif; font-weight: 700;
+  font-size: 78px; float: left; line-height: 0.85;
+  padding: 8px 12px 0 0; color: var(--accent);
+}
+.story-body strong { color: var(--ink); font-weight: 700; }
+.story-body em { color: var(--ink); }
+
+/* ── PULL QUOTE ── */
+.pull-quote { margin: 36px 0; padding: 28px 0; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
+.pull-quote-text { font-family: 'Newsreader', serif; font-size: 18px; font-weight: 400; font-style: normal; line-height: 1.75; color: var(--ink-2); letter-spacing: 0; margin-bottom: 14px; }
+.pull-quote-attr { font-variant-caps: all-small-caps; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: var(--mute); }
+
+/* ── PRINCIPLES ── */
+.principles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); margin-top: 16px; }
+.principle { background: var(--white); padding: 36px 28px; }
+[data-theme="dark"] .principle { background: var(--paper-2); }
+.principle-mark { font-family: 'Fraunces', serif; font-size: 14px; font-weight: 700; color: var(--accent); letter-spacing: 0.18em; margin-bottom: 18px; font-variant-caps: all-small-caps; display: flex; align-items: center; gap: 10px; }
+.principle-mark::before { content: ''; width: 22px; height: 1px; background: var(--accent); }
+.principle-h { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 700; color: var(--ink); margin-bottom: 14px; letter-spacing: -0.4px; line-height: 1.2; }
+.principle-p { font-size: 15px; color: var(--ink-3); line-height: 1.7; }
+
+/* ── TIMELINE ── */
+.timeline { position: relative; padding-left: 32px; }
+.timeline::before { content: ''; position: absolute; left: 8px; top: 8px; bottom: 8px; width: 1px; background: var(--line); }
+.timeline-item { position: relative; padding-bottom: 36px; }
+.timeline-item:last-child { padding-bottom: 0; }
+.timeline-item::before {
+  content: ''; position: absolute; left: -29px; top: 8px;
+  width: 11px; height: 11px; border-radius: 50%;
+  background: var(--paper); border: 2px solid var(--accent);
+}
+.timeline-date { font-variant-caps: all-small-caps; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: var(--accent); margin-bottom: 6px; }
+.timeline-h { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 600; color: var(--ink); margin-bottom: 8px; letter-spacing: -0.3px; line-height: 1.25; }
+.timeline-p { font-size: 15px; color: var(--ink-3); line-height: 1.65; max-width: 65ch; }
+
+/* ── LEADERSHIP ── */
+.leaders { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.leader-card {}
+.leader-portrait {
+  aspect-ratio: 4 / 5; background: var(--paper-2);
+  border: 1px solid var(--line); margin-bottom: 18px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Fraunces', serif; font-size: 64px; font-weight: 700;
+  color: var(--ink-3); letter-spacing: -2px;
+  background-image: repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(0,0,0,0.015) 8px, rgba(0,0,0,0.015) 9px);
+  position: relative; overflow: hidden;
+}
+[data-theme="dark"] .leader-portrait { background: var(--paper-3); }
+.leader-portrait::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 4px; background: var(--accent);
+}
+.leader-name { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; color: var(--ink); margin-bottom: 4px; letter-spacing: -0.4px; }
+.leader-role { font-variant-caps: all-small-caps; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; color: var(--accent); margin-bottom: 12px; }
+.leader-bio { font-size: 14px; color: var(--ink-3); line-height: 1.65; margin-bottom: 12px; }
+.leader-links { display: flex; gap: 14px; font-variant-caps: all-small-caps; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; }
+.leader-links a { color: var(--ink-3); border-bottom: 1px solid var(--line); padding-bottom: 2px; transition: all 0.15s; }
+.leader-links a:hover { color: var(--accent); border-color: var(--accent); }
+
+/* ── BACKERS ── */
+.backers { display: grid; grid-template-columns: 1.2fr 1fr; gap: 64px; align-items: start; }
+.backers-list { background: var(--white); border: 1px solid var(--line); padding: 0; }
+[data-theme="dark"] .backers-list { background: var(--paper-2); }
+.backer-row { display: grid; grid-template-columns: 1fr auto; gap: 20px; padding: 20px 24px; border-bottom: 1px solid var(--line); align-items: center; }
+.backer-row:last-child { border-bottom: none; }
+.backer-name { font-family: 'Fraunces', serif; font-size: 17px; font-weight: 600; color: var(--ink); letter-spacing: -0.2px; }
+.backer-meta { font-size: 13px; color: var(--mute); margin-top: 2px; line-height: 1.4; }
+.backer-tag { font-variant-caps: all-small-caps; font-size: 10px; font-weight: 700; letter-spacing: 0.14em; padding: 4px 10px; border-radius: 2px; background: var(--paper-2); color: var(--ink-3); white-space: nowrap; }
+[data-theme="dark"] .backer-tag { background: var(--paper-3); }
+
+.backers-side {}
+.backers-side h3 { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; color: var(--ink); margin-bottom: 14px; letter-spacing: -0.4px; line-height: 1.2; }
+.backers-side p { font-size: 15px; color: var(--ink-2); line-height: 1.7; margin-bottom: 16px; }
+.backers-side p:last-child { margin-bottom: 0; }
+.backers-side a { color: var(--accent); border-bottom: 1px solid rgba(200,16,46,0.3); }
+
+/* ── CTA ── */
+.cta-band { background: var(--ink); color: var(--paper); padding: 64px 48px; display: grid; grid-template-columns: 1.4fr 1fr; gap: 48px; align-items: center; }
+[data-theme="dark"] .cta-band { background: #0a0907; border: 1px solid var(--line); }
+.cta-eyebrow { font-variant-caps: all-small-caps; font-size: 12px; font-weight: 700; letter-spacing: 0.18em; color: var(--accent); margin-bottom: 14px; }
+.cta-h { font-family: 'Fraunces', serif; font-size: 38px; font-weight: 700; letter-spacing: -0.8px; line-height: 1.1; color: var(--paper); margin-bottom: 14px; }
+.cta-p { font-size: 16px; color: rgba(244,241,232,0.7); line-height: 1.6; }
+.cta-actions { display: flex; flex-direction: column; gap: 12px; }
+.cta-btn-primary { background: var(--accent); color: var(--paper); font-variant-caps: all-small-caps; font-size: 14px; font-weight: 700; letter-spacing: 0.12em; padding: 14px 22px; text-align: center; border-radius: 2px; transition: background 0.15s; }
+.cta-btn-primary:hover { background: var(--accent-dark); }
+.cta-btn-secondary { background: transparent; color: var(--paper); border: 1px solid rgba(255,255,255,0.25); font-variant-caps: all-small-caps; font-size: 14px; font-weight: 700; letter-spacing: 0.12em; padding: 13px 22px; text-align: center; border-radius: 2px; transition: all 0.15s; }
+.cta-btn-secondary:hover { border-color: var(--paper); }
+
+/* ── FOOTER ── */
+.footer { background: var(--paper); border-top: 1px solid var(--line); }
+[data-theme="dark"] .footer { background: var(--paper-2); }
+.footer-main { max-width: var(--max); margin: 0 auto; padding: 40px 32px 32px; display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 48px; }
+.footer-logo { font-family: 'Fraunces', serif; font-weight: 700; font-size: 28px; letter-spacing: -1px; color: var(--ink); display: inline-flex; align-items: baseline; margin-bottom: 12px; }
+.footer-logo .mark { display: inline-block; width: 9px; height: 9px; background: var(--accent); margin-right: 5px; position: relative; top: -2px; }
+.footer-brand p { font-size: 14px; color: var(--mute); line-height: 1.55; max-width: 38ch; }
+.footer-col h4 { font-variant-caps: all-small-caps; font-size: 13px; font-weight: 700; letter-spacing: 0.14em; color: var(--ink); margin-bottom: 12px; }
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 7px; }
+.footer-col ul a { font-size: 14px; color: var(--ink-3); transition: color 0.15s; }
+.footer-col ul a:hover { color: var(--accent); }
+.footer-foot { border-top: 1px solid var(--line); padding: 18px 32px; max-width: var(--max); margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; font-style: italic; font-size: 13px; color: var(--mute); }
+.footer-foot .links { display: flex; gap: 18px; }
+.footer-foot a { font-style: normal; font-variant-caps: all-small-caps; letter-spacing: 0.08em; font-weight: 600; color: var(--mute); transition: color 0.15s; }
+.footer-foot a:hover { color: var(--ink); }
+
+@media (max-width: 900px) {
+  .about-hero-inner { grid-template-columns: 1fr; gap: 32px; padding: 64px 24px; }
+  .hero-title { font-size: 44px; }
+  .big-stats-inner { grid-template-columns: 1fr 1fr; gap: 24px; }
+  .big-stat { border-left: none; padding-left: 0; }
+  .story-grid { grid-template-columns: 1fr; gap: 32px; }
+  .principles { grid-template-columns: 1fr; }
+  .leaders { grid-template-columns: 1fr; }
+  .backers { grid-template-columns: 1fr; gap: 32px; }
+  .cta-band { grid-template-columns: 1fr; padding: 40px 28px; }
+  .sec-h { font-size: 30px; }
+  .footer-main { grid-template-columns: 1fr 1fr; gap: 32px; }
+}
+@media (max-width: 600px) {
+  .mast-inner { padding: 16px 20px; }
+  .page-wrap { padding: 56px 20px; }
+  .pull-quote-text { font-size: 22px; }
+  .big-stats-inner { grid-template-columns: 1fr; }
+}
+
+/* dark-mode contrast fix: force light text on always-dark bands */
+[data-theme="dark"] .about-hero { color: #f4f1e8; }
+[data-theme="dark"] .about-hero .cta-h,
+[data-theme="dark"] .about-hero h1,
+[data-theme="dark"] .about-hero h2,
+[data-theme="dark"] .about-hero strong,
+[data-theme="dark"] .about-hero b,
+[data-theme="dark"] .about-hero .page-title,
+[data-theme="dark"] .about-hero [class*="-h"],
+[data-theme="dark"] .about-hero [class*="-name"],
+[data-theme="dark"] .about-hero [class*="-val"],
+[data-theme="dark"] .about-hero [class*="-item-h"] { color: #f4f1e8 !important; }
+[data-theme="dark"] .cta-band { color: #f4f1e8; }
+[data-theme="dark"] .cta-band .cta-btn-secondary,
+[data-theme="dark"] .cta-band .cta-btn-primary { color: #ffffff !important; background: #c8102e; }
+[data-theme="dark"] .cta-band .cta-h,
+[data-theme="dark"] .cta-band h1,
+[data-theme="dark"] .cta-band h2,
+[data-theme="dark"] .cta-band strong,
+[data-theme="dark"] .cta-band b,
+[data-theme="dark"] .cta-band .page-title,
+[data-theme="dark"] .cta-band [class*="-h"],
+[data-theme="dark"] .cta-band [class*="-name"],
+[data-theme="dark"] .cta-band [class*="-val"],
+[data-theme="dark"] .cta-band [class*="-item-h"] { color: #f4f1e8 !important; }
+
+/* New logo: red underline beneath the C (replaces square mark) */
+.logo { gap: 0 !important; }
+.logo-mark { display: none !important; }
+.logo-c { position: relative; padding-bottom: 0.05em; }
+.logo-c::after { content: ''; position: absolute; left: 0.01em; right: 0.01em; bottom: 0; height: 0.045em; background: var(--accent); border-radius: 1px; }
+.footer-logo .mark { display: none !important; }
+.footer-logo-c { position: relative; padding-bottom: 0.05em; }
+.footer-logo-c::after { content: ''; position: absolute; left: 0.01em; right: 0.01em; bottom: 0; height: 0.05em; background: var(--accent); border-radius: 1px; }
+/* ═══════ PAYWALL MODAL ═══════ */
+.paywall-overlay { display: none; position: fixed; inset: 0; background: rgba(11,18,32,0.55); z-index: 2000; align-items: center; justify-content: center; padding: 24px; }
+[data-theme="dark"] .paywall-overlay { background: rgba(0,0,0,0.78); }
+.paywall-overlay.open { display: flex; }
+.paywall-modal { background: var(--white); border: 1px solid var(--line); max-width: 460px; width: 100%; padding: 36px 36px 28px; position: relative; box-shadow: var(--shadow-lg, 0 12px 40px rgba(0,0,0,0.25)); animation: paywallIn 0.2s ease; }
+[data-theme="dark"] .paywall-modal { background: var(--paper-2); }
+@keyframes paywallIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+.paywall-close { position: absolute; top: 14px; right: 16px; background: none; border: none; font-size: 28px; line-height: 1; color: var(--mute); cursor: pointer; transition: color 0.15s; }
+.paywall-close:hover { color: var(--ink); }
+.paywall-eyebrow { font-variant-caps: all-small-caps; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; color: var(--accent); margin-bottom: 10px; }
+.paywall-title { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; letter-spacing: -0.5px; line-height: 1.15; color: var(--ink); margin-bottom: 12px; }
+.paywall-body { font-family: 'Newsreader', serif; font-size: 15px; line-height: 1.6; color: var(--ink-2); margin-bottom: 20px; }
+.paywall-price { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; padding: 16px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-bottom: 18px; }
+.paywall-amount { font-family: 'Fraunces', serif; font-size: 34px; font-weight: 700; color: var(--ink); letter-spacing: -1px; line-height: 1; }
+.paywall-per { font-size: 15px; color: var(--ink-2); }
+.paywall-note { font-size: 13px; color: var(--mute); font-style: italic; margin-left: auto; }
+.paywall-perks { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; padding: 0; }
+.paywall-perks li { font-size: 14px; color: var(--ink-2); line-height: 1.5; padding-left: 24px; position: relative; }
+.paywall-perks li::before { content: '✓'; position: absolute; left: 0; top: 0; color: var(--accent); font-weight: 700; }
+.paywall-actions { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.paywall-btn-primary { display: block; text-align: center; background: var(--accent); color: #fff; font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 15px; font-weight: 700; letter-spacing: 0.08em; padding: 13px; border-radius: 2px; transition: background 0.15s; }
+.paywall-btn-primary:hover { background: var(--accent-dark); }
+.paywall-btn-secondary { display: block; text-align: center; background: transparent; color: var(--ink); border: 1px solid var(--line); font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 15px; font-weight: 700; letter-spacing: 0.08em; padding: 12px; border-radius: 2px; transition: border-color 0.15s; }
+.paywall-btn-secondary:hover { border-color: var(--ink); }
+.paywall-foot { text-align: center; font-size: 14px; color: var(--mute); font-style: italic; }
+.paywall-foot a { color: var(--accent); font-style: normal; }
+
+
+.footer-cert { display: inline-flex; align-items: center; gap: 10px; margin-top: 16px; padding: 9px 13px; background: var(--white); border: 1px solid var(--line); font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 13px; font-weight: 700; color: var(--ink); letter-spacing: 0.08em; }
+.footer-cert svg { width: 14px; height: 14px; color: #2ecc71; }
+[data-theme="dark"] .footer-cert { background: var(--paper-3); border-color: var(--line); }
+</style>
+</head>
+<body>
+
+<!-- UTIL BAR -->
+<div class="util-bar">
+  <div class="util-inner">
+    <div class="util-left">
+      <div class="util-status"><div class="live-dot"></div>Live Coverage</div>
+      <div class="util-stat"><b>2,847</b> sources indexed today</div>
+      <div class="util-stat"><b>143</b> stories rewritten</div>
+    </div>
+    <div class="util-right">
+      <a href="candor-news.html" class="util-link">← Back to Candor</a>
+      <div class="util-divider"></div>
+      <a href="#" class="util-link">Sign in</a>
+    </div>
+  </div>
+</div>
+
+<!-- MASTHEAD -->
+<header class="masthead">
+  <div class="mast-inner">
+    <div class="mast-left">
+      <div class="weather-chip">Pasadena · 74°F · Clear</div>
+      <div class="date-chip">Monday, May 26, 2026</div>
+    </div>
+    <div class="logo-wrap">
+      <a href="candor-news.html" class="logo"><span class="logo-c">C</span>andor</a>
+    </div>
+    <div class="mast-right">
+      <button class="icon-btn" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+      <button class="icon-btn" aria-label="Saved stories">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+      </button>
+      <button class="icon-btn" aria-label="Theme" onclick="toggleTheme()">
+        <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <button class="btn-subscribe" onclick="showPaywall('trial')">Subscribe</button>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN NAV -->
+<nav class="nav-wrap">
+  <div class="nav-inner">
+    <a class="nav-link live-link" href="candor-news.html">Live</a>
+    <a class="nav-link" href="#">U.S.</a>
+    <a class="nav-link" href="#">World</a>
+    <a class="nav-link" href="#">Politics</a>
+    <a class="nav-link" href="#">Business</a>
+    <a class="nav-link" href="#">Sports</a>
+    <a class="nav-link" href="#">Science</a>
+    <a class="nav-link" href="#">Tech</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="about-hero">
+  <div class="about-hero-inner">
+    <div>
+      <div class="hero-eyebrow">About Candor</div>
+      <h1 class="hero-title">Built for readers who've stopped trusting the news.</h1>
+      <p class="hero-dek">Candor uses AI to read every major outlet across the political spectrum, strip out the framing, and surface the underlying facts — with every source visible.</p>
+    </div>
+    <div class="hero-right">
+      <p><strong>Founded 2026</strong> in California. Independent and self-funded. No advertisers, no investors with editorial input, no political money.</p>
+      <p>Candor was started by one person who believed AI could be used to deliver the truth to more people, on better terms. The mission comes before the headcount.</p>
+      <p>This page is the long version. The short version is on every article we publish.</p>
+    </div>
+  </div>
+</section>
+
+<!-- BIG STATS -->
+<section class="big-stats">
+  <div class="big-stats-inner">
+    <div class="big-stat">
+      <div class="big-stat-num">50,000<small>+</small></div>
+      <div class="big-stat-label">Source outlets<br>across the spectrum</div>
+    </div>
+    <div class="big-stat">
+      <div class="big-stat-num">3</div>
+      <div class="big-stat-label">Perspectives weighed<br>left, center, right</div>
+    </div>
+    <div class="big-stat">
+      <div class="big-stat-num">100<small>%</small></div>
+      <div class="big-stat-label">Claims traceable<br>to a named source</div>
+    </div>
+    <div class="big-stat">
+      <div class="big-stat-num">$0</div>
+      <div class="big-stat-label">From advertisers or<br>political donors</div>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN -->
+<div class="page-wrap">
+
+  <!-- ORIGIN STORY -->
+  <section class="sec">
+    <div class="story-grid">
+      <aside class="story-aside">
+        <div class="sec-num">Our Story</div>
+        <h2 class="sec-h">How Candor started.</h2>
+        <div class="story-aside-meta">
+          <div>Founded</div>
+          <div><b>2026</b></div>
+        </div>
+        <div class="story-aside-meta" style="margin-top:16px;">
+          <div>Based</div>
+          <div><b>California</b></div>
+        </div>
+        <div class="story-aside-meta" style="margin-top:16px;">
+          <div>Founder</div>
+          <div><b>Carson Wagner</b></div>
+        </div>
+        <div class="story-aside-meta" style="margin-top:16px;">
+          <div>Status</div>
+          <div><b>Independent · Self-funded</b></div>
+        </div>
+      </aside>
+
+      <div class="story-body">
+        <p>The idea for Candor started with a simple, frustrating observation: you can read the same news event across a left-leaning daily, a centrist wire, and a right-leaning outlet, and come away with three completely different impressions of what happened. The facts are usually nearly identical. The headlines, the framing, and the emotional register are not.</p>
+        <p>One reader comes away convinced the country is sliding into chaos. Another comes away convinced it's finally being set right. <strong>They read the same news.</strong> They just didn't read the same story.</p>
+
+        <div class="pull-quote">
+          <p class="pull-quote-text">"The factual common ground is almost always there. It just gets buried under choreography — and the choreography is what people end up fighting about."</p>
+          <p class="pull-quote-attr">— Carson Wagner, Founder</p>
+        </div>
+
+        <p>I saw a gap. The work of reading widely, comparing how outlets frame the same event, and pulling out the facts they actually agree on is exactly the kind of work modern AI is good at — and almost nobody has the time to do it for themselves. Used carefully, AI could deliver that to far more people, on far better terms than the attention-driven model the rest of the internet runs on.</p>
+        <p>So that's what Candor is built to do, automatically, for every story, every day. The AI reads dozens of outlets across the political spectrum, isolates the factual claims they agree on, strips the editorial framing, and produces a single synthesis with every claim attributed back to its original source.</p>
+        <p>What you get is shorter, plainer, and — the goal is — closer to what actually happened. What you also get is a button on every story labeled Compare Coverage. Press it and you can see exactly how each outlet framed the same event. Candor doesn't hide the partisans. It just doesn't let them write the synthesis.</p>
+        <p>Candor is independent and self-funded, and it's built around a hard rule: every claim is traceable, and the AI never operates without human editorial standards governing what it is and isn't allowed to do. It's early, and it's honest about being early — including being public, every time, when it gets something wrong.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRINCIPLES -->
+  <section class="sec">
+    <div class="sec-num">What We Believe</div>
+    <h2 class="sec-h">Three things we'll never trade away.</h2>
+    <div class="principles">
+      <div class="principle">
+        <div class="principle-mark">Principle One</div>
+        <h3 class="principle-h">Show the work.</h3>
+        <p class="principle-p">Every sentence we publish is traceable to a named source. Every source is labeled with its known bias. Every framing decision is reversible by the reader. We'd rather show our work and be wrong than hide it and be plausibly right.</p>
+      </div>
+      <div class="principle">
+        <div class="principle-mark">Principle Two</div>
+        <h3 class="principle-h">Sell to readers, not to anyone else.</h3>
+        <p class="principle-p">Our revenue comes from people who pay to read us. Not from advertisers who pay to be next to us, not from investors who want us to grow at any cost, not from foundations with policy agendas. The incentive has to point at the reader or it eventually points away from them.</p>
+      </div>
+      <div class="principle">
+        <div class="principle-mark">Principle Three</div>
+        <h3 class="principle-h">Be honest about the AI.</h3>
+        <p class="principle-p">Candor's pipeline is AI-first. That's not something to hide and it's not something to celebrate — it's just how it's built. The aim is to be explicit about what the model does well, where it fails, and which decisions stay under human editorial control.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section class="sec">
+    <div class="sec-num">Where things stand</div>
+    <h2 class="sec-h">Early, and honest about it.</h2>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-date">2026</div>
+        <div class="timeline-h">The idea</div>
+        <p class="timeline-p">Candor begins with a single conviction: that AI, used carefully and transparently, can read across the political spectrum and deliver the underlying facts to far more people than could ever do that work themselves.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">Now</div>
+        <div class="timeline-h">Building the foundation</div>
+        <p class="timeline-p">The product, the editorial standards, the bias-rating framework, and the corrections process are being built from the ground up — with the rules written before the pipeline goes live, not after.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">Next</div>
+        <div class="timeline-h">The synthesis pipeline</div>
+        <p class="timeline-p">Connecting the live pipeline that reads across 50,000+ outlets, synthesizes the facts they agree on, and attributes every claim to its source — with human review on anything sensitive before it publishes.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">The commitment</div>
+        <div class="timeline-h">One thing that won't change</div>
+        <p class="timeline-p">However big Candor gets, the rule holds: every claim stays traceable, the AI never runs without human standards governing it, and when something is wrong, it gets corrected in public.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEADERSHIP -->
+  <section class="sec">
+    <div class="sec-num">Who's behind this</div>
+    <h2 class="sec-h">The person accountable.</h2>
+    <p style="margin-bottom:32px;font-family:'Newsreader',serif;font-size:15px;color:var(--ink-2);line-height:1.7;max-width:60ch;">Candor is built to scale through technology rather than headcount. The editorial standards, source attribution, and corrections process are designed to hold whether the team is one person or many — and accountability always rests with a named human, never the model.</p>
+    <div class="leaders">
+      <div class="leader-card">
+        <div class="leader-portrait">CW</div>
+        <div class="leader-name">Carson Wagner</div>
+        <div class="leader-role">Founder · Editor-in-Chief</div>
+        <p class="leader-bio">Carson founded Candor on the belief that AI, used transparently and held to real editorial standards, can deliver the facts across the political spectrum to far more people than traditional newsrooms ever could. As Editor-in-Chief, Carson owns the standards, the corrections process, and final accountability for everything Candor publishes.</p>
+        <div class="leader-links">
+          <a href="candor-standards.html">Standards</a>
+          <a href="candor-corrections.html">Corrections</a>
+          <a href="candor-contact.html">Contact</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BACKERS -->
+  <section class="sec">
+    <div class="sec-num">Funding</div>
+    <h2 class="sec-h">Who pays for this.</h2>
+    <div class="backers">
+      <div class="backers-list">
+        <div class="backer-row">
+          <div>
+            <div class="backer-name">Self-funded</div>
+            <div class="backer-meta">Built and paid for by its founder</div>
+          </div>
+          <span class="backer-tag">Today</span>
+        </div>
+        <div class="backer-row">
+          <div>
+            <div class="backer-name">Reader memberships</div>
+            <div class="backer-meta">A single $4.99/month membership — the planned core of how Candor sustains itself</div>
+          </div>
+          <span class="backer-tag">The model</span>
+        </div>
+        <div class="backer-row">
+          <div>
+            <div class="backer-name">Advertisers</div>
+            <div class="backer-meta">No display ads, no sponsored content, no native ads, no affiliate links</div>
+          </div>
+          <span class="backer-tag">None</span>
+        </div>
+        <div class="backer-row">
+          <div>
+            <div class="backer-name">Political donors / PACs</div>
+            <div class="backer-meta">By policy, none. Forever.</div>
+          </div>
+          <span class="backer-tag">$0</span>
+        </div>
+      </div>
+
+      <div class="backers-side">
+        <h3>Why we publish this.</h3>
+        <p>It's impossible to evaluate a news outlet without knowing who pays for it. Candor is early and independent: today it's self-funded by its founder, and it's designed to be sustained by readers through a single membership — not by advertisers, investors with editorial input, or political money.</p>
+        <p>The business model is deliberately simple so the incentive stays pointed at the reader. If that funding mix ever changes in a way that could affect editorial independence, it will be disclosed plainly and prominently.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-band">
+    <div>
+      <div class="cta-eyebrow">Get involved</div>
+      <h2 class="cta-h">Read us. Hire us. Fund us. Hold us accountable.</h2>
+      <p class="cta-p">The most useful thing you can do is read the news on Candor and tell us when we get it wrong. Everything else is optional — but listed here for completeness.</p>
+    </div>
+    <div class="cta-actions">
+      <a href="candor-signup.html" class="cta-btn-primary">Start a free trial</a>
+      <a href="candor-corrections.html" class="cta-btn-secondary">Submit a correction</a>
+      <a href="#" class="cta-btn-secondary">Open careers</a>
+      <a href="#" class="cta-btn-secondary">Press inquiries</a>
+    </div>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-main">
+    <div class="footer-brand">
+      <div class="footer-logo"><span class="footer-logo-c">C</span>andor</div>
+      <p>AI-powered news synthesis. Every story verified across the full source spectrum — left, center, and right — so you can read with confidence.</p>
+      <div class="footer-cert">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4M21 12c0 5-3.5 8-9 9-5.5-1-9-4-9-9V5l9-3 9 3v7z"/></svg>
+        <span>Methodology · Open</span>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Coverage</h4>
+      <ul>
+        <li><a href="#">U.S. News</a></li><li><a href="#">World</a></li>
+        <li><a href="#">Politics</a></li><li><a href="#">Business</a></li>
+        <li><a href="#">Science</a></li><li><a href="#">Tech</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Trust</h4>
+      <ul>
+        <li><a href="candor-methodology.html">Methodology</a></li>
+        <li><a href="candor-sources.html">Source List</a></li>
+        <li><a href="candor-biasratings.html">Bias Ratings</a></li>
+        <li><a href="candor-corrections.html">Corrections</a></li>
+        <li><a href="candor-standards.html">Editorial Standards</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="candor-about.html">About</a></li>
+        <li><a href="candor-newsroom.html">Newsroom</a></li>
+        <li><a href="candor-careers.html">Careers</a></li>
+        <li><a href="candor-press.html">Press</a></li>
+        <li><a href="candor-contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-foot">
+    <span>© 2026 Candor News Inc. · AI-assisted summaries reviewed for factual accuracy.</span>
+    <div class="links">
+      <a href="candor-privacy.html">Privacy</a>
+      <a href="candor-terms.html">Terms</a>
+      <a href="candor-accessibility.html">Accessibility</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('theme-icon').innerHTML = isDark
+    ? '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'
+    : '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+}
+</script>
+
+<!-- ═══════════════ PAYWALL MODAL (universal) ═══════════════ -->
+<div class="paywall-overlay" id="paywall-overlay" onclick="if(event.target===this)closePaywall()">
+  <div class="paywall-modal" role="dialog" aria-modal="true" aria-labelledby="paywall-title">
+    <button class="paywall-close" onclick="closePaywall()" aria-label="Close">&times;</button>
+    <div class="paywall-eyebrow" id="paywall-eyebrow">Candor Membership</div>
+    <h3 class="paywall-title" id="paywall-title">This is a member feature.</h3>
+    <p class="paywall-body" id="paywall-body">The Candor AI assistant is part of Candor membership. Start a free 7-day trial to use it — no charge today, cancel anytime.</p>
+    <div class="paywall-price">
+      <span class="paywall-amount">$4.99</span>
+      <span class="paywall-per">/ month</span>
+      <span class="paywall-note">after your 7-day free trial</span>
+    </div>
+    <ul class="paywall-perks">
+      <li>Unlimited Candor AI — ask any story anything</li>
+      <li>Breaking-news alerts and the Daily Brief by email</li>
+      <li>Full archive, Compare Coverage, and the weekend long-read</li>
+    </ul>
+    <div class="paywall-actions">
+      <a href="candor-signup.html" class="paywall-btn-primary">Start 7-day free trial</a>
+      <a href="candor-signup.html" class="paywall-btn-secondary">Create a free account</a>
+    </div>
+    <div class="paywall-foot">Already a member? <a href="candor-login.html">Log in</a></div>
+  </div>
+</div>
+
+<script>
+/* ═══════ PAYWALL (member-feature gating) ═══════ */
+function showPaywall(feature) {
+  var overlay = document.getElementById('paywall-overlay');
+  if (!overlay) return;
+  var title = document.getElementById('paywall-title');
+  var body = document.getElementById('paywall-body');
+  var eyebrow = document.getElementById('paywall-eyebrow');
+  if (feature === 'alerts' || feature === 'email' || feature === 'newsletter' || feature === 'trial') {
+    eyebrow.textContent = 'Candor Membership';
+    title.textContent = 'Alerts are a member feature.';
+    body.textContent = 'Breaking-news alerts and the Daily Brief by email are part of Candor membership. Start a free 7-day trial to turn them on — no charge today, cancel anytime.';
+  } else {
+    eyebrow.textContent = 'Candor Membership';
+    title.textContent = 'Candor AI is a member feature.';
+    body.textContent = 'The Candor AI assistant is part of Candor membership. Start a free 7-day trial to ask any story anything — no charge today, cancel anytime.';
+  }
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closePaywall() {
+  var overlay = document.getElementById('paywall-overlay');
+  if (!overlay) return;
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closePaywall(); });
+
+</script>
+</body>
+</html>

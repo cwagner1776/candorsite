@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Corrections — Candor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,900&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink: #0b1220; --ink-2: #1a2233; --ink-3: #3a4358;
+  --mute: #6b7488; --mute-2: #9aa2b4;
+  --line: #e4e6ec; --line-2: #ecedf1;
+  --paper: #f7f5ef; --paper-2: #efece3; --paper-3: #e8e4d8;
+  --white: #ffffff;
+  --accent: #c8102e; --accent-dark: #9c0a23;
+  --left: #2d62b3; --center: #4a4a4a; --right: #b8451e;
+  --max: 1200px;
+}
+[data-theme="dark"] {
+  --ink: #f4f1e8; --ink-2: #e0dccf; --ink-3: #c8c4b7;
+  --mute: #a8a497; --mute-2: #8e8a7e;
+  --line: #3d3a30; --line-2: #332f25;
+  --paper: #14130e; --paper-2: #1a1812; --paper-3: #221f17;
+  --white: #1a1812;
+  --accent: #ff4d63; --accent-dark: #e6304c;
+  --left: #6a9ad8; --center: #8a92a4; --right: #e8915a;
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'Newsreader', Georgia, serif; background: var(--paper); color: var(--ink); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; transition: background 0.3s, color 0.3s; }
+a { text-decoration: none; color: inherit; cursor: pointer; }
+button { cursor: pointer; font-family: inherit; border: none; background: none; color: inherit; }
+
+/* ── UTIL BAR ── */
+.util-bar { background: var(--ink); }
+[data-theme="dark"] .util-bar { background: #0a0907; border-bottom: 1px solid var(--line); }
+.util-inner { max-width: var(--max); margin: 0 auto; padding: 9px 32px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.util-left { display: flex; align-items: center; gap: 22px; }
+.util-status { display: flex; align-items: center; gap: 8px; color: #ece8d8; font-variant-caps: all-small-caps; letter-spacing: 0.1em; font-weight: 600; font-size: 14px; }
+.live-dot { width: 7px; height: 7px; border-radius: 50%; background: #2ecc71; animation: livePulse 1.8s ease-out infinite; }
+@keyframes livePulse { 0%{box-shadow:0 0 0 0 rgba(46,204,113,0.55)}70%{box-shadow:0 0 0 6px rgba(46,204,113,0)}100%{box-shadow:0 0 0 0 rgba(46,204,113,0)} }
+.util-stat { color: var(--mute-2); font-variant-caps: all-small-caps; letter-spacing: 0.08em; font-size: 14px; }
+.util-stat b { color: #ece8d8; font-weight: 700; font-variant-caps: normal; font-size: 13px; }
+.util-right { display: flex; align-items: center; gap: 14px; }
+.util-link { color: var(--mute-2); font-variant-caps: all-small-caps; letter-spacing: 0.1em; font-weight: 600; font-size: 14px; transition: color 0.15s; }
+.util-link:hover { color: #ece8d8; }
+.util-divider { width: 1px; height: 12px; background: #2a3344; }
+[data-theme="dark"] .util-divider { background: #4a5266; }
+
+/* ── MASTHEAD ── */
+.masthead { background: var(--white); border-bottom: 1px solid var(--line); }
+[data-theme="dark"] .masthead { background: var(--paper-2); }
+.mast-inner { max-width: var(--max); margin: 0 auto; padding: 22px 32px 18px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px; }
+.mast-left { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+.weather-chip { display: flex; align-items: center; gap: 8px; font-variant-caps: all-small-caps; font-weight: 500; letter-spacing: 0.06em; font-size: 14px; color: var(--mute); }
+.date-chip { font-style: italic; font-size: 13px; color: var(--mute); }
+.logo-wrap { text-align: center; }
+.logo { font-family: 'Fraunces', serif; font-weight: 700; font-size: 48px; letter-spacing: -1.6px; line-height: 1; color: var(--ink); display: inline-flex; align-items: baseline; gap: 2px; }
+.logo-mark { display: inline-block; width: 13px; height: 13px; background: var(--accent); margin-right: 5px; position: relative; top: -3px; }
+.mast-right { display: flex; align-items: center; gap: 10px; justify-content: flex-end; }
+.icon-btn { width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--line); border-radius: 50%; color: var(--ink-3); transition: all 0.2s; background: var(--white); }
+.icon-btn:hover { color: var(--ink); border-color: var(--ink); }
+.icon-btn svg { width: 15px; height: 15px; }
+[data-theme="dark"] .icon-btn { background: var(--paper-3); border-color: var(--line); }
+.btn-subscribe { background: var(--ink); color: var(--paper); font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 16px; font-weight: 700; letter-spacing: 0.08em; padding: 9px 18px; border-radius: 2px; transition: all 0.2s; }
+.btn-subscribe:hover { background: var(--accent); }
+
+/* ── NAV ── */
+.nav-wrap { background: var(--white); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 50; }
+[data-theme="dark"] .nav-wrap { background: var(--paper-2); }
+.nav-inner { max-width: var(--max); margin: 0 auto; padding: 0 32px; display: flex; align-items: center; overflow-x: auto; scrollbar-width: none; }
+.nav-inner::-webkit-scrollbar { display: none; }
+.nav-link { font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 16px; font-weight: 600; letter-spacing: 0.08em; color: var(--ink-3); padding: 14px 14px; border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.15s; }
+.nav-link:first-child { padding-left: 0; }
+.nav-link:hover { color: var(--ink); }
+.nav-link.active { color: var(--ink); border-bottom-color: var(--accent); }
+.nav-link.live-link::before { content: ''; display: inline-block; width: 6px; height: 6px; background: #ef3340; border-radius: 50%; margin-right: 6px; vertical-align: middle; animation: livePulse 1.8s infinite; }
+
+/* ── PAGE HERO ── */
+.page-hero { background: var(--ink); color: var(--paper); padding: 72px 32px 64px; text-align: center; position: relative; overflow: hidden; }
+[data-theme="dark"] .page-hero { background: #0a0907; }
+.page-hero::before { content: 'OWN IT'; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-family: 'Fraunces', serif; font-size: 220px; font-weight: 900; color: rgba(255,255,255,0.025); white-space: nowrap; pointer-events: none; letter-spacing: -4px; }
+.page-eyebrow { font-variant-caps: all-small-caps; font-size: 13px; font-weight: 700; letter-spacing: 0.18em; color: var(--accent); margin-bottom: 16px; }
+.page-title { font-family: 'Fraunces', serif; font-size: 52px; font-weight: 700; letter-spacing: -1.5px; line-height: 1.05; color: var(--paper); margin-bottom: 20px; }
+.page-dek { font-size: 19px; color: rgba(244,241,232,0.7); line-height: 1.6; max-width: 56ch; margin: 0 auto; font-style: italic; }
+
+/* ── TRUST NAV ── */
+.trust-nav { background: var(--white); border-bottom: 1px solid var(--line); }
+[data-theme="dark"] .trust-nav { background: var(--paper-2); }
+.trust-nav-inner { max-width: var(--max); margin: 0 auto; padding: 0 32px; display: flex; gap: 0; overflow-x: auto; scrollbar-width: none; }
+.trust-nav-inner::-webkit-scrollbar { display: none; }
+.trust-link { font-variant-caps: all-small-caps; font-size: 14px; font-weight: 700; letter-spacing: 0.1em; color: var(--mute); padding: 14px 18px 14px 0; margin-right: 18px; border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.15s; }
+.trust-link:hover { color: var(--ink); }
+.trust-link.active { color: var(--ink); border-bottom-color: var(--accent); }
+
+/* ── LAYOUT ── */
+.page-wrap { max-width: var(--max); margin: 0 auto; padding: 64px 32px; }
+
+/* ── INTRO ── */
+.intro-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 64px; align-items: start; margin-bottom: 64px; }
+.intro-h { font-family: 'Fraunces', serif; font-size: 36px; font-weight: 700; letter-spacing: -0.8px; line-height: 1.15; color: var(--ink); margin-bottom: 20px; }
+.intro-body { font-size: 17px; color: var(--ink-2); line-height: 1.75; }
+.intro-body p { margin-bottom: 18px; }
+.intro-body p:last-child { margin-bottom: 0; }
+.intro-body strong { color: var(--ink); font-weight: 700; }
+
+.stat-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.stat-box { background: var(--white); padding: 22px 18px; }
+[data-theme="dark"] .stat-box { background: var(--paper-2); }
+.stat-box-num { font-family: 'Fraunces', serif; font-size: 36px; font-weight: 700; letter-spacing: -1px; color: var(--ink); line-height: 1; margin-bottom: 6px; }
+.stat-box-label { font-variant-caps: all-small-caps; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; color: var(--mute); line-height: 1.3; }
+
+/* ── SECTION HEADER ── */
+.sec-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding-bottom: 14px; border-bottom: 2px solid var(--ink); margin-bottom: 32px; }
+.sec-title { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 700; letter-spacing: -0.5px; color: var(--ink); }
+.sec-meta { font-variant-caps: all-small-caps; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; color: var(--mute); }
+
+/* ── FILTER BAR ── */
+.filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--line); }
+.filter-chip { font-variant-caps: all-small-caps; font-size: 12px; font-weight: 700; letter-spacing: 0.12em; color: var(--ink-3); padding: 7px 14px; border: 1px solid var(--line); background: var(--white); transition: all 0.15s; border-radius: 2px; }
+[data-theme="dark"] .filter-chip { background: var(--paper-2); }
+.filter-chip:hover { border-color: var(--ink); color: var(--ink); }
+.filter-chip.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+[data-theme="dark"] .filter-chip.active { background: var(--paper-3); color: var(--ink); }
+
+/* ── CORRECTION CARDS ── */
+.correction-list { display: flex; flex-direction: column; gap: 0; margin-bottom: 64px; }
+.correction { display: grid; grid-template-columns: 130px 1fr auto; gap: 32px; padding: 24px 0; border-bottom: 1px solid var(--line); align-items: start; }
+.correction:last-child { border-bottom: none; }
+.correction-date { font-variant-caps: all-small-caps; font-size: 12px; font-weight: 700; letter-spacing: 0.12em; color: var(--mute); padding-top: 4px; }
+.correction-date b { display: block; font-family: 'Fraunces', serif; font-size: 18px; font-weight: 700; color: var(--ink); font-variant-caps: normal; letter-spacing: -0.3px; margin-top: 2px; }
+.correction-body {}
+.correction-tag { display: inline-block; font-variant-caps: all-small-caps; font-size: 10px; font-weight: 700; letter-spacing: 0.14em; padding: 3px 8px; margin-bottom: 8px; border-radius: 2px; }
+.tag-correction { background: rgba(200,16,46,0.1); color: var(--accent); }
+.tag-clarification { background: rgba(184,69,30,0.12); color: var(--right); }
+.tag-update { background: rgba(45,98,179,0.1); color: var(--left); }
+.tag-retraction { background: var(--ink); color: var(--paper); }
+.correction-h { font-family: 'Fraunces', serif; font-size: 19px; font-weight: 600; color: var(--ink); margin-bottom: 8px; letter-spacing: -0.2px; line-height: 1.3; }
+.correction-h a:hover { color: var(--accent); }
+.correction-p { font-size: 15px; color: var(--ink-2); line-height: 1.65; margin-bottom: 10px; }
+.correction-p:last-child { margin-bottom: 0; }
+.correction-diff { background: var(--paper-2); border-left: 3px solid var(--line); padding: 12px 16px; margin: 10px 0; font-size: 14px; line-height: 1.6; }
+[data-theme="dark"] .correction-diff { background: var(--paper-3); }
+.diff-row { display: flex; gap: 12px; }
+.diff-label { font-variant-caps: all-small-caps; font-size: 10px; font-weight: 700; letter-spacing: 0.14em; color: var(--mute); min-width: 56px; padding-top: 3px; flex-shrink: 0; }
+.diff-text { color: var(--ink-2); }
+.diff-strike .diff-text { text-decoration: line-through; color: var(--mute); }
+.diff-add .diff-text { color: var(--ink); font-weight: 500; }
+.correction-meta { display: flex; gap: 14px; font-size: 12px; color: var(--mute); font-variant-caps: all-small-caps; letter-spacing: 0.08em; font-weight: 600; }
+.correction-meta a { color: var(--accent); border-bottom: 1px solid rgba(200,16,46,0.3); }
+.correction-meta a:hover { border-color: var(--accent); }
+.correction-actions { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+.action-btn { font-variant-caps: all-small-caps; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: var(--ink-3); padding: 6px 12px; border: 1px solid var(--line); background: var(--white); border-radius: 2px; transition: all 0.15s; white-space: nowrap; }
+[data-theme="dark"] .action-btn { background: var(--paper-2); }
+.action-btn:hover { border-color: var(--ink); color: var(--ink); }
+
+/* ── POLICY GRID ── */
+.policy-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 64px; }
+.policy-card { background: var(--white); border: 1px solid var(--line); padding: 28px 24px; }
+[data-theme="dark"] .policy-card { background: var(--paper-2); }
+.policy-num { font-family: 'Fraunces', serif; font-size: 32px; font-weight: 700; color: var(--accent); line-height: 1; margin-bottom: 14px; letter-spacing: -1px; }
+.policy-h { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 600; color: var(--ink); margin-bottom: 10px; letter-spacing: -0.2px; }
+.policy-p { font-size: 14px; color: var(--ink-3); line-height: 1.65; }
+
+/* ── SUBMIT BOX ── */
+.submit-box { background: var(--ink); color: var(--paper); padding: 48px 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; margin-bottom: 64px; }
+[data-theme="dark"] .submit-box { background: #0a0907; border: 1px solid var(--line); }
+.submit-eyebrow { font-variant-caps: all-small-caps; font-size: 12px; font-weight: 700; letter-spacing: 0.18em; color: var(--accent); margin-bottom: 14px; }
+.submit-h { font-family: 'Fraunces', serif; font-size: 30px; font-weight: 700; letter-spacing: -0.6px; line-height: 1.15; margin-bottom: 14px; color: var(--paper); }
+.submit-p { font-size: 15px; color: rgba(244,241,232,0.7); line-height: 1.65; }
+.submit-form { display: flex; flex-direction: column; gap: 12px; }
+.submit-form input, .submit-form select, .submit-form textarea {
+  font-family: 'Newsreader', serif; font-size: 15px; padding: 11px 14px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); color: var(--paper); border-radius: 2px; outline: none; transition: border-color 0.15s;
+}
+.submit-form input::placeholder, .submit-form textarea::placeholder { color: rgba(244,241,232,0.4); }
+.submit-form input:focus, .submit-form select:focus, .submit-form textarea:focus { border-color: var(--accent); }
+.submit-form textarea { resize: vertical; min-height: 80px; font-family: inherit; }
+.submit-form select { appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'><path d='M1 1L6 6L11 1' stroke='%23f4f1e8' stroke-width='1.5'/></svg>"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+.submit-btn { background: var(--accent); color: var(--paper); font-variant-caps: all-small-caps; font-size: 14px; font-weight: 700; letter-spacing: 0.12em; padding: 12px 18px; border-radius: 2px; transition: background 0.15s; align-self: flex-start; }
+.submit-btn:hover { background: var(--accent-dark); }
+
+/* ── FAQ ── */
+.faq-list { border-top: 1px solid var(--line); margin-bottom: 32px; }
+.faq-item { border-bottom: 1px solid var(--line); padding: 22px 0; }
+.faq-q { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 600; color: var(--ink); margin-bottom: 10px; letter-spacing: -0.2px; }
+.faq-a { font-size: 15px; color: var(--ink-2); line-height: 1.7; }
+.faq-a a { color: var(--accent); border-bottom: 1px solid rgba(200,16,46,0.3); }
+
+/* ── FOOTER ── */
+.footer { background: var(--paper); border-top: 1px solid var(--line); }
+[data-theme="dark"] .footer { background: var(--paper-2); }
+.footer-main { max-width: var(--max); margin: 0 auto; padding: 40px 32px 32px; display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 48px; }
+.footer-logo { font-family: 'Fraunces', serif; font-weight: 700; font-size: 28px; letter-spacing: -1px; color: var(--ink); display: inline-flex; align-items: baseline; margin-bottom: 12px; }
+.footer-logo .mark { display: inline-block; width: 9px; height: 9px; background: var(--accent); margin-right: 5px; position: relative; top: -2px; }
+.footer-brand p { font-size: 14px; color: var(--mute); line-height: 1.55; max-width: 38ch; }
+.footer-col h4 { font-variant-caps: all-small-caps; font-size: 13px; font-weight: 700; letter-spacing: 0.14em; color: var(--ink); margin-bottom: 12px; }
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 7px; }
+.footer-col ul a { font-size: 14px; color: var(--ink-3); transition: color 0.15s; }
+.footer-col ul a:hover { color: var(--accent); }
+.footer-foot { border-top: 1px solid var(--line); padding: 18px 32px; max-width: var(--max); margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; font-style: italic; font-size: 13px; color: var(--mute); }
+.footer-foot .links { display: flex; gap: 18px; }
+.footer-foot a { font-style: normal; font-variant-caps: all-small-caps; letter-spacing: 0.08em; font-weight: 600; color: var(--mute); transition: color 0.15s; }
+.footer-foot a:hover { color: var(--ink); }
+
+@media (max-width: 900px) {
+  .intro-grid { grid-template-columns: 1fr; gap: 32px; }
+  .policy-grid { grid-template-columns: 1fr; }
+  .submit-box { grid-template-columns: 1fr; gap: 28px; padding: 32px 24px; }
+  .correction { grid-template-columns: 1fr; gap: 12px; }
+  .correction-actions { flex-direction: row; }
+  .page-title { font-size: 36px; }
+  .footer-main { grid-template-columns: 1fr 1fr; gap: 32px; }
+}
+@media (max-width: 600px) {
+  .mast-inner { padding: 16px 20px; }
+  .page-wrap { padding: 40px 20px; }
+  .stat-row { grid-template-columns: 1fr; }
+  .sec-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+
+/* dark-mode contrast fix: force light text on always-dark bands */
+[data-theme="dark"] .page-hero { color: #f4f1e8; }
+[data-theme="dark"] .page-hero .cta-h,
+[data-theme="dark"] .page-hero h1,
+[data-theme="dark"] .page-hero h2,
+[data-theme="dark"] .page-hero strong,
+[data-theme="dark"] .page-hero b,
+[data-theme="dark"] .page-hero .page-title,
+[data-theme="dark"] .page-hero [class*="-h"],
+[data-theme="dark"] .page-hero [class*="-name"],
+[data-theme="dark"] .page-hero [class*="-val"],
+[data-theme="dark"] .page-hero [class*="-item-h"] { color: #f4f1e8 !important; }
+[data-theme="dark"] .submit-box { color: #f4f1e8; }
+[data-theme="dark"] .submit-box .cta-h,
+[data-theme="dark"] .submit-box h1,
+[data-theme="dark"] .submit-box h2,
+[data-theme="dark"] .submit-box strong,
+[data-theme="dark"] .submit-box b,
+[data-theme="dark"] .submit-box .page-title,
+[data-theme="dark"] .submit-box [class*="-h"],
+[data-theme="dark"] .submit-box [class*="-name"],
+[data-theme="dark"] .submit-box [class*="-val"],
+[data-theme="dark"] .submit-box [class*="-item-h"] { color: #f4f1e8 !important; }
+
+/* New logo: red underline beneath the C (replaces square mark) */
+.logo { gap: 0 !important; }
+.logo-mark { display: none !important; }
+.logo-c { position: relative; padding-bottom: 0.05em; }
+.logo-c::after { content: ''; position: absolute; left: 0.01em; right: 0.01em; bottom: 0; height: 0.045em; background: var(--accent); border-radius: 1px; }
+.footer-logo .mark { display: none !important; }
+.footer-logo-c { position: relative; padding-bottom: 0.05em; }
+.footer-logo-c::after { content: ''; position: absolute; left: 0.01em; right: 0.01em; bottom: 0; height: 0.05em; background: var(--accent); border-radius: 1px; }
+/* ═══════ PAYWALL MODAL ═══════ */
+.paywall-overlay { display: none; position: fixed; inset: 0; background: rgba(11,18,32,0.55); z-index: 2000; align-items: center; justify-content: center; padding: 24px; }
+[data-theme="dark"] .paywall-overlay { background: rgba(0,0,0,0.78); }
+.paywall-overlay.open { display: flex; }
+.paywall-modal { background: var(--white); border: 1px solid var(--line); max-width: 460px; width: 100%; padding: 36px 36px 28px; position: relative; box-shadow: var(--shadow-lg, 0 12px 40px rgba(0,0,0,0.25)); animation: paywallIn 0.2s ease; }
+[data-theme="dark"] .paywall-modal { background: var(--paper-2); }
+@keyframes paywallIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+.paywall-close { position: absolute; top: 14px; right: 16px; background: none; border: none; font-size: 28px; line-height: 1; color: var(--mute); cursor: pointer; transition: color 0.15s; }
+.paywall-close:hover { color: var(--ink); }
+.paywall-eyebrow { font-variant-caps: all-small-caps; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; color: var(--accent); margin-bottom: 10px; }
+.paywall-title { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; letter-spacing: -0.5px; line-height: 1.15; color: var(--ink); margin-bottom: 12px; }
+.paywall-body { font-family: 'Newsreader', serif; font-size: 15px; line-height: 1.6; color: var(--ink-2); margin-bottom: 20px; }
+.paywall-price { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; padding: 16px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-bottom: 18px; }
+.paywall-amount { font-family: 'Fraunces', serif; font-size: 34px; font-weight: 700; color: var(--ink); letter-spacing: -1px; line-height: 1; }
+.paywall-per { font-size: 15px; color: var(--ink-2); }
+.paywall-note { font-size: 13px; color: var(--mute); font-style: italic; margin-left: auto; }
+.paywall-perks { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; padding: 0; }
+.paywall-perks li { font-size: 14px; color: var(--ink-2); line-height: 1.5; padding-left: 24px; position: relative; }
+.paywall-perks li::before { content: '✓'; position: absolute; left: 0; top: 0; color: var(--accent); font-weight: 700; }
+.paywall-actions { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.paywall-btn-primary { display: block; text-align: center; background: var(--accent); color: #fff; font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 15px; font-weight: 700; letter-spacing: 0.08em; padding: 13px; border-radius: 2px; transition: background 0.15s; }
+.paywall-btn-primary:hover { background: var(--accent-dark); }
+.paywall-btn-secondary { display: block; text-align: center; background: transparent; color: var(--ink); border: 1px solid var(--line); font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 15px; font-weight: 700; letter-spacing: 0.08em; padding: 12px; border-radius: 2px; transition: border-color 0.15s; }
+.paywall-btn-secondary:hover { border-color: var(--ink); }
+.paywall-foot { text-align: center; font-size: 14px; color: var(--mute); font-style: italic; }
+.paywall-foot a { color: var(--accent); font-style: normal; }
+
+
+.footer-cert { display: inline-flex; align-items: center; gap: 10px; margin-top: 16px; padding: 9px 13px; background: var(--white); border: 1px solid var(--line); font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 13px; font-weight: 700; color: var(--ink); letter-spacing: 0.08em; }
+.footer-cert svg { width: 14px; height: 14px; color: #2ecc71; }
+[data-theme="dark"] .footer-cert { background: var(--paper-3); border-color: var(--line); }
+</style>
+</head>
+<body>
+
+<!-- UTIL BAR -->
+<div class="util-bar">
+  <div class="util-inner">
+    <div class="util-left">
+      <div class="util-status"><div class="live-dot"></div>Live Coverage</div>
+      <div class="util-stat"><b>2,847</b> sources indexed today</div>
+      <div class="util-stat"><b>143</b> stories rewritten</div>
+    </div>
+    <div class="util-right">
+      <a href="candor-news.html" class="util-link">← Back to Candor</a>
+      <div class="util-divider"></div>
+      <a href="#" class="util-link">Sign in</a>
+    </div>
+  </div>
+</div>
+
+<!-- MASTHEAD -->
+<header class="masthead">
+  <div class="mast-inner">
+    <div class="mast-left">
+      <div class="weather-chip">Pasadena · 74°F · Clear</div>
+      <div class="date-chip">Monday, May 26, 2026</div>
+    </div>
+    <div class="logo-wrap">
+      <a href="candor-news.html" class="logo"><span class="logo-c">C</span>andor</a>
+    </div>
+    <div class="mast-right">
+      <button class="icon-btn" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+      <button class="icon-btn" aria-label="Saved stories">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+      </button>
+      <button class="icon-btn" aria-label="Theme" onclick="toggleTheme()">
+        <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <button class="btn-subscribe" onclick="showPaywall('trial')">Subscribe</button>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN NAV -->
+<nav class="nav-wrap">
+  <div class="nav-inner">
+    <a class="nav-link live-link" href="candor-news.html">Live</a>
+    <a class="nav-link" href="#">U.S.</a>
+    <a class="nav-link" href="#">World</a>
+    <a class="nav-link" href="#">Politics</a>
+    <a class="nav-link" href="#">Business</a>
+    <a class="nav-link" href="#">Sports</a>
+    <a class="nav-link" href="#">Science</a>
+    <a class="nav-link" href="#">Tech</a>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-eyebrow">Trust & Transparency</div>
+  <h1 class="page-title">Corrections</h1>
+  <p class="page-dek">When we get something wrong, we fix it in public. Every correction we've issued, with the original text, the change, and what we learned.</p>
+</div>
+
+<!-- TRUST SUB-NAV -->
+<div class="trust-nav">
+  <div class="trust-nav-inner">
+    <a class="trust-link" href="candor-methodology.html">Methodology</a>
+    <a class="trust-link" href="candor-sources.html">Source List</a>
+    <a class="trust-link" href="candor-biasratings.html">Bias Ratings</a>
+    <a class="trust-link active" href="candor-corrections.html">Corrections</a>
+    <a class="trust-link" href="candor-standards.html">Editorial Standards</a>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="page-wrap">
+
+  <!-- INTRO -->
+  <section class="intro-grid">
+    <div>
+      <h2 class="intro-h">Mistakes are inevitable. Hiding them isn't.</h2>
+      <div class="intro-body">
+        <p>Candor is an AI-assisted news platform, and AI makes mistakes. So do humans. So do the source outlets we synthesize from. When an error reaches publication — whether ours or one we inherited — we correct it openly, log it on this page, and explain what went wrong.</p>
+        <p>Every correction below shows the <strong>exact text we changed</strong>, the <strong>date and time</strong> the change was made, and a link to the article in its corrected form. Articles with active corrections display a notice at the top.</p>
+        <p>If you've spotted something we got wrong, use the form on this page. We respond to every submission, usually within 24 hours.</p>
+      </div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="stat-box-num">47</div>
+        <div class="stat-box-label">Corrections issued in 2026</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-box-num">19h</div>
+        <div class="stat-box-label">Avg. time to publish correction</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-box-num">3</div>
+        <div class="stat-box-label">Full retractions to date</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-box-num">100%</div>
+        <div class="stat-box-label">Corrections shown publicly</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CORRECTIONS LOG -->
+  <section>
+    <div class="sec-header">
+      <h2 class="sec-title">Correction Log</h2>
+      <div class="sec-meta">Most recent first · Last 60 days</div>
+    </div>
+
+    <div class="filter-bar">
+      <button class="filter-chip active">All (12)</button>
+      <button class="filter-chip">Correction (7)</button>
+      <button class="filter-chip">Clarification (3)</button>
+      <button class="filter-chip">Update (1)</button>
+      <button class="filter-chip">Retraction (1)</button>
+    </div>
+
+    <div class="correction-list">
+
+      <article class="correction">
+        <div class="correction-date">May 24<b>2026</b>14:22 PT</div>
+        <div class="correction-body">
+          <span class="correction-tag tag-correction">Correction</span>
+          <h3 class="correction-h"><a href="#">Senate vote on infrastructure package misreported as 58–42; actual count was 56–44</a></h3>
+          <p class="correction-p">Our initial synthesis pulled the vote tally from a wire report that was later updated. Two senators who were initially recorded as "yea" had their votes corrected to "nay" in the official Senate record. We re-ran the synthesis after the official tally was published.</p>
+          <div class="correction-diff">
+            <div class="diff-row diff-strike"><div class="diff-label">Was</div><div class="diff-text">The bill passed the Senate 58–42, with eight Republicans joining all Democrats in support.</div></div>
+            <div class="diff-row diff-add"><div class="diff-label">Now</div><div class="diff-text">The bill passed the Senate 56–44, with six Republicans joining all Democrats in support.</div></div>
+          </div>
+          <div class="correction-meta">
+            <span>Article: <a href="candor-article.html">Senate passes $740B infrastructure bill</a></span>
+            <span>Caught by: Reader submission</span>
+          </div>
+        </div>
+        <div class="correction-actions">
+          <button class="action-btn">View article</button>
+          <button class="action-btn">Permalink</button>
+        </div>
+      </article>
+
+      <article class="correction">
+        <div class="correction-date">May 22<b>2026</b>09:08 PT</div>
+        <div class="correction-body">
+          <span class="correction-tag tag-clarification">Clarification</span>
+          <h3 class="correction-h"><a href="#">"Record-low unemployment" framing did not specify the demographic group cited in the Labor Department release</a></h3>
+          <p class="correction-p">The underlying Labor Department release referred specifically to the prime-age (25–54) workforce, not the broader U-3 unemployment rate. Our synthesis carried the headline framing without that qualifier. We've updated the article to specify the demographic and added a sentence noting the broader U-3 figure for context.</p>
+          <div class="correction-meta">
+            <span>Article: <a href="#">April jobs report: prime-age employment hits record</a></span>
+            <span>Caught by: Internal review</span>
+          </div>
+        </div>
+        <div class="correction-actions">
+          <button class="action-btn">View article</button>
+          <button class="action-btn">Permalink</button>
+        </div>
+      </article>
+
+      <article class="correction">
+        <div class="correction-date">May 19<b>2026</b>16:47 PT</div>
+        <div class="correction-body">
+          <span class="correction-tag tag-correction">Correction</span>
+          <h3 class="correction-h"><a href="#">Attribution error: quote attributed to Sen. Warren was made by Sen. Warnock</a></h3>
+          <p class="correction-p">A quote about Federal Reserve policy was attributed to Sen. Elizabeth Warren (D-MA). The quote was actually given by Sen. Raphael Warnock (D-GA) during the same committee hearing. The error originated in our claim-extraction step, which conflated the two surnames in transcript metadata. We've corrected the attribution and added the speaker-disambiguation check to our pipeline review.</p>
+          <div class="correction-diff">
+            <div class="diff-row diff-strike"><div class="diff-label">Was</div><div class="diff-text">"The Fed cannot keep treating wage growth as the enemy," Sen. Elizabeth Warren said.</div></div>
+            <div class="diff-row diff-add"><div class="diff-label">Now</div><div class="diff-text">"The Fed cannot keep treating wage growth as the enemy," Sen. Raphael Warnock said.</div></div>
+          </div>
+          <div class="correction-meta">
+            <span>Article: <a href="#">Senators press Powell on rate path at Banking Committee hearing</a></span>
+            <span>Caught by: Reader submission</span>
+          </div>
+        </div>
+        <div class="correction-actions">
+          <button class="action-btn">View article</button>
+          <button class="action-btn">Permalink</button>
+        </div>
+      </article>
+
+      <article class="correction">
+        <div class="correction-date">May 15<b>2026</b>11:30 PT</div>
+        <div class="correction-body">
+          <span class="correction-tag tag-retraction">Retraction</span>
+          <h3 class="correction-h"><a href="#">Story on alleged data breach at Meridian Health withdrawn; primary source could not be corroborated</a></h3>
+          <p class="correction-p">We published a synthesis based on initial reporting from two outlets describing a data breach affecting 2.1 million Meridian Health patients. Within 36 hours, the original reporting outlet retracted its story, citing a misidentified internal document. The second outlet had cited the first. With both sources withdrawn, we removed the article in full and replaced it with this retraction notice. We failed our two-source independence test — the second outlet was not independently sourced. We've added stricter source-chain checks to prevent recurrence.</p>
+          <div class="correction-meta">
+            <span>Article: <em>Removed</em></span>
+            <span>Caught by: Source retraction</span>
+          </div>
+        </div>
+        <div class="correction-actions">
+          <button class="action-btn">Read full notice</button>
+          <button class="action-btn">Permalink</button>
+        </div>
+      </article>
+
+      <article class="correction">
+        <div class="correction-date">May 12<b>2026</b>08:55 PT</div>
+        <div class="correction-body">
+          <span class="correction-tag tag-correction">Correction</span>
+          <h3 class="correction-h"><a href="#">Hurricane forecast cone misdescribed as "predicted path"</a></h3>
+          <p class="correction-p">An article describing the National Hurricane Center's projected cone for Tropical Storm Bret used the phrase "predicted path of the storm." The NHC cone represents the probable path of the storm's <em>center</em>, not the area expected to experience storm conditions. We've corrected the language and added a sentence explaining the difference.</p>
+          <div class="correction-meta">
+            <span>Article: <a href="#">Tropical Storm Bret strengthens en route to Gulf Coast</a></span>
+            <span>Caught by: Reader submission</span>
+          </div>
+        </div>
+        <div class="correction-actions">
+          <button class="action-btn">View article</button>
+          <button class="action-btn">Permalink</button>
+        </div>
+      </article>
+
+      <article class="correction">
+        <div class="correction-date">May 09<b>2026</b>17:14 PT</div>
+        <div class="correction-body">
+          <span class="correction-tag tag-update">Update</span>
+          <h3 class="correction-h"><a href="#">Court ruling article updated to reflect appeals court reversal issued same day</a></h3>
+          <p class="correction-p">Our article reporting on a federal district court ruling was published at 10:42 AM PT. At 4:50 PM PT, the Ninth Circuit issued an emergency stay. Because the article was older than our 6-hour active-update window, the synthesis did not re-run automatically. We've manually updated the piece and added a timeline of the day's procedural moves.</p>
+          <div class="correction-meta">
+            <span>Article: <a href="#">Federal judge blocks California gig-worker reclassification</a></span>
+            <span>Caught by: Internal alert</span>
+          </div>
+        </div>
+        <div class="correction-actions">
+          <button class="action-btn">View article</button>
+          <button class="action-btn">Permalink</button>
+        </div>
+      </article>
+
+      <article class="correction">
+        <div class="correction-date">May 06<b>2026</b>13:20 PT</div>
+        <div class="correction-body">
+          <span class="correction-tag tag-correction">Correction</span>
+          <h3 class="correction-h"><a href="#">Currency conversion error in EU defense spending figure</a></h3>
+          <p class="correction-p">An article reporting on the European Commission's proposed defense budget converted €185 billion to $172 billion. The correct conversion at the time of publication was $200 billion. The error originated from a stale exchange rate in our conversion lookup. We've corrected the figure and audited the conversion table for other recent articles. No other affected stories were found.</p>
+          <div class="correction-diff">
+            <div class="diff-row diff-strike"><div class="diff-label">Was</div><div class="diff-text">…a proposed €185 billion ($172 billion) defense package over five years.</div></div>
+            <div class="diff-row diff-add"><div class="diff-label">Now</div><div class="diff-text">…a proposed €185 billion ($200 billion) defense package over five years.</div></div>
+          </div>
+          <div class="correction-meta">
+            <span>Article: <a href="#">EU unveils five-year defense spending plan</a></span>
+            <span>Caught by: Reader submission</span>
+          </div>
+        </div>
+        <div class="correction-actions">
+          <button class="action-btn">View article</button>
+          <button class="action-btn">Permalink</button>
+        </div>
+      </article>
+
+      <article class="correction">
+        <div class="correction-date">May 03<b>2026</b>10:08 PT</div>
+        <div class="correction-body">
+          <span class="correction-tag tag-clarification">Clarification</span>
+          <h3 class="correction-h"><a href="#">"Bipartisan opposition" framing did not reflect the actual partisan split on the amendment vote</a></h3>
+          <p class="correction-p">We described opposition to an immigration amendment as "bipartisan." While two Democrats did vote against the amendment, 47 of 49 Democrats supported it, alongside 4 of 50 Republicans. The "bipartisan" framing — pulled from one source outlet — overstated the cross-party split. We've replaced the framing with the actual vote counts.</p>
+          <div class="correction-meta">
+            <span>Article: <a href="#">Senate immigration amendment fails 48–51</a></span>
+            <span>Caught by: Reader submission</span>
+          </div>
+        </div>
+        <div class="correction-actions">
+          <button class="action-btn">View article</button>
+          <button class="action-btn">Permalink</button>
+        </div>
+      </article>
+
+      <article class="correction">
+        <div class="correction-date">Apr 28<b>2026</b>15:42 PT</div>
+        <div class="correction-body">
+          <span class="correction-tag tag-correction">Correction</span>
+          <h3 class="correction-h"><a href="#">Company headquarters location misidentified</a></h3>
+          <p class="correction-p">We reported that Lumen Biotech is headquartered in Cambridge, Massachusetts. The company is headquartered in Cambridge, England; its U.S. operations are based in Boston. We've corrected the article and added a parenthetical to disambiguate the two Cambridges in future coverage.</p>
+          <div class="correction-meta">
+            <span>Article: <a href="#">Lumen Biotech reports Phase II trial results</a></span>
+            <span>Caught by: Reader submission</span>
+          </div>
+        </div>
+        <div class="correction-actions">
+          <button class="action-btn">View article</button>
+          <button class="action-btn">Permalink</button>
+        </div>
+      </article>
+
+      <article class="correction">
+        <div class="correction-date">Apr 25<b>2026</b>09:30 PT</div>
+        <div class="correction-body">
+          <span class="correction-tag tag-clarification">Clarification</span>
+          <h3 class="correction-h"><a href="#">Study described as "peer-reviewed" was a preprint at time of publication</a></h3>
+          <p class="correction-p">A climate study we summarized was described in two of our source outlets as "peer-reviewed." It was a preprint posted to a research repository and had not yet completed peer review. We've corrected the description and added a note explaining the difference between a preprint and a published study.</p>
+          <div class="correction-meta">
+            <span>Article: <a href="#">New study links Arctic ice loss to North Atlantic current changes</a></span>
+            <span>Caught by: Internal review</span>
+          </div>
+        </div>
+        <div class="correction-actions">
+          <button class="action-btn">View article</button>
+          <button class="action-btn">Permalink</button>
+        </div>
+      </article>
+
+      <article class="correction">
+        <div class="correction-date">Apr 21<b>2026</b>14:06 PT</div>
+        <div class="correction-body">
+          <span class="correction-tag tag-correction">Correction</span>
+          <h3 class="correction-h"><a href="#">CEO's tenure misstated</a></h3>
+          <p class="correction-p">We reported that Halberg Industries CEO Diana Park has led the company since 2019. Park has led the company since 2021; she was promoted to CEO after serving as COO from 2019. We've corrected the article.</p>
+          <div class="correction-meta">
+            <span>Article: <a href="#">Halberg Industries beats Q1 earnings expectations</a></span>
+            <span>Caught by: Subject of article</span>
+          </div>
+        </div>
+        <div class="correction-actions">
+          <button class="action-btn">View article</button>
+          <button class="action-btn">Permalink</button>
+        </div>
+      </article>
+
+      <article class="correction">
+        <div class="correction-date">Apr 17<b>2026</b>11:55 PT</div>
+        <div class="correction-body">
+          <span class="correction-tag tag-correction">Correction</span>
+          <h3 class="correction-h"><a href="#">Treaty signatory list missing one country</a></h3>
+          <p class="correction-p">An article listing signatories to the Pacific Maritime Cooperation Agreement omitted Vanuatu, which signed the agreement on the same day as the other twelve nations. The omission appeared in two of our source outlets and was not caught by our cross-source check. We've added Vanuatu and updated the count from twelve to thirteen.</p>
+          <div class="correction-meta">
+            <span>Article: <a href="#">Twelve Pacific nations sign maritime cooperation pact</a></span>
+            <span>Caught by: Reader submission</span>
+          </div>
+        </div>
+        <div class="correction-actions">
+          <button class="action-btn">View article</button>
+          <button class="action-btn">Permalink</button>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- POLICY -->
+  <section>
+    <div class="sec-header">
+      <h2 class="sec-title">How corrections work at Candor</h2>
+      <div class="sec-meta">Our four-tier system</div>
+    </div>
+    <div class="policy-grid">
+      <div class="policy-card">
+        <div class="policy-num">01</div>
+        <div class="policy-h">Correction</div>
+        <p class="policy-p">A factual error in the published article — a wrong name, number, date, attribution, or location. The article remains live with the corrected text. A notice appears at the top showing what changed.</p>
+      </div>
+      <div class="policy-card">
+        <div class="policy-num">02</div>
+        <div class="policy-h">Clarification</div>
+        <p class="policy-p">The original statement was technically accurate but framed in a way that could mislead — a missing qualifier, an ambiguous phrase, or context that materially changes the reader's understanding.</p>
+      </div>
+      <div class="policy-card">
+        <div class="policy-num">03</div>
+        <div class="policy-h">Update</div>
+        <p class="policy-p">New information has emerged that materially changes the story but does not invalidate the original reporting. The article is updated with a timestamp and a summary of what's new.</p>
+      </div>
+      <div class="policy-card">
+        <div class="policy-num">04</div>
+        <div class="policy-h">Retraction</div>
+        <p class="policy-p">The article's core premise is unsupportable. We remove the original article, replace it with a retraction notice explaining why, and keep that notice live indefinitely. Retractions are rare and we log every one.</p>
+      </div>
+      <div class="policy-card">
+        <div class="policy-num">05</div>
+        <div class="policy-h">Source retraction</div>
+        <p class="policy-p">When one of our upstream source outlets retracts a story we synthesized from, we re-run the synthesis against the remaining sources. If the story can't stand without the retracted source, we issue our own retraction.</p>
+      </div>
+      <div class="policy-card">
+        <div class="policy-num">06</div>
+        <div class="policy-h">No silent edits</div>
+        <p class="policy-p">We never edit a published article to fix an error without a public correction notice. The only silent changes we make are typo fixes that don't affect meaning. Every other change is logged here.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUBMIT -->
+  <section class="submit-box">
+    <div>
+      <div class="submit-eyebrow">Spotted an error?</div>
+      <h2 class="submit-h">Send us the correction. We'll respond within 24 hours.</h2>
+      <p class="submit-p">Every submission is reviewed by our editorial team. If you're the subject of an article, please use the dedicated <a href="#" style="color:var(--accent);">subject-of-article form</a> instead — it routes to a senior editor with shorter response targets.</p>
+    </div>
+    <form class="submit-form" onsubmit="event.preventDefault(); this.querySelector('.submit-btn').textContent='Submitted ✓';">
+      <input type="text" placeholder="Article URL or headline" required>
+      <select required>
+        <option value="">Type of correction…</option>
+        <option>Factual error</option>
+        <option>Misleading framing</option>
+        <option>Attribution error</option>
+        <option>Missing context</option>
+        <option>Other</option>
+      </select>
+      <textarea placeholder="What's wrong? Include the specific sentence if possible." required></textarea>
+      <input type="email" placeholder="Your email (for follow-up)" required>
+      <button type="submit" class="submit-btn">Submit Correction</button>
+    </form>
+  </section>
+
+  <!-- FAQ -->
+  <section>
+    <div class="sec-header">
+      <h2 class="sec-title">Frequently asked</h2>
+      <div class="sec-meta">About our process</div>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q">What's the difference between a correction and a clarification?</div>
+        <div class="faq-a">A correction fixes something that was factually wrong — a misspelled name, a wrong number, a misattributed quote. A clarification addresses something that was technically accurate but written in a way that misled readers. Both are logged here with equal visibility.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Do you ever delete articles?</div>
+        <div class="faq-a">Only in the case of a full retraction, where the article's core premise is unsupportable. Even then, the URL remains live and is replaced with the retraction notice — so anyone who linked to the original can see what happened. We never delete an article to hide a mistake.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What if the error came from one of your source outlets?</div>
+        <div class="faq-a">We still correct it on our end and log it here. Our synthesis is our responsibility — if we passed along an error from a source, that's our error too. Where relevant, we note the source-chain in the correction. See our <a href="candor-methodology.html">Methodology</a> for how source disagreements are handled before publication.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">How quickly do you respond to reader submissions?</div>
+        <div class="faq-a">Median response time in 2026 is under 19 hours from submission to either a published correction or a written explanation of why we believe the article is accurate. Submissions concerning breaking-news stories are prioritized.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Who reviews corrections?</div>
+        <div class="faq-a">Our editorial team — two senior editors and three associate editors — reviews every submission. Significant corrections (retractions, attribution errors involving public figures, and any correction caught by the subject of an article) require sign-off from our Editor-in-Chief. See <a href="candor-standards.html">Editorial Standards</a> for the full review chain.</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-main">
+    <div class="footer-brand">
+      <div class="footer-logo"><span class="footer-logo-c">C</span>andor</div>
+      <p>AI-powered news synthesis. Every story verified across the full source spectrum — left, center, and right — so you can read with confidence.</p>
+      <div class="footer-cert">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4M21 12c0 5-3.5 8-9 9-5.5-1-9-4-9-9V5l9-3 9 3v7z"/></svg>
+        <span>Methodology · Open</span>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Coverage</h4>
+      <ul>
+        <li><a href="#">U.S. News</a></li><li><a href="#">World</a></li>
+        <li><a href="#">Politics</a></li><li><a href="#">Business</a></li>
+        <li><a href="#">Science</a></li><li><a href="#">Tech</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Trust</h4>
+      <ul>
+        <li><a href="candor-methodology.html">Methodology</a></li>
+        <li><a href="candor-sources.html">Source List</a></li>
+        <li><a href="candor-biasratings.html">Bias Ratings</a></li>
+        <li><a href="candor-corrections.html">Corrections</a></li>
+        <li><a href="candor-standards.html">Editorial Standards</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="candor-about.html">About</a></li>
+        <li><a href="candor-newsroom.html">Newsroom</a></li>
+        <li><a href="candor-careers.html">Careers</a></li>
+        <li><a href="candor-press.html">Press</a></li>
+        <li><a href="candor-contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-foot">
+    <span>© 2026 Candor News Inc. · AI-assisted summaries reviewed for factual accuracy.</span>
+    <div class="links">
+      <a href="candor-privacy.html">Privacy</a>
+      <a href="candor-terms.html">Terms</a>
+      <a href="candor-accessibility.html">Accessibility</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('theme-icon').innerHTML = isDark
+    ? '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'
+    : '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+}
+
+// Filter chips (visual only)
+document.querySelectorAll('.filter-chip').forEach(c => {
+  c.addEventListener('click', () => {
+    document.querySelectorAll('.filter-chip').forEach(x => x.classList.remove('active'));
+    c.classList.add('active');
+  });
+});
+</script>
+
+<!-- ═══════════════ PAYWALL MODAL (universal) ═══════════════ -->
+<div class="paywall-overlay" id="paywall-overlay" onclick="if(event.target===this)closePaywall()">
+  <div class="paywall-modal" role="dialog" aria-modal="true" aria-labelledby="paywall-title">
+    <button class="paywall-close" onclick="closePaywall()" aria-label="Close">&times;</button>
+    <div class="paywall-eyebrow" id="paywall-eyebrow">Candor Membership</div>
+    <h3 class="paywall-title" id="paywall-title">This is a member feature.</h3>
+    <p class="paywall-body" id="paywall-body">The Candor AI assistant is part of Candor membership. Start a free 7-day trial to use it — no charge today, cancel anytime.</p>
+    <div class="paywall-price">
+      <span class="paywall-amount">$4.99</span>
+      <span class="paywall-per">/ month</span>
+      <span class="paywall-note">after your 7-day free trial</span>
+    </div>
+    <ul class="paywall-perks">
+      <li>Unlimited Candor AI — ask any story anything</li>
+      <li>Breaking-news alerts and the Daily Brief by email</li>
+      <li>Full archive, Compare Coverage, and the weekend long-read</li>
+    </ul>
+    <div class="paywall-actions">
+      <a href="candor-signup.html" class="paywall-btn-primary">Start 7-day free trial</a>
+      <a href="candor-signup.html" class="paywall-btn-secondary">Create a free account</a>
+    </div>
+    <div class="paywall-foot">Already a member? <a href="candor-login.html">Log in</a></div>
+  </div>
+</div>
+
+<script>
+/* ═══════ PAYWALL (member-feature gating) ═══════ */
+function showPaywall(feature) {
+  var overlay = document.getElementById('paywall-overlay');
+  if (!overlay) return;
+  var title = document.getElementById('paywall-title');
+  var body = document.getElementById('paywall-body');
+  var eyebrow = document.getElementById('paywall-eyebrow');
+  if (feature === 'alerts' || feature === 'email' || feature === 'newsletter' || feature === 'trial') {
+    eyebrow.textContent = 'Candor Membership';
+    title.textContent = 'Alerts are a member feature.';
+    body.textContent = 'Breaking-news alerts and the Daily Brief by email are part of Candor membership. Start a free 7-day trial to turn them on — no charge today, cancel anytime.';
+  } else {
+    eyebrow.textContent = 'Candor Membership';
+    title.textContent = 'Candor AI is a member feature.';
+    body.textContent = 'The Candor AI assistant is part of Candor membership. Start a free 7-day trial to ask any story anything — no charge today, cancel anytime.';
+  }
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closePaywall() {
+  var overlay = document.getElementById('paywall-overlay');
+  if (!overlay) return;
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closePaywall(); });
+
+</script>
+</body>
+</html>

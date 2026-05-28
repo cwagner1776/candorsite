@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Editorial Standards — Candor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,900&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink: #0b1220; --ink-2: #1a2233; --ink-3: #3a4358;
+  --mute: #6b7488; --mute-2: #9aa2b4;
+  --line: #e4e6ec; --line-2: #ecedf1;
+  --paper: #f7f5ef; --paper-2: #efece3; --paper-3: #e8e4d8;
+  --white: #ffffff;
+  --accent: #c8102e; --accent-dark: #9c0a23;
+  --left: #2d62b3; --center: #4a4a4a; --right: #b8451e;
+  --max: 1200px;
+}
+[data-theme="dark"] {
+  --ink: #f4f1e8; --ink-2: #e0dccf; --ink-3: #c8c4b7;
+  --mute: #a8a497; --mute-2: #8e8a7e;
+  --line: #3d3a30; --line-2: #332f25;
+  --paper: #14130e; --paper-2: #1a1812; --paper-3: #221f17;
+  --white: #1a1812;
+  --accent: #ff4d63; --accent-dark: #e6304c;
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'Newsreader', Georgia, serif; background: var(--paper); color: var(--ink); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; transition: background 0.3s, color 0.3s; }
+a { text-decoration: none; color: inherit; cursor: pointer; }
+button { cursor: pointer; font-family: inherit; border: none; background: none; color: inherit; }
+
+/* ── UTIL BAR ── */
+.util-bar { background: var(--ink); }
+[data-theme="dark"] .util-bar { background: #0a0907; border-bottom: 1px solid var(--line); }
+.util-inner { max-width: var(--max); margin: 0 auto; padding: 9px 32px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.util-left { display: flex; align-items: center; gap: 22px; }
+.util-status { display: flex; align-items: center; gap: 8px; color: #ece8d8; font-variant-caps: all-small-caps; letter-spacing: 0.1em; font-weight: 600; font-size: 14px; }
+.live-dot { width: 7px; height: 7px; border-radius: 50%; background: #2ecc71; animation: livePulse 1.8s ease-out infinite; }
+@keyframes livePulse { 0%{box-shadow:0 0 0 0 rgba(46,204,113,0.55)}70%{box-shadow:0 0 0 6px rgba(46,204,113,0)}100%{box-shadow:0 0 0 0 rgba(46,204,113,0)} }
+.util-stat { color: var(--mute-2); font-variant-caps: all-small-caps; letter-spacing: 0.08em; font-size: 14px; }
+.util-stat b { color: #ece8d8; font-weight: 700; font-variant-caps: normal; font-size: 13px; }
+.util-right { display: flex; align-items: center; gap: 14px; }
+.util-link { color: var(--mute-2); font-variant-caps: all-small-caps; letter-spacing: 0.1em; font-weight: 600; font-size: 14px; transition: color 0.15s; }
+.util-link:hover { color: #ece8d8; }
+.util-divider { width: 1px; height: 12px; background: #2a3344; }
+[data-theme="dark"] .util-divider { background: #4a5266; }
+
+/* ── MASTHEAD ── */
+.masthead { background: var(--white); border-bottom: 1px solid var(--line); }
+[data-theme="dark"] .masthead { background: var(--paper-2); }
+.mast-inner { max-width: var(--max); margin: 0 auto; padding: 22px 32px 18px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px; }
+.mast-left { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+.weather-chip { display: flex; align-items: center; gap: 8px; font-variant-caps: all-small-caps; font-weight: 500; letter-spacing: 0.06em; font-size: 14px; color: var(--mute); }
+.date-chip { font-style: italic; font-size: 13px; color: var(--mute); }
+.logo-wrap { text-align: center; }
+.logo { font-family: 'Fraunces', serif; font-weight: 700; font-size: 48px; letter-spacing: -1.6px; line-height: 1; color: var(--ink); display: inline-flex; align-items: baseline; gap: 2px; }
+.logo-mark { display: inline-block; width: 13px; height: 13px; background: var(--accent); margin-right: 5px; position: relative; top: -3px; }
+.mast-right { display: flex; align-items: center; gap: 10px; justify-content: flex-end; }
+.icon-btn { width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--line); border-radius: 50%; color: var(--ink-3); transition: all 0.2s; background: var(--white); }
+.icon-btn:hover { color: var(--ink); border-color: var(--ink); }
+.icon-btn svg { width: 15px; height: 15px; }
+[data-theme="dark"] .icon-btn { background: var(--paper-3); border-color: var(--line); }
+.btn-subscribe { background: var(--ink); color: var(--paper); font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 16px; font-weight: 700; letter-spacing: 0.08em; padding: 9px 18px; border-radius: 2px; transition: all 0.2s; }
+.btn-subscribe:hover { background: var(--accent); }
+
+/* ── NAV ── */
+.nav-wrap { background: var(--white); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 50; }
+[data-theme="dark"] .nav-wrap { background: var(--paper-2); }
+.nav-inner { max-width: var(--max); margin: 0 auto; padding: 0 32px; display: flex; align-items: center; overflow-x: auto; scrollbar-width: none; }
+.nav-inner::-webkit-scrollbar { display: none; }
+.nav-link { font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 16px; font-weight: 600; letter-spacing: 0.08em; color: var(--ink-3); padding: 14px 14px; border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.15s; }
+.nav-link:first-child { padding-left: 0; }
+.nav-link:hover { color: var(--ink); }
+.nav-link.active { color: var(--ink); border-bottom-color: var(--accent); }
+.nav-link.live-link::before { content: ''; display: inline-block; width: 6px; height: 6px; background: #ef3340; border-radius: 50%; margin-right: 6px; vertical-align: middle; animation: livePulse 1.8s infinite; }
+
+/* ── PAGE HERO ── */
+.page-hero { background: var(--ink); color: var(--paper); padding: 72px 32px 64px; text-align: center; position: relative; overflow: hidden; }
+[data-theme="dark"] .page-hero { background: #0a0907; }
+.page-hero::before { content: 'THE RULES'; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-family: 'Fraunces', serif; font-size: 200px; font-weight: 900; color: rgba(255,255,255,0.025); white-space: nowrap; pointer-events: none; letter-spacing: -4px; }
+.page-eyebrow { font-variant-caps: all-small-caps; font-size: 13px; font-weight: 700; letter-spacing: 0.18em; color: var(--accent); margin-bottom: 16px; }
+.page-title { font-family: 'Fraunces', serif; font-size: 52px; font-weight: 700; letter-spacing: -1.5px; line-height: 1.05; color: var(--paper); margin-bottom: 20px; }
+.page-dek { font-size: 19px; color: rgba(244,241,232,0.7); line-height: 1.6; max-width: 56ch; margin: 0 auto; font-style: italic; }
+
+/* ── TRUST NAV ── */
+.trust-nav { background: var(--white); border-bottom: 1px solid var(--line); }
+[data-theme="dark"] .trust-nav { background: var(--paper-2); }
+.trust-nav-inner { max-width: var(--max); margin: 0 auto; padding: 0 32px; display: flex; gap: 0; overflow-x: auto; scrollbar-width: none; }
+.trust-nav-inner::-webkit-scrollbar { display: none; }
+.trust-link { font-variant-caps: all-small-caps; font-size: 14px; font-weight: 700; letter-spacing: 0.1em; color: var(--mute); padding: 14px 18px 14px 0; margin-right: 18px; border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.15s; }
+.trust-link:hover { color: var(--ink); }
+.trust-link.active { color: var(--ink); border-bottom-color: var(--accent); }
+
+/* ── LAYOUT ── */
+.page-wrap { max-width: var(--max); margin: 0 auto; padding: 64px 32px; display: grid; grid-template-columns: 220px 1fr; gap: 64px; align-items: start; }
+
+/* ── STICKY SIDEBAR TOC ── */
+.toc { position: sticky; top: 80px; }
+.toc-title { font-variant-caps: all-small-caps; font-size: 11px; font-weight: 700; letter-spacing: 0.18em; color: var(--mute); margin-bottom: 16px; border-bottom: 2px solid var(--ink); padding-bottom: 8px; }
+.toc-link { display: block; font-size: 13px; color: var(--ink-3); padding: 7px 0; border-bottom: 1px solid var(--line-2); transition: color 0.15s; line-height: 1.3; }
+.toc-link:hover { color: var(--accent); }
+.toc-link.active { color: var(--accent); font-weight: 600; }
+
+/* ── CONTENT ── */
+.content-col { min-width: 0; }
+.section-block { margin-bottom: 72px; scroll-margin-top: 90px; }
+.section-num { font-variant-caps: all-small-caps; font-size: 12px; font-weight: 700; letter-spacing: 0.18em; color: var(--accent); margin-bottom: 10px; }
+.section-h { font-family: 'Fraunces', serif; font-size: 32px; font-weight: 700; letter-spacing: -0.6px; line-height: 1.15; color: var(--ink); margin-bottom: 20px; }
+.section-body { font-size: 17px; color: var(--ink-2); line-height: 1.75; }
+.section-body p { margin-bottom: 20px; }
+.section-body p:last-child { margin-bottom: 0; }
+.section-body strong { color: var(--ink); font-weight: 700; }
+.section-body em { color: var(--ink); font-style: italic; }
+.section-body a { color: var(--accent); border-bottom: 1px solid rgba(200,16,46,0.3); transition: border-color 0.15s; }
+.section-body a:hover { border-color: var(--accent); }
+
+/* Callout */
+.callout { background: var(--white); border: 1px solid var(--line); border-left: 3px solid var(--accent); padding: 20px 24px; margin: 28px 0; }
+[data-theme="dark"] .callout { background: var(--paper-2); }
+.callout-label { font-variant-caps: all-small-caps; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: var(--accent); margin-bottom: 8px; }
+.callout p { font-size: 15px; color: var(--ink-2); line-height: 1.6; margin: 0; }
+
+/* Pledge list */
+.pledge { display: flex; flex-direction: column; gap: 0; margin: 24px 0; counter-reset: pledges; }
+.pledge-item { display: grid; grid-template-columns: 40px 1fr; gap: 20px; padding: 20px 0; border-bottom: 1px solid var(--line); align-items: start; counter-increment: pledges; }
+.pledge-item:last-child { border-bottom: none; }
+.pledge-mark { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; color: var(--accent); line-height: 1; letter-spacing: -1px; }
+.pledge-mark::before { content: counter(pledges, decimal-leading-zero); }
+.pledge-h { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 600; color: var(--ink); margin-bottom: 6px; letter-spacing: -0.2px; }
+.pledge-p { font-size: 15px; color: var(--ink-3); line-height: 1.65; }
+
+/* Do/Don't grid */
+.do-dont { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); margin: 28px 0; }
+.dd-col { background: var(--white); padding: 22px 24px; }
+[data-theme="dark"] .dd-col { background: var(--paper-2); }
+.dd-label { font-variant-caps: all-small-caps; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; margin-bottom: 14px; display: inline-flex; align-items: center; gap: 8px; }
+.dd-do .dd-label { color: #1a8754; }
+[data-theme="dark"] .dd-do .dd-label { color: #34c77b; }
+.dd-dont .dd-label { color: var(--accent); }
+.dd-label::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+.dd-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.dd-list li { font-size: 14px; color: var(--ink-2); line-height: 1.55; padding-left: 18px; position: relative; }
+.dd-list li::before { position: absolute; left: 0; top: 0; font-weight: 700; }
+.dd-do .dd-list li::before { content: '+'; color: #1a8754; }
+.dd-dont .dd-list li::before { content: '×'; color: var(--accent); }
+
+/* Bias table */
+.std-table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 15px; }
+.std-table th { font-variant-caps: all-small-caps; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; color: var(--mute); text-align: left; padding: 10px 16px; border-bottom: 2px solid var(--ink); background: var(--paper-2); }
+[data-theme="dark"] .std-table th { background: var(--paper-3); }
+.std-table td { padding: 13px 16px; border-bottom: 1px solid var(--line); color: var(--ink-2); vertical-align: top; line-height: 1.5; }
+.std-table tr:last-child td { border-bottom: none; }
+.std-table td:first-child { font-weight: 600; color: var(--ink); white-space: nowrap; }
+
+/* Team grid */
+.team-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); margin: 28px 0; }
+.team-card { background: var(--white); padding: 22px 24px; }
+[data-theme="dark"] .team-card { background: var(--paper-2); }
+.team-name { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 600; color: var(--ink); margin-bottom: 3px; letter-spacing: -0.2px; }
+.team-role { font-variant-caps: all-small-caps; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; color: var(--accent); margin-bottom: 10px; }
+.team-bio { font-size: 14px; color: var(--ink-3); line-height: 1.6; }
+
+/* Sign-off block */
+.signoff { background: var(--paper-2); border-left: 3px solid var(--ink); padding: 28px 32px; margin: 32px 0 0; font-style: italic; font-size: 16px; color: var(--ink-2); line-height: 1.7; }
+[data-theme="dark"] .signoff { background: var(--paper-3); border-left-color: var(--ink-2); }
+.signoff-author { display: block; margin-top: 16px; font-style: normal; font-variant-caps: all-small-caps; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; color: var(--mute); }
+.signoff-author b { color: var(--ink); font-variant-caps: normal; font-weight: 700; letter-spacing: 0; font-family: 'Fraunces', serif; font-size: 15px; }
+
+/* ── FOOTER ── */
+.footer { background: var(--paper); border-top: 1px solid var(--line); }
+[data-theme="dark"] .footer { background: var(--paper-2); }
+.footer-main { max-width: var(--max); margin: 0 auto; padding: 40px 32px 32px; display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 48px; }
+.footer-logo { font-family: 'Fraunces', serif; font-weight: 700; font-size: 28px; letter-spacing: -1px; color: var(--ink); display: inline-flex; align-items: baseline; margin-bottom: 12px; }
+.footer-logo .mark { display: inline-block; width: 9px; height: 9px; background: var(--accent); margin-right: 5px; position: relative; top: -2px; }
+.footer-brand p { font-size: 14px; color: var(--mute); line-height: 1.55; max-width: 38ch; }
+.footer-col h4 { font-variant-caps: all-small-caps; font-size: 13px; font-weight: 700; letter-spacing: 0.14em; color: var(--ink); margin-bottom: 12px; }
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 7px; }
+.footer-col ul a { font-size: 14px; color: var(--ink-3); transition: color 0.15s; }
+.footer-col ul a:hover { color: var(--accent); }
+.footer-foot { border-top: 1px solid var(--line); padding: 18px 32px; max-width: var(--max); margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; font-style: italic; font-size: 13px; color: var(--mute); }
+.footer-foot .links { display: flex; gap: 18px; }
+.footer-foot a { font-style: normal; font-variant-caps: all-small-caps; letter-spacing: 0.08em; font-weight: 600; color: var(--mute); transition: color 0.15s; }
+.footer-foot a:hover { color: var(--ink); }
+
+@media (max-width: 900px) {
+  .page-wrap { grid-template-columns: 1fr; gap: 40px; }
+  .toc { display: none; }
+  .page-title { font-size: 36px; }
+  .do-dont { grid-template-columns: 1fr; }
+  .team-grid { grid-template-columns: 1fr; }
+  .footer-main { grid-template-columns: 1fr 1fr; gap: 32px; }
+}
+@media (max-width: 600px) {
+  .mast-inner { padding: 16px 20px; }
+  .page-wrap { padding: 40px 20px; }
+}
+
+/* dark-mode contrast fix: force light text on always-dark bands */
+[data-theme="dark"] .page-hero { color: #f4f1e8; }
+[data-theme="dark"] .page-hero .cta-h,
+[data-theme="dark"] .page-hero h1,
+[data-theme="dark"] .page-hero h2,
+[data-theme="dark"] .page-hero strong,
+[data-theme="dark"] .page-hero b,
+[data-theme="dark"] .page-hero .page-title,
+[data-theme="dark"] .page-hero [class*="-h"],
+[data-theme="dark"] .page-hero [class*="-name"],
+[data-theme="dark"] .page-hero [class*="-val"],
+[data-theme="dark"] .page-hero [class*="-item-h"] { color: #f4f1e8 !important; }
+
+/* New logo: red underline beneath the C (replaces square mark) */
+.logo { gap: 0 !important; }
+.logo-mark { display: none !important; }
+.logo-c { position: relative; padding-bottom: 0.05em; }
+.logo-c::after { content: ''; position: absolute; left: 0.01em; right: 0.01em; bottom: 0; height: 0.045em; background: var(--accent); border-radius: 1px; }
+.footer-logo .mark { display: none !important; }
+.footer-logo-c { position: relative; padding-bottom: 0.05em; }
+.footer-logo-c::after { content: ''; position: absolute; left: 0.01em; right: 0.01em; bottom: 0; height: 0.05em; background: var(--accent); border-radius: 1px; }
+/* ═══════ PAYWALL MODAL ═══════ */
+.paywall-overlay { display: none; position: fixed; inset: 0; background: rgba(11,18,32,0.55); z-index: 2000; align-items: center; justify-content: center; padding: 24px; }
+[data-theme="dark"] .paywall-overlay { background: rgba(0,0,0,0.78); }
+.paywall-overlay.open { display: flex; }
+.paywall-modal { background: var(--white); border: 1px solid var(--line); max-width: 460px; width: 100%; padding: 36px 36px 28px; position: relative; box-shadow: var(--shadow-lg, 0 12px 40px rgba(0,0,0,0.25)); animation: paywallIn 0.2s ease; }
+[data-theme="dark"] .paywall-modal { background: var(--paper-2); }
+@keyframes paywallIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+.paywall-close { position: absolute; top: 14px; right: 16px; background: none; border: none; font-size: 28px; line-height: 1; color: var(--mute); cursor: pointer; transition: color 0.15s; }
+.paywall-close:hover { color: var(--ink); }
+.paywall-eyebrow { font-variant-caps: all-small-caps; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; color: var(--accent); margin-bottom: 10px; }
+.paywall-title { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; letter-spacing: -0.5px; line-height: 1.15; color: var(--ink); margin-bottom: 12px; }
+.paywall-body { font-family: 'Newsreader', serif; font-size: 15px; line-height: 1.6; color: var(--ink-2); margin-bottom: 20px; }
+.paywall-price { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; padding: 16px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-bottom: 18px; }
+.paywall-amount { font-family: 'Fraunces', serif; font-size: 34px; font-weight: 700; color: var(--ink); letter-spacing: -1px; line-height: 1; }
+.paywall-per { font-size: 15px; color: var(--ink-2); }
+.paywall-note { font-size: 13px; color: var(--mute); font-style: italic; margin-left: auto; }
+.paywall-perks { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; padding: 0; }
+.paywall-perks li { font-size: 14px; color: var(--ink-2); line-height: 1.5; padding-left: 24px; position: relative; }
+.paywall-perks li::before { content: '✓'; position: absolute; left: 0; top: 0; color: var(--accent); font-weight: 700; }
+.paywall-actions { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.paywall-btn-primary { display: block; text-align: center; background: var(--accent); color: #fff; font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 15px; font-weight: 700; letter-spacing: 0.08em; padding: 13px; border-radius: 2px; transition: background 0.15s; }
+.paywall-btn-primary:hover { background: var(--accent-dark); }
+.paywall-btn-secondary { display: block; text-align: center; background: transparent; color: var(--ink); border: 1px solid var(--line); font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 15px; font-weight: 700; letter-spacing: 0.08em; padding: 12px; border-radius: 2px; transition: border-color 0.15s; }
+.paywall-btn-secondary:hover { border-color: var(--ink); }
+.paywall-foot { text-align: center; font-size: 14px; color: var(--mute); font-style: italic; }
+.paywall-foot a { color: var(--accent); font-style: normal; }
+
+
+.footer-cert { display: inline-flex; align-items: center; gap: 10px; margin-top: 16px; padding: 9px 13px; background: var(--white); border: 1px solid var(--line); font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 13px; font-weight: 700; color: var(--ink); letter-spacing: 0.08em; }
+.footer-cert svg { width: 14px; height: 14px; color: #2ecc71; }
+[data-theme="dark"] .footer-cert { background: var(--paper-3); border-color: var(--line); }
+</style>
+</head>
+<body>
+
+<!-- UTIL BAR -->
+<div class="util-bar">
+  <div class="util-inner">
+    <div class="util-left">
+      <div class="util-status"><div class="live-dot"></div>Live Coverage</div>
+      <div class="util-stat"><b>2,847</b> sources indexed today</div>
+      <div class="util-stat"><b>143</b> stories rewritten</div>
+    </div>
+    <div class="util-right">
+      <a href="candor-news.html" class="util-link">← Back to Candor</a>
+      <div class="util-divider"></div>
+      <a href="#" class="util-link">Sign in</a>
+    </div>
+  </div>
+</div>
+
+<!-- MASTHEAD -->
+<header class="masthead">
+  <div class="mast-inner">
+    <div class="mast-left">
+      <div class="weather-chip">Pasadena · 74°F · Clear</div>
+      <div class="date-chip">Monday, May 26, 2026</div>
+    </div>
+    <div class="logo-wrap">
+      <a href="candor-news.html" class="logo"><span class="logo-c">C</span>andor</a>
+    </div>
+    <div class="mast-right">
+      <button class="icon-btn" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+      <button class="icon-btn" aria-label="Saved stories">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+      </button>
+      <button class="icon-btn" aria-label="Theme" onclick="toggleTheme()">
+        <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <button class="btn-subscribe" onclick="showPaywall('trial')">Subscribe</button>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN NAV -->
+<nav class="nav-wrap">
+  <div class="nav-inner">
+    <a class="nav-link live-link" href="candor-news.html">Live</a>
+    <a class="nav-link" href="#">U.S.</a>
+    <a class="nav-link" href="#">World</a>
+    <a class="nav-link" href="#">Politics</a>
+    <a class="nav-link" href="#">Business</a>
+    <a class="nav-link" href="#">Sports</a>
+    <a class="nav-link" href="#">Science</a>
+    <a class="nav-link" href="#">Tech</a>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-eyebrow">Trust & Transparency</div>
+  <h1 class="page-title">Editorial Standards</h1>
+  <p class="page-dek">The principles, rules, and review chains that govern every story Candor publishes — and the people responsible for enforcing them.</p>
+</div>
+
+<!-- TRUST SUB-NAV -->
+<div class="trust-nav">
+  <div class="trust-nav-inner">
+    <a class="trust-link" href="candor-methodology.html">Methodology</a>
+    <a class="trust-link" href="candor-sources.html">Source List</a>
+    <a class="trust-link" href="candor-biasratings.html">Bias Ratings</a>
+    <a class="trust-link" href="candor-corrections.html">Corrections</a>
+    <a class="trust-link active" href="candor-standards.html">Editorial Standards</a>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="page-wrap">
+
+  <!-- TOC -->
+  <aside class="toc">
+    <div class="toc-title">On this page</div>
+    <a class="toc-link active" href="#mission">Mission</a>
+    <a class="toc-link" href="#pledge">The Candor Pledge</a>
+    <a class="toc-link" href="#sourcing">Sourcing Standards</a>
+    <a class="toc-link" href="#language">Language & Framing</a>
+    <a class="toc-link" href="#ai-rules">AI Rules</a>
+    <a class="toc-link" href="#anonymous">Anonymous Sources</a>
+    <a class="toc-link" href="#review">Review Chain</a>
+    <a class="toc-link" href="#conflicts">Conflicts of Interest</a>
+    <a class="toc-link" href="#ownership">Ownership & Funding</a>
+    <a class="toc-link" href="#team">Editorial Team</a>
+    <a class="toc-link" href="#signoff">A note from the editor</a>
+  </aside>
+
+  <!-- CONTENT -->
+  <div class="content-col">
+
+    <div class="section-block" id="mission">
+      <div class="section-num">Mission</div>
+      <h2 class="section-h">Why we exist, and what we'll never compromise on.</h2>
+      <div class="section-body">
+        <p>Candor exists because most people have no time to read five different newspapers to figure out what's actually happening. We use AI to do that reading at scale — synthesizing reporting from across the political spectrum into a single, framing-stripped account of the day's events.</p>
+        <p>That mission only works if you can trust what you read. This page is our contract with you: the standards we hold ourselves to, the rules our AI must follow, and the human review chain that catches what the AI misses.</p>
+        <p>If we ever fail one of these standards, we want you to be able to point at the specific clause we broke. That's why we wrote them down.</p>
+      </div>
+    </div>
+
+    <div class="section-block" id="pledge">
+      <div class="section-num">Core Principles</div>
+      <h2 class="section-h">The Candor Pledge</h2>
+      <div class="section-body">
+        <p>Six commitments that govern every editorial decision we make.</p>
+      </div>
+      <div class="pledge">
+        <div class="pledge-item">
+          <div class="pledge-mark"></div>
+          <div>
+            <div class="pledge-h">We will not invent facts.</div>
+            <p class="pledge-p">Every factual claim in a Candor article is traceable to a named source. Our AI is explicitly prohibited from inferring details that weren't in the source material, however plausible the inference.</p>
+          </div>
+        </div>
+        <div class="pledge-item">
+          <div class="pledge-mark"></div>
+          <div>
+            <div class="pledge-h">We will not hide our sources.</div>
+            <p class="pledge-p">Every sentence is attributed. Every source is listed publicly. Every source's known bias is disclosed. If we can't tell you where a claim came from, we don't publish it.</p>
+          </div>
+        </div>
+        <div class="pledge-item">
+          <div class="pledge-mark"></div>
+          <div>
+            <div class="pledge-h">We will not replicate framing.</div>
+            <p class="pledge-p">Adjectives, loaded verbs, and editorial characterizations from source outlets — including centrist ones — are stripped before publication. We aim for the underlying facts, not anyone's tone.</p>
+          </div>
+        </div>
+        <div class="pledge-item">
+          <div class="pledge-mark"></div>
+          <div>
+            <div class="pledge-h">We will correct in public.</div>
+            <p class="pledge-p">No silent edits. Every change of substance is logged on our <a href="candor-corrections.html">Corrections page</a> with the original and corrected text shown side by side.</p>
+          </div>
+        </div>
+        <div class="pledge-item">
+          <div class="pledge-mark"></div>
+          <div>
+            <div class="pledge-h">We will not accept payment to alter coverage.</div>
+            <p class="pledge-p">Advertisers, investors, and partners have zero influence on editorial decisions. The wall between business and editorial is enforced at the org-chart level — see <a href="#ownership">Ownership & Funding</a>.</p>
+          </div>
+        </div>
+        <div class="pledge-item">
+          <div class="pledge-mark"></div>
+          <div>
+            <div class="pledge-h">We will tell you when we're uncertain.</div>
+            <p class="pledge-p">Every article carries a confidence rating. Disputed claims are labeled, not smoothed over. If a story is still developing, we say so — clearly, at the top.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block" id="sourcing">
+      <div class="section-num">Standards</div>
+      <h2 class="section-h">Sourcing Standards</h2>
+      <div class="section-body">
+        <p>Every Candor article must meet the following sourcing thresholds before it can be published.</p>
+      </div>
+      <table class="std-table">
+        <thead><tr><th>Story Type</th><th>Minimum Sources</th><th>Bias Distribution</th><th>Human Review</th></tr></thead>
+        <tbody>
+          <tr><td>Breaking news</td><td>2 independent</td><td>Any</td><td>Yes — pre-publish</td></tr>
+          <tr><td>Politics / elections</td><td>3 independent</td><td>Must span L / C / R</td><td>Yes — pre-publish</td></tr>
+          <tr><td>Court rulings</td><td>2 + primary doc</td><td>Any</td><td>Yes — pre-publish</td></tr>
+          <tr><td>Business / markets</td><td>2 independent</td><td>Any</td><td>Spot check</td></tr>
+          <tr><td>Science / health</td><td>2 + peer-reviewed source</td><td>Any</td><td>Yes — pre-publish</td></tr>
+          <tr><td>Sports / culture</td><td>2 independent</td><td>Any</td><td>Spot check</td></tr>
+          <tr><td>Investigative / single-source</td><td>1 with track record</td><td>N/A</td><td>Mandatory — full review</td></tr>
+        </tbody>
+      </table>
+      <div class="callout">
+        <div class="callout-label">Independence rule</div>
+        <p>Two outlets running the same wire copy count as <strong>one source</strong>, not two. Our pipeline detects shared wire feeds (AP, Reuters, AFP) and weights them accordingly. The independence requirement exists because narrative consensus is not the same as factual consensus — five outlets repeating each other is not five sources.</p>
+      </div>
+    </div>
+
+    <div class="section-block" id="language">
+      <div class="section-num">Standards</div>
+      <h2 class="section-h">Language & Framing Rules</h2>
+      <div class="section-body">
+        <p>The hardest part of stripping framing is knowing what to strip. Our style guide includes explicit rules about which classes of language must be removed, replaced, or attributed.</p>
+      </div>
+      <div class="do-dont">
+        <div class="dd-col dd-do">
+          <div class="dd-label">Use</div>
+          <ul class="dd-list">
+            <li>Specific verbs that describe action (<em>voted, signed, ruled, declined</em>)</li>
+            <li>Documented quantities (<em>56–44 vote</em>, not "narrow margin")</li>
+            <li>Direct quotes with full attribution and context</li>
+            <li>Named actors (<em>the senator</em>, not "critics")</li>
+            <li>Both sides of a disputed claim, with labels</li>
+            <li>Plain language — short sentences, common words</li>
+          </ul>
+        </div>
+        <div class="dd-col dd-dont">
+          <div class="dd-label">Avoid</div>
+          <ul class="dd-list">
+            <li>Loaded verbs (<em>slammed, blasted, gushed, admitted</em>)</li>
+            <li>Vague intensifiers (<em>massive, sweeping, controversial</em>)</li>
+            <li>Unsourced characterizations (<em>some say</em>, <em>experts believe</em>)</li>
+            <li>Headline framing that overstates ("crisis," "war on")</li>
+            <li>Smuggling editorial conclusions into "neutral" phrasing</li>
+            <li>Borrowing tone from any single source — even centrist ones</li>
+          </ul>
+        </div>
+      </div>
+      <div class="section-body">
+        <p>Our full language guide is internal and lists over 400 flagged terms. When the AI generates a sentence containing a flagged term, the term must be either removed, replaced with a documented alternative, or — if essential — placed inside an attributed quote.</p>
+      </div>
+    </div>
+
+    <div class="section-block" id="ai-rules">
+      <div class="section-num">Standards</div>
+      <h2 class="section-h">Rules Our AI Must Follow</h2>
+      <div class="section-body">
+        <p>Candor's synthesis pipeline runs against a hard-coded set of constraints. These are not suggestions to the model — they are filters that block publication if violated.</p>
+      </div>
+      <div class="pledge">
+        <div class="pledge-item">
+          <div class="pledge-mark"></div>
+          <div>
+            <div class="pledge-h">No claims without source attribution.</div>
+            <p class="pledge-p">Every sentence must have at least one source ID attached. Sentences that fail this check are removed before the article reaches the review queue.</p>
+          </div>
+        </div>
+        <div class="pledge-item">
+          <div class="pledge-mark"></div>
+          <div>
+            <div class="pledge-h">No inference beyond the source material.</div>
+            <p class="pledge-p">If three outlets say "the vote passed," the AI may not write "the vote passed easily" — even if that's likely true. Plausibility is not evidence.</p>
+          </div>
+        </div>
+        <div class="pledge-item">
+          <div class="pledge-mark"></div>
+          <div>
+            <div class="pledge-h">No emotional language about identifiable people.</div>
+            <p class="pledge-p">Descriptions of public figures must be limited to verifiable role, action, and direct quotes. The AI may not characterize a person's tone, mood, or apparent intent unless a source explicitly does so — in which case it must be attributed.</p>
+          </div>
+        </div>
+        <div class="pledge-item">
+          <div class="pledge-mark"></div>
+          <div>
+            <div class="pledge-h">No fabricated quotes.</div>
+            <p class="pledge-p">A quote in a Candor article must appear verbatim in at least one source. The AI is not permitted to paraphrase a statement as a direct quote, ever. Paraphrases are clearly labeled and not enclosed in quotation marks.</p>
+          </div>
+        </div>
+        <div class="pledge-item">
+          <div class="pledge-mark"></div>
+          <div>
+            <div class="pledge-h">No predictions presented as facts.</div>
+            <p class="pledge-p">Forecasts, projections, and analyst expectations must be attributed and tense-marked. "Markets are expected to fall" is not acceptable; "JPMorgan analysts forecast a 3% decline" is.</p>
+          </div>
+        </div>
+        <div class="pledge-item">
+          <div class="pledge-mark"></div>
+          <div>
+            <div class="pledge-h">Mandatory human review tags.</div>
+            <p class="pledge-p">Stories touching elections, court rulings, health, mass casualties, or named private individuals are auto-routed to human editors before publication, regardless of confidence score.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block" id="anonymous">
+      <div class="section-num">Standards</div>
+      <h2 class="section-h">Anonymous Sources</h2>
+      <div class="section-body">
+        <p>Because Candor synthesizes rather than originates reporting, we generally do not directly use anonymous sources. We do, however, inherit them from our source outlets — and we have rules about how those inherited anonymous sources are handled.</p>
+        <p>A claim sourced only to anonymous individuals (e.g., "three administration officials," "a senior aide familiar with the matter") is treated as <strong>single-source</strong> regardless of how many outlets repeat it, unless the outlets demonstrably spoke to different unnamed individuals. We do not multiply anonymous attributions across outlets to manufacture consensus.</p>
+        <p>Anonymous-source claims appear in Candor articles with an explicit "Reported anonymously by [outlet]" label and are excluded from our high-confidence consensus tier. Readers can opt to filter them out entirely in their reading preferences.</p>
+      </div>
+      <div class="callout">
+        <div class="callout-label">When we'd break this rule</div>
+        <p>If a story of major public interest depends entirely on anonymous sources from a single outlet, we may publish a synthesis only with: (a) sign-off from our Editor-in-Chief, (b) an explicit notice at the top of the article, and (c) a confidence rating capped at <em>Medium</em>. This has happened twice in 2026.</p>
+      </div>
+    </div>
+
+    <div class="section-block" id="review">
+      <div class="section-num">Process</div>
+      <h2 class="section-h">The Review Chain</h2>
+      <div class="section-body">
+        <p>Not every Candor article is read by a human before publication — at our volume, that wouldn't be possible. But every article that meets specific risk criteria is reviewed by an editor, and every reader-flagged story is reviewed within hours.</p>
+      </div>
+      <table class="std-table">
+        <thead><tr><th>Trigger</th><th>Reviewer</th><th>Target Time</th></tr></thead>
+        <tbody>
+          <tr><td>Routine story, high confidence</td><td>Automated checks only</td><td>Pipeline (~90s)</td></tr>
+          <tr><td>Routine story, medium confidence</td><td>Associate editor (spot check)</td><td>Within 30 min</td></tr>
+          <tr><td>Politics, courts, health, elections</td><td>Senior editor</td><td>Pre-publish</td></tr>
+          <tr><td>Named private individual</td><td>Senior editor</td><td>Pre-publish</td></tr>
+          <tr><td>Single-source or anonymous-source story</td><td>Editor-in-Chief</td><td>Pre-publish</td></tr>
+          <tr><td>Reader-submitted correction</td><td>Senior editor</td><td>Within 24h</td></tr>
+          <tr><td>Subject-of-article complaint</td><td>Editor-in-Chief</td><td>Within 12h</td></tr>
+          <tr><td>Retraction</td><td>Editor-in-Chief + Standards Editor</td><td>Same day</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-block" id="conflicts">
+      <div class="section-num">Disclosure</div>
+      <h2 class="section-h">Conflicts of Interest</h2>
+      <div class="section-body">
+        <p>Editorial staff are required to disclose financial holdings, political donations, family ties to elected officials or public-company executives, and any other relationship that could reasonably affect coverage. Disclosures are reviewed annually by our Standards Editor.</p>
+        <p>When a staff member has a relevant conflict on a specific story, they are recused from review of that story. Recusals are logged internally and disclosed to readers in the article's source notes when material.</p>
+        <p>Candor's parent company holds no equity stakes in news outlets, political organizations, or campaign-finance entities. The current ownership and funding structure is detailed below.</p>
+      </div>
+    </div>
+
+    <div class="section-block" id="ownership">
+      <div class="section-num">Disclosure</div>
+      <h2 class="section-h">Ownership & Funding</h2>
+      <div class="section-body">
+        <p>Candor is an independent news product founded in 2026. It is not owned by, controlled by, or affiliated with any larger media group, political organization, or technology platform.</p>
+        <p><strong>Funding.</strong> Candor is currently self-funded by its founder. It is designed to be sustained by readers through a single membership rather than by advertisers or outside investors. We do not run sponsored content, native ads, or affiliate links inside news articles.</p>
+        <p><strong>No advertiser or political money.</strong> Candor takes no money from advertisers, and none — ever — from political donors or PACs. If the funding mix ever changes in a way that could affect editorial independence, that change will be disclosed plainly and prominently.</p>
+        <p><strong>Editorial accountability.</strong> Final accountability for everything Candor publishes rests with the Editor-in-Chief. Commercial considerations never have read, edit, or pre-publication access to the editorial synthesis.</p>
+      </div>
+      <div class="callout">
+        <div class="callout-label">If this ever changes</div>
+        <p>If Candor is acquired, takes on a strategic investor with media holdings, or changes its revenue model in a way that affects editorial independence, we will disclose it at the top of every page for 30 days and explain what — if anything — changes about our standards.</p>
+      </div>
+    </div>
+
+    <div class="section-block" id="team">
+      <div class="section-num">People</div>
+      <h2 class="section-h">Who's accountable</h2>
+      <div class="section-body">
+        <p>Candor is an AI-first product, but the responsibility for what it publishes is human and named. Editorial accountability — the standards on this page, the corrections process, and final sign-off on anything the sensitivity check flags — rests with the Editor-in-Chief.</p>
+      </div>
+      <div class="team-grid">
+        <div class="team-card">
+          <div class="team-name">Carson Wagner</div>
+          <div class="team-role">Founder · Editor-in-Chief</div>
+          <p class="team-bio">Owns these standards, the corrections process, and final accountability for everything Candor publishes. Reviews anything the automated sensitivity check holds — including single-source, contested, or person-specific stories — before it goes live.</p>
+        </div>
+      </div>
+      <div class="section-body" style="margin-top:18px;">
+        <p>Candor is built to scale through technology rather than headcount. As the editorial team grows, every reviewer's responsibilities and any recusals will be listed here — but the rule holds at any size: a named human is accountable, never the model.</p>
+      </div>
+    </div>
+
+    <div class="section-block" id="signoff">
+      <div class="section-num">Closing</div>
+      <h2 class="section-h">A note from the editor</h2>
+      <div class="signoff">
+        AI-assisted news is not inherently more or less honest than traditional news. It is honest in proportion to the rules its operators are willing to enforce — and the rules they are willing to break. We've tried to write this page so that you can hold us to specific commitments, not vague ones. If we ever quietly walk back a standard listed here, you have our permission to point at it and call us out.
+        <span class="signoff-author">— <b>Carson Wagner</b>, Founder & Editor-in-Chief · Last updated May 2026</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-main">
+    <div class="footer-brand">
+      <div class="footer-logo"><span class="footer-logo-c">C</span>andor</div>
+      <p>AI-powered news synthesis. Every story verified across the full source spectrum — left, center, and right — so you can read with confidence.</p>
+      <div class="footer-cert">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4M21 12c0 5-3.5 8-9 9-5.5-1-9-4-9-9V5l9-3 9 3v7z"/></svg>
+        <span>Methodology · Open</span>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Coverage</h4>
+      <ul>
+        <li><a href="#">U.S. News</a></li><li><a href="#">World</a></li>
+        <li><a href="#">Politics</a></li><li><a href="#">Business</a></li>
+        <li><a href="#">Science</a></li><li><a href="#">Tech</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Trust</h4>
+      <ul>
+        <li><a href="candor-methodology.html">Methodology</a></li>
+        <li><a href="candor-sources.html">Source List</a></li>
+        <li><a href="candor-biasratings.html">Bias Ratings</a></li>
+        <li><a href="candor-corrections.html">Corrections</a></li>
+        <li><a href="candor-standards.html">Editorial Standards</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="candor-about.html">About</a></li>
+        <li><a href="candor-newsroom.html">Newsroom</a></li>
+        <li><a href="candor-careers.html">Careers</a></li>
+        <li><a href="candor-press.html">Press</a></li>
+        <li><a href="candor-contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-foot">
+    <span>© 2026 Candor News Inc. · AI-assisted summaries reviewed for factual accuracy.</span>
+    <div class="links">
+      <a href="candor-privacy.html">Privacy</a>
+      <a href="candor-terms.html">Terms</a>
+      <a href="candor-accessibility.html">Accessibility</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('theme-icon').innerHTML = isDark
+    ? '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'
+    : '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+}
+
+// Highlight active TOC link on scroll
+const sections = document.querySelectorAll('.section-block');
+const tocLinks = document.querySelectorAll('.toc-link');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+  tocLinks.forEach(l => { l.classList.toggle('active', l.getAttribute('href') === '#' + current); });
+});
+</script>
+
+<!-- ═══════════════ PAYWALL MODAL (universal) ═══════════════ -->
+<div class="paywall-overlay" id="paywall-overlay" onclick="if(event.target===this)closePaywall()">
+  <div class="paywall-modal" role="dialog" aria-modal="true" aria-labelledby="paywall-title">
+    <button class="paywall-close" onclick="closePaywall()" aria-label="Close">&times;</button>
+    <div class="paywall-eyebrow" id="paywall-eyebrow">Candor Membership</div>
+    <h3 class="paywall-title" id="paywall-title">This is a member feature.</h3>
+    <p class="paywall-body" id="paywall-body">The Candor AI assistant is part of Candor membership. Start a free 7-day trial to use it — no charge today, cancel anytime.</p>
+    <div class="paywall-price">
+      <span class="paywall-amount">$4.99</span>
+      <span class="paywall-per">/ month</span>
+      <span class="paywall-note">after your 7-day free trial</span>
+    </div>
+    <ul class="paywall-perks">
+      <li>Unlimited Candor AI — ask any story anything</li>
+      <li>Breaking-news alerts and the Daily Brief by email</li>
+      <li>Full archive, Compare Coverage, and the weekend long-read</li>
+    </ul>
+    <div class="paywall-actions">
+      <a href="candor-signup.html" class="paywall-btn-primary">Start 7-day free trial</a>
+      <a href="candor-signup.html" class="paywall-btn-secondary">Create a free account</a>
+    </div>
+    <div class="paywall-foot">Already a member? <a href="candor-login.html">Log in</a></div>
+  </div>
+</div>
+
+<script>
+/* ═══════ PAYWALL (member-feature gating) ═══════ */
+function showPaywall(feature) {
+  var overlay = document.getElementById('paywall-overlay');
+  if (!overlay) return;
+  var title = document.getElementById('paywall-title');
+  var body = document.getElementById('paywall-body');
+  var eyebrow = document.getElementById('paywall-eyebrow');
+  if (feature === 'alerts' || feature === 'email' || feature === 'newsletter' || feature === 'trial') {
+    eyebrow.textContent = 'Candor Membership';
+    title.textContent = 'Alerts are a member feature.';
+    body.textContent = 'Breaking-news alerts and the Daily Brief by email are part of Candor membership. Start a free 7-day trial to turn them on — no charge today, cancel anytime.';
+  } else {
+    eyebrow.textContent = 'Candor Membership';
+    title.textContent = 'Candor AI is a member feature.';
+    body.textContent = 'The Candor AI assistant is part of Candor membership. Start a free 7-day trial to ask any story anything — no charge today, cancel anytime.';
+  }
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closePaywall() {
+  var overlay = document.getElementById('paywall-overlay');
+  if (!overlay) return;
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closePaywall(); });
+
+</script>
+</body>
+</html>

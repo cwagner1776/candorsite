@@ -1,0 +1,3636 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Candor — The story, unfiltered.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,900&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #0b1220;
+  --ink-2: #1a2233;
+  --ink-3: #3a4358;
+  --mute: #6b7488;
+  --mute-2: #9aa2b4;
+  --line: #e4e6ec;
+  --line-2: #ecedf1;
+  --paper: #f7f5ef;
+  --paper-2: #efece3;
+  --paper-3: #e8e4d8;
+  --white: #ffffff;
+  --accent: #c8102e;
+  --accent-dark: #9c0a23;
+  --left: #2d62b3;
+  --center: #4a4a4a;
+  --right: #b8451e;
+  --gold: #b8924a;
+  --max: 1280px;
+  --shadow: 0 1px 2px rgba(11,18,32,0.04), 0 4px 16px rgba(11,18,32,0.04);
+  --shadow-lg: 0 4px 12px rgba(11,18,32,0.06), 0 12px 40px rgba(11,18,32,0.08);
+}
+
+[data-theme="dark"] {
+  --ink: #f4f1e8;
+  --ink-2: #e0dccf;
+  --ink-3: #c8c4b7;
+  --mute: #a8a497;
+  --mute-2: #8e8a7e;
+  --line: #3d3a30;
+  --line-2: #332f25;
+  --paper: #14130e;
+  --paper-2: #1a1812;
+  --paper-3: #221f17;
+  --white: #1a1812;
+  --accent: #ff4d63;
+  --accent-dark: #c8102e;
+  --left: #5587d8;
+  --center: #9aa2b4;
+  --right: #d9682c;
+  --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 4px 16px rgba(0,0,0,0.4);
+  --shadow-lg: 0 4px 12px rgba(0,0,0,0.5), 0 12px 40px rgba(0,0,0,0.6);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Newsreader', Georgia, serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background 0.3s, color 0.3s;
+}
+
+a { text-decoration: none; color: inherit; cursor: pointer; }
+button { cursor: pointer; font-family: inherit; border: none; background: none; color: inherit; }
+img { display: block; width: 100%; object-fit: cover; }
+
+/* News-style small caps for kickers/agate/meta */
+.kicker {
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  font-size: 13px;
+}
+
+/* UI sans for chrome only */
+.ui {
+  font-family: 'Figtree', sans-serif;
+}
+
+/* ───── READING PROGRESS BAR ───── */
+.progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  background: var(--accent);
+  z-index: 100;
+  width: 0;
+  transition: width 0.1s linear;
+}
+
+/* ═══════════════ UTILITY BAR ═══════════════ */
+.util-bar {
+  background: var(--ink);
+  color: var(--mute-2);
+  font-family: 'Newsreader', serif;
+  font-size: 13px;
+}
+[data-theme="dark"] .util-bar { background: #0a0907; border-bottom: 1px solid var(--line); }
+.util-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 9px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.util-left { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
+.util-status {
+  display: flex; align-items: center; gap: 8px;
+  color: #ece8d8;
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  font-size: 14px;
+}
+.live-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #2ecc71;
+  box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.55);
+  animation: livePulse 1.8s ease-out infinite;
+}
+@keyframes livePulse {
+  0% { box-shadow: 0 0 0 0 rgba(46,204,113,0.55); }
+  70% { box-shadow: 0 0 0 6px rgba(46,204,113,0); }
+  100% { box-shadow: 0 0 0 0 rgba(46,204,113,0); }
+}
+.util-stat {
+  color: var(--mute-2);
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.08em;
+  font-size: 14px;
+}
+.util-stat b { color: #ece8d8; font-weight: 700; font-variant-caps: normal; font-size: 13px; letter-spacing: 0; }
+.util-right { display: flex; align-items: center; gap: 14px; }
+.util-link {
+  color: var(--mute-2);
+  transition: color 0.15s;
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  font-size: 14px;
+}
+.util-link:hover { color: #ece8d8; }
+.util-divider { width: 1px; height: 12px; background: #2a3344; }
+[data-theme="dark"] .util-divider { background: #4a5266; }
+
+/* Live rewriting feed */
+.rewriting-feed {
+  display: flex; align-items: center; gap: 8px;
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.06em;
+  font-size: 14px;
+  color: var(--mute-2);
+  overflow: hidden;
+  max-width: 380px;
+  position: relative;
+}
+.rewriting-feed .write-pulse {
+  width: 5px; height: 5px;
+  background: var(--accent);
+  border-radius: 50%;
+  flex-shrink: 0;
+  animation: livePulse 1.2s infinite;
+}
+.rewriting-feed .feed-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #c4c0b0;
+}
+
+/* ═══════════════ MASTHEAD ═══════════════ */
+.masthead { background: var(--white); border-bottom: 1px solid var(--line); }
+[data-theme="dark"] .masthead { background: var(--paper-2); }
+.mast-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 22px 32px 18px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 24px;
+}
+.mast-left { display: flex; align-items: center; gap: 18px; }
+.weather-chip {
+  display: flex; align-items: center; gap: 8px;
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  font-size: 15px;
+  color: var(--mute);
+}
+.weather-chip svg { width: 14px; height: 14px; }
+.date-chip {
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--mute);
+}
+
+.logo-wrap { text-align: center; }
+.logo {
+  font-family: 'Fraunces', serif;
+  font-weight: 700;
+  font-size: 48px;
+  letter-spacing: -1.6px;
+  line-height: 1;
+  color: var(--ink);
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+}
+.logo-mark {
+  display: inline-block;
+  width: 13px; height: 13px;
+  background: var(--accent);
+  margin-right: 5px;
+  position: relative;
+  top: -3px;
+}
+.logo-tag {
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--mute);
+  margin-top: 6px;
+  letter-spacing: 0.01em;
+}
+
+.mast-right { display: flex; align-items: center; gap: 10px; justify-content: flex-end; }
+.icon-btn {
+  width: 36px; height: 36px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--ink-3);
+  transition: all 0.2s;
+  background: var(--white);
+  position: relative;
+}
+.icon-btn:hover { color: var(--ink); border-color: var(--ink); transform: translateY(-1px); }
+.icon-btn svg { width: 15px; height: 15px; }
+.icon-btn.active { background: var(--ink); color: var(--white); border-color: var(--ink); }
+.btn-subscribe {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 9px 18px;
+  border-radius: 2px;
+  transition: all 0.2s;
+}
+.btn-subscribe:hover { background: var(--accent); transform: translateY(-1px); }
+
+/* Keyboard hint */
+.kbd-hint {
+  position: absolute;
+  bottom: -22px;
+  right: 0;
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+  font-size: 11px;
+  color: var(--mute);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+.icon-btn:hover + .kbd-hint { opacity: 1; }
+kbd {
+  font-family: 'Newsreader', serif;
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  padding: 1px 5px;
+  border-radius: 2px;
+  font-size: 10px;
+  font-style: normal;
+}
+
+/* ═══════════════ NAV ═══════════════ */
+.nav-wrap { background: var(--white); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 50; }
+[data-theme="dark"] .nav-wrap { background: var(--paper-2); }
+.nav-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.nav-inner::-webkit-scrollbar { display: none; }
+.nav-link {
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+  padding: 14px 14px;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+.nav-link:first-child { padding-left: 0; }
+.nav-link:hover { color: var(--ink); }
+.nav-link.active { color: var(--ink); border-bottom-color: var(--accent); }
+.nav-link.live-link::before {
+  content: '';
+  display: inline-block;
+  width: 6px; height: 6px;
+  background: #ef3340;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+  animation: livePulse 1.8s infinite;
+}
+
+/* ───── BIAS FILTER ───── */
+.bias-filter-wrap {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 16px;
+}
+.bias-filter-label {
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--mute);
+  white-space: nowrap;
+}
+.bias-filter {
+  display: flex;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  background: var(--white);
+}
+.bias-btn {
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 6px 10px;
+  color: var(--mute);
+  transition: all 0.15s;
+  border-right: 1px solid var(--line);
+  white-space: nowrap;
+}
+.bias-btn:last-child { border-right: none; }
+.bias-btn:hover { color: var(--ink); background: var(--paper-2); }
+.bias-btn.active { background: var(--ink); color: var(--paper); }
+.bias-btn .dot {
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+/* ═══════════════ TICKER ═══════════════ */
+.ticker-bar {
+  background: var(--ink);
+  color: #d8d4c7;
+  border-bottom: 1px solid #1a2233;
+}
+[data-theme="dark"] .ticker-bar { background: #0a0907; }
+.ticker-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  height: 40px;
+  gap: 18px;
+}
+.ticker-tag {
+  background: var(--accent);
+  color: var(--white);
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  padding: 4px 12px;
+  flex-shrink: 0;
+}
+.ticker-wrap { flex: 1; overflow: hidden; -webkit-mask-image: linear-gradient(to right, transparent, black 20px, black calc(100% - 40px), transparent); mask-image: linear-gradient(to right, transparent, black 20px, black calc(100% - 40px), transparent); }
+.ticker-track {
+  display: inline-block;
+  white-space: nowrap;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.005em;
+  animation: ticker 48s linear infinite;
+}
+.ticker-track:hover { animation-play-state: paused; }
+.ticker-track span { color: #d4d0c0; }
+.ticker-track em { color: var(--mute); font-style: normal; margin: 0 18px; }
+@keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* ═══════════════ MAIN WRAP ═══════════════ */
+.wrap { max-width: var(--max); margin: 0 auto; padding: 0 32px; }
+
+/* ═══════════════ HERO ═══════════════ */
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 0;
+  padding: 36px 0 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.hero-main { padding-right: 40px; border-right: 1px solid var(--line); }
+
+.hero-img-wrap {
+  position: relative;
+  margin-bottom: 22px;
+  background: var(--ink);
+  overflow: hidden;
+}
+.hero-img-wrap img {
+  height: 440px;
+  width: 100%;
+  object-fit: cover;
+  filter: contrast(1.02) saturate(0.95);
+  transition: transform 0.6s ease;
+}
+.hero-img-wrap:hover img { transform: scale(1.02); }
+.hero-img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 50%, rgba(11,18,32,0.45) 100%);
+  pointer-events: none;
+}
+.hero-img-caption {
+  position: absolute;
+  bottom: 14px; left: 18px; right: 18px;
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+  font-size: 13px;
+  color: rgba(255,255,255,0.9);
+  display: flex; justify-content: space-between; align-items: end;
+  gap: 12px;
+}
+.hero-img-caption .credit {
+  color: rgba(255,255,255,0.65);
+  font-style: normal;
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.1em;
+  font-size: 12px;
+}
+
+.story-eyebrow {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 14px;
+}
+.story-eyebrow .tag {
+  background: var(--accent);
+  color: var(--white);
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  padding: 4px 10px;
+}
+.story-eyebrow .section {
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  color: var(--mute);
+  font-weight: 600;
+}
+.story-eyebrow .section a { color: var(--ink); }
+
+.hero-headline {
+  font-family: 'Fraunces', serif;
+  font-weight: 700;
+  font-size: 52px;
+  line-height: 1.04;
+  letter-spacing: -1.4px;
+  color: var(--ink);
+  margin-bottom: 18px;
+}
+
+.hero-dek {
+  font-family: 'Newsreader', serif;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1.5;
+  color: var(--ink-2);
+  margin-bottom: 22px;
+  max-width: 62ch;
+}
+.hero-dek::first-letter {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+}
+
+/* AI rewritten banner */
+.ai-rewrite-banner {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  padding: 10px 14px;
+  margin-bottom: 20px;
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--ink-2);
+}
+.ai-rewrite-banner .pulse-dot {
+  width: 6px; height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: livePulse 1.8s infinite;
+  flex-shrink: 0;
+}
+.ai-rewrite-banner .timestamp {
+  font-variant-caps: normal;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  color: var(--mute);
+  font-size: 13px;
+}
+
+/* Source signal */
+.source-signal {
+  background: var(--white);
+  border: 1px solid var(--line);
+  padding: 18px 20px;
+  margin-bottom: 18px;
+  transition: box-shadow 0.2s;
+}
+.source-signal:hover { box-shadow: var(--shadow); }
+
+/* ───── ANALYSIS PANEL (collapsible) ───── */
+.analysis-panel {
+  background: var(--white);
+  border: 1px solid var(--line);
+  margin-bottom: 22px;
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+.analysis-panel:hover { box-shadow: var(--shadow); }
+
+.analysis-toggle {
+  width: 100%;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: var(--white);
+  text-align: left;
+  transition: background 0.15s;
+}
+.analysis-toggle:hover { background: var(--paper); }
+.analysis-panel.open .analysis-toggle { border-bottom: 1px solid var(--line); background: var(--paper); }
+
+.atog-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--ink);
+}
+.atog-icon { width: 15px; height: 15px; color: var(--ink-3); }
+.atog-pip {
+  font-family: 'Newsreader', serif;
+  font-variant-caps: normal;
+  letter-spacing: 0.02em;
+  font-style: italic;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--mute);
+  margin-left: 4px;
+}
+.atog-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--mute);
+}
+.atog-label {
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+.atog-chev {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.25s ease;
+}
+.analysis-panel.open .atog-chev { transform: rotate(180deg); }
+
+.analysis-body {
+  display: none;
+  padding: 4px 20px 22px;
+  animation: fadeIn 0.3s ease;
+}
+.analysis-panel.open .analysis-body { display: block; }
+
+/* Stats grid */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 22px;
+}
+.stat-cell {
+  padding: 0 18px;
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.stat-cell:first-child { padding-left: 0; }
+.stat-cell:last-child { padding-right: 0; border-right: none; }
+.stat-label {
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--mute);
+}
+.stat-value {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 26px;
+  line-height: 1;
+  letter-spacing: -0.5px;
+  color: var(--ink);
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+.stat-unit {
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 13px;
+  color: var(--mute);
+  letter-spacing: 0;
+}
+.stat-conf-high { color: #2ecc71; font-style: italic; font-size: 22px; }
+
+/* Section inside analysis */
+.analysis-section { margin-bottom: 20px; }
+.analysis-section:last-child { margin-bottom: 0; }
+.analysis-section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.ass-title {
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--ink);
+}
+.ass-sub {
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+  font-size: 12px;
+  color: var(--mute);
+}
+
+@media (max-width: 720px) {
+  .stat-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; padding: 14px 0; }
+  .stat-cell { padding: 0; border-right: none; }
+  .stat-cell:nth-child(2n) { padding-left: 14px; border-left: 1px solid var(--line); }
+}
+
+.signal-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+.signal-label {
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--ink);
+  display: flex; align-items: center; gap: 8px;
+}
+.signal-label svg { width: 14px; height: 14px; color: var(--ink-3); }
+.signal-count {
+  font-family: 'Newsreader', serif;
+  font-size: 13px;
+  font-style: italic;
+  color: var(--mute);
+}
+.signal-count b { color: var(--ink); font-weight: 700; font-style: normal; }
+
+.toggle-sources {
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+  border-bottom: 1px dotted var(--mute);
+  padding-bottom: 1px;
+  transition: color 0.15s;
+}
+.toggle-sources:hover { color: var(--accent); }
+
+.bias-bar {
+  display: flex;
+  height: 8px;
+  overflow: hidden;
+  border-radius: 1px;
+  background: var(--line);
+  cursor: pointer;
+}
+.bias-seg {
+  height: 100%;
+  transition: all 0.4s ease;
+  position: relative;
+}
+.bias-seg:hover { filter: brightness(1.15); }
+.bias-left { background: var(--left); }
+.bias-center { background: var(--center); }
+.bias-right { background: var(--right); }
+
+.bias-labels {
+  display: flex;
+  margin-top: 10px;
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--mute);
+  letter-spacing: 0.08em;
+}
+.bias-label-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.bias-label-item:hover { color: var(--ink); }
+.bias-label-item .swatch { width: 8px; height: 8px; }
+.bias-label-item.center { justify-content: center; }
+.bias-label-item.right { justify-content: flex-end; }
+.bias-label-item b { color: var(--ink); font-weight: 700; font-variant-caps: normal; }
+
+/* Source list (expandable) */
+.source-list {
+  display: none;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  flex-wrap: wrap;
+  gap: 6px;
+  animation: fadeIn 0.3s ease;
+}
+.source-list.open { display: flex; }
+.src-chip {
+  font-family: 'Newsreader', serif;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink-2);
+  border-radius: 2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.src-chip:hover { border-color: var(--ink); background: var(--white); }
+.src-chip .src-bias {
+  width: 5px; height: 5px; border-radius: 50%;
+}
+
+.story-meta {
+  display: flex; align-items: center; gap: 14px;
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--mute);
+  flex-wrap: wrap;
+}
+.story-meta .dot { color: var(--line); font-style: normal; }
+.story-meta b {
+  color: var(--ink);
+  font-weight: 700;
+  font-style: normal;
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.04em;
+  font-size: 13px;
+}
+
+.action-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 22px;
+}
+.read-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+  padding: 11px 18px;
+  background: var(--ink);
+  color: var(--paper);
+  transition: all 0.2s;
+}
+.read-cta:hover { background: var(--accent); transform: translateY(-1px); }
+.read-cta svg { width: 14px; height: 14px; }
+
+.action-btn {
+  width: 38px; height: 38px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--line);
+  background: var(--white);
+  color: var(--ink-3);
+  transition: all 0.15s;
+}
+.action-btn:hover { border-color: var(--ink); color: var(--ink); }
+.action-btn.saved { background: var(--accent); color: var(--white); border-color: var(--accent); }
+.action-btn svg { width: 14px; height: 14px; }
+
+/* Hero Sidebar */
+.hero-side { padding-left: 32px; }
+.side-header {
+  display: flex; align-items: baseline; justify-content: space-between;
+  padding-bottom: 10px;
+  margin-bottom: 6px;
+  border-bottom: 2px solid var(--ink);
+}
+.side-header h3 {
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+.side-header .more {
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--mute);
+}
+
+.side-story {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: 1fr 92px;
+  gap: 16px;
+  transition: all 0.15s;
+  cursor: pointer;
+  position: relative;
+}
+.side-story:last-child { border-bottom: none; }
+.side-story:hover .side-headline { color: var(--accent); }
+.side-story:hover .side-img img { transform: scale(1.06); }
+
+.side-content { display: flex; flex-direction: column; min-width: 0; }
+.side-rank {
+  font-family: 'Fraunces', serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--accent);
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+.side-eyebrow {
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--mute);
+  margin-bottom: 4px;
+}
+.side-headline {
+  font-family: 'Fraunces', serif;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.22;
+  color: var(--ink);
+  margin-bottom: 8px;
+  transition: color 0.15s;
+  letter-spacing: -0.2px;
+}
+.side-meta {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Newsreader', serif;
+  font-size: 12px;
+  color: var(--mute);
+  font-style: italic;
+}
+.side-meta .mini-bar {
+  display: flex;
+  width: 36px;
+  height: 3px;
+  flex-shrink: 0;
+}
+.side-meta .mini-bar div { height: 100%; }
+.side-meta b { color: var(--ink-2); font-weight: 700; font-style: normal; font-variant-caps: all-small-caps; letter-spacing: 0.04em; }
+
+.side-img {
+  width: 92px; height: 92px;
+  overflow: hidden;
+  background: var(--paper-2);
+}
+.side-img img {
+  width: 92px; height: 92px;
+  object-fit: cover;
+  filter: contrast(1.02) saturate(0.95);
+  transition: transform 0.4s ease;
+}
+
+/* ═══════════════ AI ASSISTANT ═══════════════ */
+.ai-section {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+}
+[data-theme="dark"] .ai-section { background: #0a0907; color: #f4f1e8; border: 1px solid var(--line); }
+[data-theme="dark"] .ai-section .ai-brand h2,
+[data-theme="dark"] .ai-section .ai-stat-num,
+[data-theme="dark"] .ai-section .ss-current { color: #f4f1e8; }
+.ai-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(200, 16, 46, 0.1) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(45, 98, 179, 0.08) 0%, transparent 40%);
+  pointer-events: none;
+}
+.ai-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 48px 32px;
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 48px;
+  align-items: start;
+  position: relative;
+}
+
+.ai-brand .ai-tag {
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--accent);
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 14px;
+}
+.ai-brand .ai-tag .pulse-dot {
+  width: 6px; height: 6px; background: var(--accent); border-radius: 50%;
+  animation: livePulse 1.8s infinite;
+}
+.ai-brand h2 {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 1.1;
+  letter-spacing: -0.6px;
+  margin-bottom: 14px;
+  color: var(--paper);
+}
+.ai-brand p {
+  font-family: 'Newsreader', serif;
+  font-size: 15px;
+  color: #c4c0b0;
+  line-height: 1.55;
+  margin-bottom: 20px;
+}
+.ai-brand .ai-stats {
+  display: flex; gap: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #3d3a30;
+}
+.ai-brand .ai-stat-num {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 28px;
+  color: var(--paper);
+  letter-spacing: -0.5px;
+  display: block;
+  line-height: 1;
+}
+.ai-brand .ai-stat-lbl {
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 12px;
+  color: var(--mute-2);
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  margin-top: 4px;
+  display: block;
+}
+
+.ai-panel { display: flex; flex-direction: column; gap: 14px; }
+
+/* ───── STORY SELECTOR ───── */
+.story-selector { position: relative; }
+.ss-label {
+  display: block;
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--mute-2);
+  margin-bottom: 8px;
+}
+.ss-control {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.18);
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.ss-control:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); }
+.ss-current {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--paper);
+  letter-spacing: -0.2px;
+}
+.ss-chev {
+  width: 14px;
+  height: 14px;
+  color: var(--mute-2);
+  transition: transform 0.25s ease;
+  flex-shrink: 0;
+}
+.story-selector.open .ss-chev { transform: rotate(180deg); }
+
+.ss-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0; right: 0;
+  background: #1a2233;
+  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+  z-index: 30;
+  max-height: 360px;
+  overflow-y: auto;
+  animation: fadeIn 0.2s ease;
+}
+.story-selector.open .ss-menu { display: block; }
+.ss-option {
+  width: 100%;
+  text-align: left;
+  padding: 12px 18px;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  transition: background 0.15s;
+}
+.ss-option:hover { background: rgba(255,255,255,0.06); }
+.ss-option.active { background: rgba(200,16,46,0.1); }
+.ss-option.active::after {
+  content: '●';
+  margin-left: auto;
+  color: var(--accent);
+  font-size: 10px;
+}
+.ss-opt-tag {
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--mute-2);
+  min-width: 88px;
+  flex-shrink: 0;
+}
+.ss-opt-title {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--paper);
+  letter-spacing: -0.1px;
+}
+.ss-divider {
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--mute);
+  padding: 10px 18px 6px;
+  background: rgba(0,0,0,0.2);
+}
+
+/* ───── LIGHT STORY SELECTOR (compare section) ───── */
+.compare-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+}
+.story-selector-light {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.ssl-label {
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--mute);
+}
+.ssl-control {
+  background: var(--white);
+  border: 1px solid var(--line);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  min-width: 280px;
+  transition: all 0.2s;
+}
+.ssl-control:hover { border-color: var(--ink); }
+.ssl-current {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--ink);
+  letter-spacing: -0.1px;
+  flex: 1;
+}
+.ssl-chev {
+  width: 13px;
+  height: 13px;
+  color: var(--mute);
+  transition: transform 0.25s ease;
+}
+.story-selector-light.open .ssl-chev { transform: rotate(180deg); }
+
+.ssl-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 65px; right: 0;
+  background: var(--white);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-lg);
+  z-index: 30;
+  max-height: 320px;
+  overflow-y: auto;
+  animation: fadeIn 0.2s ease;
+}
+.story-selector-light.open .ssl-menu { display: block; }
+.ssl-option {
+  width: 100%;
+  text-align: left;
+  padding: 11px 16px;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  border-bottom: 1px solid var(--line-2);
+  transition: background 0.15s;
+}
+.ssl-option:hover { background: var(--paper); }
+.ssl-option.active { background: rgba(200,16,46,0.06); }
+.ssl-option.active::after {
+  content: '●';
+  margin-left: auto;
+  color: var(--accent);
+  font-size: 9px;
+}
+.ssl-opt-tag {
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  min-width: 82px;
+  flex-shrink: 0;
+}
+.ssl-opt-title {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--ink);
+  letter-spacing: -0.1px;
+}
+
+/* Reposition tabs inside compare-controls */
+.compare-controls .compare-tabs {
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+@media (max-width: 720px) {
+  .ssl-control { min-width: 200px; }
+  .ssl-menu { left: 0; right: 0; }
+}
+.ai-prompts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.ai-prompt {
+  text-align: left;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #ece8d8;
+  padding: 14px 16px;
+  font-family: 'Newsreader', serif;
+  font-size: 15px;
+  line-height: 1.35;
+  transition: all 0.2s;
+  position: relative;
+  display: flex; flex-direction: column; gap: 8px;
+  min-height: 90px;
+}
+.ai-prompt:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.25);
+  transform: translateY(-2px);
+}
+.ai-prompt .prompt-icon {
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.14em;
+}
+
+.ai-input-row {
+  display: flex; gap: 0;
+  background: var(--white);
+  border-radius: 2px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+.ai-text {
+  flex: 1;
+  border: none;
+  padding: 15px 18px;
+  font-size: 16px;
+  font-family: 'Newsreader', serif;
+  color: var(--ink);
+  background: transparent;
+  outline: none;
+}
+.ai-text::placeholder { color: var(--mute); font-style: italic; }
+.ai-submit {
+  background: var(--accent);
+  color: var(--white);
+  padding: 0 24px;
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  transition: background 0.15s;
+  display: flex; align-items: center; gap: 8px;
+}
+.ai-submit:hover { background: var(--accent-dark); }
+.ai-submit svg { width: 14px; height: 14px; }
+
+.ai-response {
+  display: none;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-left: 3px solid var(--accent);
+  padding: 20px 22px;
+  font-family: 'Newsreader', serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #d8d4c7;
+}
+.ai-response.visible { display: block; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+.ai-response-q {
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+  font-size: 15px;
+  color: var(--mute-2);
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.ai-response-a { color: var(--paper); margin-bottom: 16px; }
+.ai-response-a strong { color: var(--white); font-weight: 700; }
+.ai-response-a .cursor {
+  display: inline-block;
+  width: 8px; height: 16px;
+  background: var(--accent);
+  vertical-align: text-bottom;
+  margin-left: 2px;
+  animation: blink 1s infinite;
+}
+@keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+.ai-response-footer {
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+  font-size: 12px;
+  color: var(--mute);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.ai-reset {
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--mute-2);
+  transition: color 0.15s;
+  font-style: normal;
+}
+.ai-reset:hover { color: var(--paper); }
+
+.ai-disclaimer {
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--mute);
+  display: flex; align-items: center; gap: 8px;
+}
+.ai-disclaimer svg { width: 13px; height: 13px; flex-shrink: 0; }
+
+/* ═══════════════ SECTION HEADER ═══════════════ */
+.sec-header {
+  padding: 44px 0 18px;
+  margin-bottom: 0;
+  border-bottom: 1px solid var(--ink);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.sec-header h2 {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 34px;
+  letter-spacing: -0.6px;
+  color: var(--ink);
+}
+.sec-header h2 em {
+  font-style: italic;
+  color: var(--accent);
+  font-weight: 500;
+}
+.sec-header .sub {
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--mute);
+}
+
+/* ═══════════════ STORIES GRID ═══════════════ */
+.stories-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--line);
+}
+
+.story-card {
+  padding: 24px 24px 28px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+  background: transparent;
+  transition: all 0.2s;
+  display: flex; flex-direction: column;
+  position: relative;
+}
+.story-card:first-child { padding-left: 0; }
+.story-card:nth-child(3n) { border-right: none; padding-right: 0; }
+.story-card:nth-child(3n+1) { padding-left: 0; }
+.story-card:hover { background: var(--white); }
+.story-card:hover .card-headline { color: var(--accent); }
+.story-card.filter-hidden { display: none; }
+.grid-empty { display: none; grid-column: 1 / -1; text-align: center; padding: 48px 24px; color: var(--mute); font-family: 'Newsreader', serif; font-style: italic; font-size: 16px; border: 1px dashed var(--line); margin-top: 8px; }
+
+.card-img {
+  height: 190px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  background: var(--paper-2);
+}
+.card-img img {
+  height: 190px;
+  width: 100%;
+  object-fit: cover;
+  filter: contrast(1.02) saturate(0.95);
+  transition: transform 0.5s ease;
+}
+.story-card:hover .card-img img { transform: scale(1.04); }
+
+.card-cat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.card-cat-left { display: flex; align-items: center; gap: 10px; }
+.card-eyebrow {
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+}
+.card-time {
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+  font-size: 12px;
+  color: var(--mute);
+}
+.card-save {
+  width: 26px; height: 26px;
+  border: 1px solid var(--line);
+  background: var(--white);
+  color: var(--mute);
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.card-save:hover { color: var(--ink); border-color: var(--ink); }
+.card-save.saved { color: var(--accent); border-color: var(--accent); }
+.card-save svg { width: 11px; height: 11px; }
+
+.card-headline {
+  font-family: 'Fraunces', serif;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--ink);
+  margin-bottom: 10px;
+  letter-spacing: -0.3px;
+  transition: color 0.15s;
+}
+.card-dek {
+  font-family: 'Newsreader', serif;
+  font-size: 15px;
+  color: var(--ink-3);
+  line-height: 1.5;
+  margin-bottom: 14px;
+  flex-grow: 1;
+}
+
+.card-bottom {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  position: relative;
+}
+.card-bias-mini {
+  display: flex;
+  height: 4px;
+  width: 80px;
+  background: var(--line);
+  cursor: pointer;
+}
+.card-bias-mini div { height: 100%; transition: all 0.2s; }
+.card-bias-mini:hover div { filter: brightness(1.2); }
+.card-sources {
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--mute);
+}
+.card-sources b {
+  color: var(--ink);
+  font-weight: 700;
+  font-style: normal;
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.04em;
+}
+
+/* Hover tooltip for bias mini */
+.bias-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 8px 12px;
+  font-family: 'Newsreader', serif;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: 20;
+  box-shadow: var(--shadow-lg);
+}
+.bias-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 16px;
+  border: 5px solid transparent;
+  border-top-color: var(--ink);
+}
+.card-bias-mini:hover + .bias-tooltip { opacity: 1; }
+.bias-tooltip .b-row {
+  display: flex; align-items: center; gap: 6px;
+}
+.bias-tooltip .b-row + .b-row { margin-top: 4px; }
+.bias-tooltip .sw {
+  width: 7px; height: 7px;
+}
+
+/* ═══════════════ COMPARE COVERAGE SECTION ═══════════════ */
+.compare-section {
+  background: var(--paper-2);
+  padding: 56px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+[data-theme="dark"] .compare-section { background: var(--paper-3); }
+.compare-inner { max-width: var(--max); margin: 0 auto; padding: 0 32px; }
+
+.compare-head {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 24px;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+.compare-head .label {
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+.compare-head h2 {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 36px;
+  letter-spacing: -0.7px;
+  line-height: 1.1;
+  color: var(--ink);
+  max-width: 700px;
+}
+.compare-head h2 em { font-style: italic; color: var(--accent); }
+.compare-head .story-link {
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--mute);
+}
+.compare-head .story-link b {
+  color: var(--ink);
+  font-style: normal;
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+}
+
+/* Tab triggers for compare */
+.compare-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+.compare-tab {
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 10px 18px;
+  color: var(--mute);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all 0.2s;
+  display: flex; align-items: center; gap: 8px;
+}
+.compare-tab:hover { color: var(--ink); }
+.compare-tab.active { color: var(--ink); border-bottom-color: var(--accent); }
+.compare-tab .dot { width: 8px; height: 8px; border-radius: 50%; }
+
+.compare-cols {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.compare-col {
+  background: var(--white);
+  border: 1px solid var(--line);
+  padding: 24px 24px 26px;
+  position: relative;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+.compare-col:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+.compare-col.focused { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+.compare-col.dimmed { opacity: 0.45; }
+.compare-col::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.compare-col.col-left::before { background: var(--left); }
+.compare-col.col-center::before { background: var(--center); }
+.compare-col.col-right::before { background: var(--right); }
+
+.col-bias-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+.col-bias-label {
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  display: flex; align-items: center; gap: 8px;
+}
+.col-bias-label .dot { width: 9px; height: 9px; }
+.col-left .col-bias-label { color: var(--left); }
+.col-left .col-bias-label .dot { background: var(--left); }
+.col-center .col-bias-label { color: var(--center); }
+.col-center .col-bias-label .dot { background: var(--center); }
+.col-right .col-bias-label { color: var(--right); }
+.col-right .col-bias-label .dot { background: var(--right); }
+.col-source-count {
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--mute);
+}
+
+.col-frame {
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  font-weight: 700;
+  color: var(--mute);
+  margin-bottom: 8px;
+}
+.col-headline {
+  font-family: 'Fraunces', serif;
+  font-size: 19px;
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--ink);
+  margin-bottom: 14px;
+  letter-spacing: -0.2px;
+}
+.col-summary {
+  font-family: 'Newsreader', serif;
+  font-size: 15px;
+  color: var(--ink-2);
+  line-height: 1.55;
+  margin-bottom: 16px;
+}
+.col-summary mark {
+  background: rgba(200, 16, 46, 0.1);
+  color: var(--ink);
+  padding: 1px 4px;
+  font-weight: 600;
+}
+.col-sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.col-source-chip {
+  font-family: 'Newsreader', serif;
+  font-size: 12px;
+  font-weight: 500;
+  background: var(--paper);
+  color: var(--ink-3);
+  padding: 4px 9px;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  transition: all 0.15s;
+}
+.col-source-chip:hover { background: var(--white); border-color: var(--ink-3); }
+
+/* ═══════════════ SUBSCRIBE STRIP ═══════════════ */
+.sub-strip {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 64px 0;
+  position: relative;
+  overflow: hidden;
+}
+[data-theme="dark"] .sub-strip { background: #0a0907; color: #f4f1e8; }
+[data-theme="dark"] .sub-h { color: #f4f1e8; }
+.sub-strip::before {
+  content: 'CANDOR';
+  position: absolute;
+  font-family: 'Fraunces', serif;
+  font-weight: 900;
+  font-size: 320px;
+  letter-spacing: -10px;
+  color: rgba(244,241,232,0.025);
+  bottom: -110px;
+  right: -40px;
+  pointer-events: none;
+  line-height: 1;
+}
+.sub-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 32px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: center;
+  position: relative;
+}
+.sub-eyebrow {
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+.sub-h {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 42px;
+  line-height: 1.08;
+  letter-spacing: -0.8px;
+  color: var(--paper);
+  margin-bottom: 16px;
+}
+.sub-h em { font-style: italic; color: var(--accent); }
+.sub-p {
+  font-family: 'Newsreader', serif;
+  font-size: 16px;
+  color: #c4c0b0;
+  line-height: 1.55;
+  max-width: 42ch;
+}
+.sub-form {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 26px;
+}
+.sub-form-label {
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--mute-2);
+  margin-bottom: 12px;
+}
+.sub-form-row { display: flex; gap: 0; margin-bottom: 14px; }
+.sub-input {
+  flex: 1;
+  background: var(--white);
+  border: none;
+  padding: 14px 16px;
+  font-size: 15px;
+  font-family: 'Newsreader', serif;
+  color: var(--ink);
+  outline: none;
+}
+.sub-input::placeholder { color: var(--mute); font-style: italic; }
+.sub-btn {
+  background: var(--accent);
+  color: var(--white);
+  padding: 0 24px;
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.sub-btn:hover { background: var(--accent-dark); }
+.sub-form-foot {
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+  font-size: 12px;
+  color: var(--mute);
+}
+
+/* ═══════════════ FOOTER ═══════════════ */
+.footer {
+  background: var(--paper);
+  border-top: 1px solid var(--line);
+}
+.footer-main {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 52px 32px 40px;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap: 48px;
+}
+.footer-brand .footer-logo {
+  font-family: 'Fraunces', serif;
+  font-weight: 700;
+  font-size: 32px;
+  letter-spacing: -1px;
+  color: var(--ink);
+  display: inline-flex;
+  align-items: baseline;
+  margin-bottom: 16px;
+}
+.footer-brand .footer-logo .mark {
+  display: inline-block;
+  width: 10px; height: 10px;
+  background: var(--accent);
+  margin-right: 5px;
+  position: relative;
+  top: -2px;
+}
+.footer-brand p {
+  font-family: 'Newsreader', serif;
+  font-size: 15px;
+  color: var(--mute);
+  line-height: 1.55;
+  margin-bottom: 18px;
+  max-width: 38ch;
+}
+.footer-cert {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 13px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: 0.08em;
+}
+.footer-cert svg { width: 14px; height: 14px; color: #2ecc71; }
+
+.footer-col h4 {
+  font-family: 'Newsreader', serif;
+  font-variant-caps: all-small-caps;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 8px; }
+.footer-col ul a {
+  font-family: 'Newsreader', serif;
+  font-size: 14px;
+  color: var(--ink-3);
+  transition: color 0.15s;
+}
+.footer-col ul a:hover { color: var(--accent); }
+
+.footer-foot {
+  border-top: 1px solid var(--line);
+  padding: 20px 32px;
+  max-width: var(--max);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--mute);
+}
+.footer-foot .links { display: flex; gap: 18px; }
+.footer-foot a {
+  font-style: normal;
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+.footer-foot a:hover { color: var(--ink); }
+
+/* ═══════════════ TOASTS ═══════════════ */
+.toast-wrap {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+.toast {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 12px 18px;
+  font-family: 'Newsreader', serif;
+  font-size: 14px;
+  display: flex; align-items: center; gap: 10px;
+  box-shadow: var(--shadow-lg);
+  animation: toastIn 0.3s ease;
+  pointer-events: auto;
+}
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.toast.fade-out { animation: toastOut 0.3s ease forwards; }
+@keyframes toastOut {
+  to { opacity: 0; transform: translateY(20px); }
+}
+.toast svg { width: 14px; height: 14px; color: #2ecc71; }
+
+/* ═══════════════ MODAL ═══════════════ */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(11,18,32,0.7);
+  z-index: 150;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+.modal-backdrop.open { display: flex; }
+.modal {
+  background: var(--white);
+  width: 92%;
+  max-width: 560px;
+  padding: 32px;
+  position: relative;
+  box-shadow: var(--shadow-lg);
+  animation: modalIn 0.3s ease;
+}
+@keyframes modalIn { from { opacity: 0; transform: translateY(20px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+.modal-close {
+  position: absolute;
+  top: 16px; right: 16px;
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--mute);
+  transition: color 0.15s;
+}
+.modal-close:hover { color: var(--ink); }
+.modal h3 {
+  font-family: 'Fraunces', serif;
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.4px;
+  margin-bottom: 8px;
+}
+.modal-sub {
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--mute);
+  margin-bottom: 22px;
+}
+.search-input {
+  width: 100%;
+  border: 1px solid var(--line);
+  padding: 14px 18px;
+  font-size: 16px;
+  font-family: 'Newsreader', serif;
+  color: var(--ink);
+  background: var(--paper);
+  outline: none;
+  transition: border-color 0.15s;
+}
+.search-input:focus { border-color: var(--ink); }
+.search-hints {
+  margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.search-hint {
+  font-family: 'Newsreader', serif;
+  font-size: 13px;
+  padding: 6px 12px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.search-hint:hover { background: var(--ink); color: var(--paper); }
+
+/* ═══════════════ RESPONSIVE ═══════════════ */
+@media (max-width: 1080px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-main { border-right: none; padding-right: 0; padding-bottom: 32px; border-bottom: 1px solid var(--line); margin-bottom: 32px; }
+  .hero-side { padding-left: 0; }
+  .ai-inner { grid-template-columns: 1fr; gap: 32px; }
+  .ai-prompts { grid-template-columns: repeat(2, 1fr); }
+  .compare-cols { grid-template-columns: 1fr; }
+  .stories-grid { grid-template-columns: repeat(2, 1fr); }
+  .story-card:nth-child(3n) { border-right: 1px solid var(--line); padding-right: 24px; }
+  .story-card:nth-child(3n+1) { padding-left: 24px; }
+  .story-card:nth-child(2n) { border-right: none; padding-right: 0; }
+  .story-card:nth-child(2n+1) { padding-left: 0; }
+  .sub-inner { grid-template-columns: 1fr; gap: 32px; }
+  .footer-main { grid-template-columns: 1fr 1fr; gap: 32px; }
+  .bias-filter-wrap { display: none; }
+}
+@media (max-width: 720px) {
+  .util-inner { padding: 8px 20px; flex-wrap: wrap; }
+  .mast-inner { grid-template-columns: 1fr; padding: 18px 20px; gap: 14px; }
+  .mast-left, .mast-right { justify-content: center; }
+  .logo { font-size: 40px; }
+  .nav-inner, .ticker-inner, .wrap, .compare-inner, .sub-inner, .footer-main { padding-left: 20px; padding-right: 20px; }
+  .hero-headline { font-size: 34px; }
+  .hero-dek { font-size: 17px; }
+  .hero-img-wrap img { height: 240px; }
+  .ai-prompts { grid-template-columns: 1fr; }
+  .stories-grid { grid-template-columns: 1fr; }
+  .story-card { border-right: none !important; padding-left: 0 !important; padding-right: 0 !important; }
+  .sec-header h2, .sub-h, .compare-head h2 { font-size: 28px; }
+  .footer-main { grid-template-columns: 1fr; }
+  .util-stat, .rewriting-feed { display: none; }
+  .compare-tabs { overflow-x: auto; }
+}
+
+/* ═══════ DARK MODE FIXES ═══════ */
+[data-theme="dark"] .icon-btn { background: var(--paper-3); border-color: var(--line); }
+[data-theme="dark"] .bias-filter { background: var(--paper-3); border-color: var(--line); }
+[data-theme="dark"] .bias-btn:hover { background: var(--paper-2); }
+[data-theme="dark"] .bias-btn.active { background: var(--ink); color: var(--paper); }
+[data-theme="dark"] .analysis-panel { background: var(--paper-2); border-color: var(--line); }
+[data-theme="dark"] .analysis-toggle { background: var(--paper-2); }
+[data-theme="dark"] .analysis-toggle:hover { background: var(--paper-3); }
+[data-theme="dark"] .analysis-panel.open .analysis-toggle { background: var(--paper-3); }
+[data-theme="dark"] .analysis-body { background: var(--paper-2); }
+[data-theme="dark"] .src-chip { background: var(--paper-3); border-color: var(--line); color: var(--ink-2); }
+[data-theme="dark"] .src-chip:hover { background: var(--paper-2); border-color: var(--ink-3); }
+[data-theme="dark"] .story-card { background: var(--paper); }
+[data-theme="dark"] .story-card:hover { background: var(--paper-2); }
+[data-theme="dark"] .card-save { background: var(--paper-3); border-color: var(--line); }
+[data-theme="dark"] .compare-col { background: var(--paper-2); border-color: var(--line); }
+[data-theme="dark"] .col-source-chip { background: var(--paper-3); border-color: var(--line); color: var(--ink-2); }
+[data-theme="dark"] .sub-input { background: var(--paper-3); color: var(--ink); }
+[data-theme="dark"] .footer { background: var(--paper-2); }
+[data-theme="dark"] .footer-cert { background: var(--paper-3); border-color: var(--line); }
+[data-theme="dark"] .read-cta { background: var(--ink); color: var(--paper); }
+[data-theme="dark"] .action-btn { background: var(--paper-3); border-color: var(--line); }
+[data-theme="dark"] .ss-menu { background: var(--paper-2); border-color: var(--line); }
+[data-theme="dark"] .ai-text { background: var(--paper-3); color: var(--ink); }
+[data-theme="dark"] .search-modal-box { background: var(--paper-2); }
+[data-theme="dark"] .search-input { background: var(--paper-3); color: var(--ink); border-color: var(--line); }
+[data-theme="dark"] .side-img { background: var(--paper-3); }
+[data-theme="dark"] .hero-img-wrap { background: var(--paper-3); }
+[data-theme="dark"] .btn-subscribe { background: var(--ink); color: var(--paper); }
+
+/* New logo: red underline beneath the C (replaces square mark) */
+.logo { gap: 0 !important; }
+.logo-mark { display: none !important; }
+.logo-c { position: relative; padding-bottom: 0.05em; }
+.logo-c::after { content: ''; position: absolute; left: 0.01em; right: 0.01em; bottom: 0; height: 0.045em; background: var(--accent); border-radius: 1px; }
+.footer-logo .mark { display: none !important; }
+.footer-logo-c { position: relative; padding-bottom: 0.05em; }
+.footer-logo-c::after { content: ''; position: absolute; left: 0.01em; right: 0.01em; bottom: 0; height: 0.05em; background: var(--accent); border-radius: 1px; }
+/* ═══════ PAYWALL MODAL ═══════ */
+.paywall-overlay { display: none; position: fixed; inset: 0; background: rgba(11,18,32,0.55); z-index: 2000; align-items: center; justify-content: center; padding: 24px; }
+[data-theme="dark"] .paywall-overlay { background: rgba(0,0,0,0.78); }
+.paywall-overlay.open { display: flex; }
+.paywall-modal { background: var(--white); border: 1px solid var(--line); max-width: 460px; width: 100%; padding: 36px 36px 28px; position: relative; box-shadow: var(--shadow-lg, 0 12px 40px rgba(0,0,0,0.25)); animation: paywallIn 0.2s ease; }
+[data-theme="dark"] .paywall-modal { background: var(--paper-2); }
+@keyframes paywallIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+.paywall-close { position: absolute; top: 14px; right: 16px; background: none; border: none; font-size: 28px; line-height: 1; color: var(--mute); cursor: pointer; transition: color 0.15s; }
+.paywall-close:hover { color: var(--ink); }
+.paywall-eyebrow { font-variant-caps: all-small-caps; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; color: var(--accent); margin-bottom: 10px; }
+.paywall-title { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; letter-spacing: -0.5px; line-height: 1.15; color: var(--ink); margin-bottom: 12px; }
+.paywall-body { font-family: 'Newsreader', serif; font-size: 15px; line-height: 1.6; color: var(--ink-2); margin-bottom: 20px; }
+.paywall-price { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; padding: 16px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-bottom: 18px; }
+.paywall-amount { font-family: 'Fraunces', serif; font-size: 34px; font-weight: 700; color: var(--ink); letter-spacing: -1px; line-height: 1; }
+.paywall-per { font-size: 15px; color: var(--ink-2); }
+.paywall-note { font-size: 13px; color: var(--mute); font-style: italic; margin-left: auto; }
+.paywall-perks { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; padding: 0; }
+.paywall-perks li { font-size: 14px; color: var(--ink-2); line-height: 1.5; padding-left: 24px; position: relative; }
+.paywall-perks li::before { content: '✓'; position: absolute; left: 0; top: 0; color: var(--accent); font-weight: 700; }
+.paywall-actions { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.paywall-btn-primary { display: block; text-align: center; background: var(--accent); color: #fff; font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 15px; font-weight: 700; letter-spacing: 0.08em; padding: 13px; border-radius: 2px; transition: background 0.15s; }
+.paywall-btn-primary:hover { background: var(--accent-dark); }
+.paywall-btn-secondary { display: block; text-align: center; background: transparent; color: var(--ink); border: 1px solid var(--line); font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 15px; font-weight: 700; letter-spacing: 0.08em; padding: 12px; border-radius: 2px; transition: border-color 0.15s; }
+.paywall-btn-secondary:hover { border-color: var(--ink); }
+.paywall-foot { text-align: center; font-size: 14px; color: var(--mute); font-style: italic; }
+.paywall-foot a { color: var(--accent); font-style: normal; }
+
+</style>
+</head>
+<body>
+
+<!-- READING PROGRESS -->
+<div class="progress-bar" id="progress-bar"></div>
+
+<!-- ═══════════════ UTILITY BAR ═══════════════ -->
+<div class="util-bar">
+  <div class="util-inner">
+    <div class="util-left">
+      <div class="util-status">
+        <span class="live-dot"></span>
+        <span>Live</span>
+      </div>
+      <div class="util-stat"><b id="src-count">2,847</b> sources monitored</div>
+      <div class="rewriting-feed">
+        <span class="write-pulse"></span>
+        <span class="feed-text" id="feed-text">Rewriting: Fed minutes from 4 sources…</span>
+      </div>
+    </div>
+    <div class="util-right">
+      <a href="#" class="util-link">Methodology</a>
+      <div class="util-divider"></div>
+      <a href="#" class="util-link">Sign in</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ MASTHEAD ═══════════════ -->
+<header class="masthead">
+  <div class="mast-inner">
+    <div class="mast-left" style="flex-direction:column;align-items:flex-start;gap:4px;">
+      <div class="weather-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <span>Pasadena · 74°F · Clear</span>
+      </div>
+      <div class="date-chip" id="date-chip">Monday, May 25, 2026</div>
+    </div>
+    <div class="logo-wrap">
+      <div class="logo">
+        <span class="logo-c">C</span>andor
+      </div>
+      
+    </div>
+    <div class="mast-right">
+      <button class="icon-btn" aria-label="Search" onclick="openSearch()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      </button>
+      <button class="icon-btn" aria-label="Saved" id="saved-btn" onclick="toast('You have ' + savedCount() + ' saved stories')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+      </button>
+      <button class="icon-btn" aria-label="Theme" id="theme-btn" onclick="toggleTheme()">
+        <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <button class="btn-subscribe" onclick="showPaywall('trial')">Subscribe</button>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════ NAV ═══════════════ -->
+<nav class="nav-wrap">
+  <div class="nav-inner">
+    <a class="nav-link active live-link" href="#" data-section="all">Live</a>
+    <a class="nav-link" href="#" data-section="us">U.S.</a>
+    <a class="nav-link" href="#" data-section="world">World</a>
+    <a class="nav-link" href="#" data-section="politics">Politics</a>
+    <a class="nav-link" href="#" data-section="business">Business</a>
+    <a class="nav-link" href="#" data-section="sports">Sports</a>
+    <a class="nav-link" href="#" data-section="science">Science</a>
+    <a class="nav-link" href="#" data-section="tech">Tech</a>
+
+    <div class="bias-filter-wrap">
+      <span class="bias-filter-label">Filter by source bias:</span>
+      <div class="bias-filter">
+        <button class="bias-btn active" data-filter="all">All</button>
+        <button class="bias-btn" data-filter="left"><span class="dot" style="background:var(--left)"></span>Left</button>
+        <button class="bias-btn" data-filter="center"><span class="dot" style="background:var(--center)"></span>Center</button>
+        <button class="bias-btn" data-filter="right"><span class="dot" style="background:var(--right)"></span>Right</button>
+        <button class="bias-btn" data-filter="balanced">Balanced</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════ TICKER ═══════════════ -->
+<div class="ticker-bar">
+  <div class="ticker-inner">
+    <span class="ticker-tag">Breaking</span>
+    <div class="ticker-wrap">
+      <div class="ticker-track">
+        <span>Senate passes AI Oversight Act 67–33</span><em>·</em>
+        <span>Fed holds rates; Dow gains 1.2%</span><em>·</em>
+        <span>G7 climate deal signed with binding 2030 targets</span><em>·</em>
+        <span>Alzheimer's drug shows 60% progression slowdown</span><em>·</em>
+        <span>SpaceX Starship completes full orbital mission</span><em>·</em>
+        <span>Amazon deforestation down 45%</span><em>·</em>
+        <span>Cannes Palme d'Or awarded to Iranian first-time director</span><em>·</em>
+        <span>Senate passes AI Oversight Act 67–33</span><em>·</em>
+        <span>Fed holds rates; Dow gains 1.2%</span><em>·</em>
+        <span>G7 climate deal signed with binding 2030 targets</span><em>·</em>
+        <span>Alzheimer's drug shows 60% progression slowdown</span><em>·</em>
+        <span>SpaceX Starship completes full orbital mission</span><em>·</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<div class="wrap">
+  <section class="hero">
+
+    <div class="hero-main">
+      <div class="hero-img-wrap">
+        <img
+          src="https://images.pexels.com/photos/1550337/pexels-photo-1550337.jpeg?auto=compress&cs=tinysrgb&w=1200"
+          alt="World leaders at a summit conference"
+          onerror="this.style.height='320px';this.style.background='#1a2233';this.src=''"
+        >
+        <div class="hero-img-overlay"></div>
+        <div class="hero-img-caption">
+          <span>World leaders convene for climate negotiations in Toronto</span>
+          <span class="credit">— Photo · Pexels</span>
+        </div>
+      </div>
+
+      <div class="story-eyebrow">
+        <span class="tag">● Breaking</span>
+        <span class="section">World / <a href="#">Climate Policy</a></span>
+      </div>
+
+      <h1 class="hero-headline" style="cursor:pointer" onclick="window.location='candor-article.html'">G7 Nations Sign First-Ever Binding Climate Pact With Real Enforcement Teeth</h1>
+
+      <p class="hero-dek">Leaders from all seven nations committed to a 42% emissions cut by 2030 — and, for the first time, agreed to financial penalties for missing the targets. Officials called it a "historic turning point" in global climate governance.</p>
+
+      <div class="ai-rewrite-banner">
+        <span class="pulse-dot"></span>
+        <span>Candor AI · Rewritten from 11 sources</span>
+        <span class="timestamp" id="hero-timestamp">— 8 seconds ago</span>
+      </div>
+
+      <!-- COLLAPSIBLE ANALYSIS PANEL -->
+      <div class="analysis-panel" id="analysis-panel">
+        <button class="analysis-toggle" onclick="toggleAnalysis()" aria-expanded="false">
+          <span class="atog-left">
+            <svg class="atog-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            Coverage Analysis
+            <span class="atog-pip">11 sources</span>
+          </span>
+          <span class="atog-right">
+            <span class="atog-label">View details</span>
+            <svg class="atog-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+        </button>
+
+        <div class="analysis-body" id="analysis-body">
+          <!-- Stats grid -->
+          <div class="stat-grid">
+            <div class="stat-cell">
+              <div class="stat-label">Updated</div>
+              <div class="stat-value">12<span class="stat-unit">min ago</span></div>
+            </div>
+            <div class="stat-cell">
+              <div class="stat-label">Read time</div>
+              <div class="stat-value">4<span class="stat-unit">min</span></div>
+            </div>
+            <div class="stat-cell">
+              <div class="stat-label">Factual consensus</div>
+              <div class="stat-value">94<span class="stat-unit">%</span></div>
+            </div>
+            <div class="stat-cell">
+              <div class="stat-label">Confidence</div>
+              <div class="stat-value stat-conf-high">High</div>
+            </div>
+          </div>
+
+          <!-- Bias bar -->
+          <div class="analysis-section">
+            <div class="analysis-section-head">
+              <span class="ass-title">Source Coverage</span>
+              <span class="ass-sub">Click a segment to compare framing</span>
+            </div>
+            <div class="bias-bar" onclick="scrollToCompare()">
+              <div class="bias-seg bias-left" style="width: 36%" data-bias="left"></div>
+              <div class="bias-seg bias-center" style="width: 36%" data-bias="center"></div>
+              <div class="bias-seg bias-right" style="width: 28%" data-bias="right"></div>
+            </div>
+            <div class="bias-labels">
+              <div class="bias-label-item" onclick="focusBias('left')"><span class="swatch" style="background:var(--left)"></span>Left-leaning <b>4</b></div>
+              <div class="bias-label-item center" onclick="focusBias('center')"><span class="swatch" style="background:var(--center)"></span>Center <b>4</b></div>
+              <div class="bias-label-item right" onclick="focusBias('right')">Right-leaning <b>3</b><span class="swatch" style="background:var(--right)"></span></div>
+            </div>
+          </div>
+
+          <!-- Source list -->
+          <div class="analysis-section">
+            <div class="analysis-section-head">
+              <span class="ass-title">All Sources</span>
+              <span class="ass-sub">11 outlets cited</span>
+            </div>
+            <div class="source-list open">
+              <div class="src-chip"><span class="src-bias" style="background:var(--left)"></span>Guardian</div>
+              <div class="src-chip"><span class="src-bias" style="background:var(--left)"></span>New York Times</div>
+              <div class="src-chip"><span class="src-bias" style="background:var(--left)"></span>Vox</div>
+              <div class="src-chip"><span class="src-bias" style="background:var(--left)"></span>MSNBC</div>
+              <div class="src-chip"><span class="src-bias" style="background:var(--center)"></span>Reuters</div>
+              <div class="src-chip"><span class="src-bias" style="background:var(--center)"></span>Associated Press</div>
+              <div class="src-chip"><span class="src-bias" style="background:var(--center)"></span>BBC</div>
+              <div class="src-chip"><span class="src-bias" style="background:var(--center)"></span>Bloomberg</div>
+              <div class="src-chip"><span class="src-bias" style="background:var(--right)"></span>Wall Street Journal</div>
+              <div class="src-chip"><span class="src-bias" style="background:var(--right)"></span>New York Post</div>
+              <div class="src-chip"><span class="src-bias" style="background:var(--right)"></span>Washington Examiner</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <a class="read-cta" href="#">
+          Read the full report
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </a>
+        <button class="action-btn" onclick="toggleSave(this, 'hero')" aria-label="Save story">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        </button>
+        <button class="action-btn" onclick="shareStory()" aria-label="Share">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <aside class="hero-side">
+      <div class="side-header">
+        <h3>Top Stories</h3>
+        <span class="more">Trending now</span>
+      </div>
+
+      <article class="side-story" data-bias-tilt="balanced" data-section="politics">
+        <div class="side-content">
+          <div class="side-eyebrow">Politics</div>
+          <h4 class="side-headline">Senate Passes AI Oversight Act 67–33 in Rare Bipartisan Vote</h4>
+          <div class="side-meta">
+            <span class="mini-bar"><div style="background:var(--left);width:33%"></div><div style="background:var(--center);width:34%"></div><div style="background:var(--right);width:33%"></div></span>
+            <span><b>6</b> sources · 2h</span>
+          </div>
+        </div>
+        <div class="side-img">
+          <img src="https://images.pexels.com/photos/8112199/pexels-photo-8112199.jpeg?auto=compress&cs=tinysrgb&w=200" alt="Senate" onerror="this.style.background='#e4e6ec';this.src=''">
+        </div>
+      </article>
+
+      <article class="side-story" data-bias-tilt="center">
+        <div class="side-content">
+          <div class="side-eyebrow">Economy</div>
+          <h4 class="side-headline">Markets Rally Third Straight Week After Fed Signals Rate Pause</h4>
+          <div class="side-meta">
+            <span class="mini-bar"><div style="background:var(--left);width:25%"></div><div style="background:var(--center);width:50%"></div><div style="background:var(--right);width:25%"></div></span>
+            <span><b>4</b> sources · 4h</span>
+          </div>
+        </div>
+        <div class="side-img">
+          <img src="https://images.pexels.com/photos/187041/pexels-photo-187041.jpeg?auto=compress&cs=tinysrgb&w=200" alt="Markets" onerror="this.style.background='#e4e6ec';this.src=''">
+        </div>
+      </article>
+
+      <article class="side-story" data-bias-tilt="center">
+        <div class="side-content">
+          <div class="side-eyebrow">Health</div>
+          <h4 class="side-headline">Alzheimer's Drug Shows 60% Slowdown in Phase III Trial Results</h4>
+          <div class="side-meta">
+            <span class="mini-bar"><div style="background:var(--left);width:33%"></div><div style="background:var(--center);width:67%"></div><div style="background:var(--right);width:0%"></div></span>
+            <span><b>3</b> sources · 6h</span>
+          </div>
+        </div>
+        <div class="side-img">
+          <img src="https://images.pexels.com/photos/3938022/pexels-photo-3938022.jpeg?auto=compress&cs=tinysrgb&w=200" alt="Lab" onerror="this.style.background='#e4e6ec';this.src=''">
+        </div>
+      </article>
+
+      <article class="side-story" data-bias-tilt="balanced">
+        <div class="side-content">
+          <div class="side-eyebrow">Space</div>
+          <h4 class="side-headline">SpaceX Starship Completes First Full Orbital Mission With Live Payload</h4>
+          <div class="side-meta">
+            <span class="mini-bar"><div style="background:var(--left);width:20%"></div><div style="background:var(--center);width:60%"></div><div style="background:var(--right);width:20%"></div></span>
+            <span><b>5</b> sources · 8h</span>
+          </div>
+        </div>
+        <div class="side-img">
+          <img src="https://images.pexels.com/photos/586063/pexels-photo-586063.jpeg?auto=compress&cs=tinysrgb&w=200" alt="Rocket" onerror="this.style.background='#e4e6ec';this.src=''">
+        </div>
+      </article>
+    </aside>
+
+  </section>
+</div>
+
+<!-- ═══════════════ AI ASSISTANT ═══════════════ -->
+<section class="ai-section">
+  <div class="ai-inner">
+    <div class="ai-brand">
+      <div class="ai-tag"><span class="pulse-dot"></span>Candor AI Desk</div>
+      <h2 id="ai-brand-h2">Ask any story anything.</h2>
+      <p id="ai-brand-p">Our AI reads every source covering a story in real time. Pick a story below — or ask a general question across all of today's news.</p>
+      <div class="ai-stats">
+        <div>
+          <span class="ai-stat-num" id="ai-stat-sources">11</span>
+          <span class="ai-stat-lbl">Sources read</span>
+        </div>
+        <div>
+          <span class="ai-stat-num" id="ai-stat-consensus">94%</span>
+          <span class="ai-stat-lbl">Consensus</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ai-panel">
+      <!-- Story selector -->
+      <div class="story-selector">
+        <label class="ss-label">Asking about</label>
+        <div class="ss-control" onclick="toggleStoryMenu()" id="ss-control">
+          <span class="ss-current" id="ss-current">G7 Binding Climate Pact</span>
+          <svg class="ss-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="ss-menu" id="ss-menu">
+          <button class="ss-option" data-story="general">
+            <span class="ss-opt-tag">General</span>
+            <span class="ss-opt-title">Ask across all of today's news</span>
+          </button>
+          <div class="ss-divider">Today's stories</div>
+          <button class="ss-option active" data-story="g7">
+            <span class="ss-opt-tag" style="color:var(--accent)">World</span>
+            <span class="ss-opt-title">G7 Binding Climate Pact</span>
+          </button>
+          <button class="ss-option" data-story="senate">
+            <span class="ss-opt-tag" style="color:var(--accent)">Politics</span>
+            <span class="ss-opt-title">Senate AI Oversight Act 67–33</span>
+          </button>
+          <button class="ss-option" data-story="fed">
+            <span class="ss-opt-tag" style="color:var(--accent)">Economy</span>
+            <span class="ss-opt-title">Dow Rises as Fed Holds Rates</span>
+          </button>
+          <button class="ss-option" data-story="alz">
+            <span class="ss-opt-tag" style="color:var(--accent)">Health</span>
+            <span class="ss-opt-title">Alzheimer's Drug 60% Slowdown</span>
+          </button>
+          <button class="ss-option" data-story="starship">
+            <span class="ss-opt-tag" style="color:var(--accent)">Space</span>
+            <span class="ss-opt-title">SpaceX Starship Orbital Mission</span>
+          </button>
+          <button class="ss-option" data-story="apple">
+            <span class="ss-opt-tag" style="color:var(--accent)">Technology</span>
+            <span class="ss-opt-title">Apple On-Device AI</span>
+          </button>
+          <button class="ss-option" data-story="amazon">
+            <span class="ss-opt-tag" style="color:var(--accent)">Environment</span>
+            <span class="ss-opt-title">Amazon Deforestation Down 45%</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="ai-prompts" id="ai-prompts">
+        <!-- populated by JS -->
+      </div>
+
+      <div class="ai-input-row">
+        <input class="ai-text" id="ai-input" type="text" placeholder="Ask your own question…" onkeydown="if(event.key==='Enter')askAI(this.value)">
+        <button class="ai-submit" onclick="askAI(document.getElementById('ai-input').value)">
+          Ask Candor
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+
+      <div class="ai-response" id="ai-response">
+        <div class="ai-response-q" id="ai-response-q"></div>
+        <div class="ai-response-a" id="ai-response-a"></div>
+        <div class="ai-response-footer">
+          <span id="ai-response-src"></span>
+          <button class="ai-reset" onclick="resetAI()">← Ask another</button>
+        </div>
+      </div>
+
+      <div class="ai-disclaimer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <span>AI responses are generated only from cited sources. Every claim is traceable to original reporting.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ COMPARE COVERAGE ═══════════════ -->
+<section class="compare-section" id="compare-section">
+  <div class="compare-inner">
+    <div class="compare-head">
+      <div>
+        <div class="label">⊕ Compare Coverage</div>
+        <h2>See how three sides of the press are covering <span id="compare-h-story">the G7 climate pact</span>.</h2>
+      </div>
+      <div class="story-link">
+        Same story · <b id="compare-framings">3 different framings</b>
+      </div>
+    </div>
+
+    <!-- Compare story selector -->
+    <div class="compare-controls">
+      <div class="story-selector-light">
+        <label class="ssl-label">Story</label>
+        <div class="ssl-control" onclick="toggleCompareMenu()" id="ssl-control">
+          <span class="ssl-current" id="ssl-current">G7 Binding Climate Pact</span>
+          <svg class="ssl-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="ssl-menu" id="ssl-menu">
+          <button class="ssl-option active" data-story="g7">
+            <span class="ssl-opt-tag">World</span>
+            <span class="ssl-opt-title">G7 Binding Climate Pact</span>
+          </button>
+          <button class="ssl-option" data-story="senate">
+            <span class="ssl-opt-tag">Politics</span>
+            <span class="ssl-opt-title">Senate AI Oversight Act 67–33</span>
+          </button>
+          <button class="ssl-option" data-story="fed">
+            <span class="ssl-opt-tag">Economy</span>
+            <span class="ssl-opt-title">Dow Rises as Fed Holds Rates</span>
+          </button>
+          <button class="ssl-option" data-story="alz">
+            <span class="ssl-opt-tag">Health</span>
+            <span class="ssl-opt-title">Alzheimer's Drug 60% Slowdown</span>
+          </button>
+          <button class="ssl-option" data-story="starship">
+            <span class="ssl-opt-tag">Space</span>
+            <span class="ssl-opt-title">SpaceX Starship Orbital Mission</span>
+          </button>
+          <button class="ssl-option" data-story="apple">
+            <span class="ssl-opt-tag">Technology</span>
+            <span class="ssl-opt-title">Apple On-Device AI</span>
+          </button>
+          <button class="ssl-option" data-story="amazon">
+            <span class="ssl-opt-tag">Environment</span>
+            <span class="ssl-opt-title">Amazon Deforestation Down 45%</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="compare-tabs">
+        <button class="compare-tab active" data-tab="all">All Sides</button>
+        <button class="compare-tab" data-tab="left"><span class="dot" style="background:var(--left)"></span>Left only</button>
+        <button class="compare-tab" data-tab="center"><span class="dot" style="background:var(--center)"></span>Center only</button>
+        <button class="compare-tab" data-tab="right"><span class="dot" style="background:var(--right)"></span>Right only</button>
+      </div>
+    </div>
+
+    <div class="compare-cols" id="compare-cols">
+
+      <div class="compare-col col-left" data-col="left">
+        <div class="col-bias-header">
+          <div class="col-bias-label"><span class="dot"></span>Left-leaning</div>
+          <div class="col-source-count" id="cc-left-count">4 sources</div>
+        </div>
+        <div class="col-frame">Framing</div>
+        <h3 class="col-headline" id="cc-left-headline">"Historic deal — but still short of what 1.5°C demands"</h3>
+        <p class="col-summary" id="cc-left-summary">Coverage emphasizes the <mark>enforcement breakthrough</mark> while pointing out that 42% by 2030 still falls short of IPCC recommendations. Frames cost concerns as industry talking points; centers climate-vulnerable nations and inter-generational justice.</p>
+        <div class="col-sources" id="cc-left-sources">
+          <span class="col-source-chip">Guardian</span>
+          <span class="col-source-chip">NYT</span>
+          <span class="col-source-chip">Vox</span>
+          <span class="col-source-chip">MSNBC</span>
+        </div>
+      </div>
+
+      <div class="compare-col col-center" data-col="center">
+        <div class="col-bias-header">
+          <div class="col-bias-label"><span class="dot"></span>Center</div>
+          <div class="col-source-count" id="cc-center-count">4 sources</div>
+        </div>
+        <div class="col-frame">Framing</div>
+        <h3 class="col-headline" id="cc-center-headline">"First binding climate agreement; verification remains the hard part"</h3>
+        <p class="col-summary" id="cc-center-summary">Focuses on the procedural breakthrough and the <mark>practical challenges of verification</mark>. Notes the absence of China and India from the agreement as a major caveat. Largely descriptive, light on political framing.</p>
+        <div class="col-sources" id="cc-center-sources">
+          <span class="col-source-chip">Reuters</span>
+          <span class="col-source-chip">AP</span>
+          <span class="col-source-chip">BBC</span>
+          <span class="col-source-chip">Bloomberg</span>
+        </div>
+      </div>
+
+      <div class="compare-col col-right" data-col="right">
+        <div class="col-bias-header">
+          <div class="col-bias-label"><span class="dot"></span>Right-leaning</div>
+          <div class="col-source-count" id="cc-right-count">3 sources</div>
+        </div>
+        <div class="col-frame">Framing</div>
+        <h3 class="col-headline" id="cc-right-headline">"Penalties raise sovereignty concerns; industry warns of job losses"</h3>
+        <p class="col-summary" id="cc-right-summary">Centers <mark>economic costs</mark> and the sovereignty implications of binding international penalties. Highlights congressional skepticism over implementation funding and questions verification methodology applied to U.S. industry.</p>
+        <div class="col-sources" id="cc-right-sources">
+          <span class="col-source-chip">WSJ</span>
+          <span class="col-source-chip">NY Post</span>
+          <span class="col-source-chip">Wash. Examiner</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ MORE STORIES ═══════════════ -->
+<div class="wrap">
+  <div class="sec-header">
+    <h2>More stories</h2>
+    <span class="sub" id="grid-sub">Updated continuously · ranked by source breadth</span>
+  </div>
+
+  <div class="stories-grid" id="stories-grid">
+
+    <article class="story-card" data-bias-tilt="balanced" data-section="politics">
+      <div class="card-img">
+        <img src="https://images.pexels.com/photos/8112199/pexels-photo-8112199.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Senate" onerror="this.style.background='#e4e6ec';this.src=''">
+      </div>
+      <div class="card-cat-row">
+        <div class="card-cat-left">
+          <span class="card-eyebrow">Politics</span>
+          <span class="card-time">· 2h ago</span>
+        </div>
+        <button class="card-save" onclick="toggleSave(this, 'c1'); event.stopPropagation();" aria-label="Save">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        </button>
+      </div>
+      <h3 class="card-headline">Senate AI Oversight Act: What the 67–33 Vote Means Going Forward</h3>
+      <p class="card-dek">Independent audits, $10M penalties, and a new federal AI bureau — inside the bill that just cleared the Senate.</p>
+      <div class="card-bottom">
+        <div class="card-bias-mini" data-l="33" data-c="34" data-r="33"><div style="background:var(--left);width:33%"></div><div style="background:var(--center);width:34%"></div><div style="background:var(--right);width:33%"></div></div>
+        <div class="bias-tooltip">
+          <div class="b-row"><span class="sw" style="background:var(--left)"></span>Left: 2 sources</div>
+          <div class="b-row"><span class="sw" style="background:var(--center)"></span>Center: 2 sources</div>
+          <div class="b-row"><span class="sw" style="background:var(--right)"></span>Right: 2 sources</div>
+        </div>
+        <span class="card-sources"><b>6</b> sources</span>
+      </div>
+    </article>
+
+    <article class="story-card" data-bias-tilt="center" data-section="business" onclick="window.location='candor-article.html'">
+      <div class="card-img">
+        <img src="https://images.pexels.com/photos/187041/pexels-photo-187041.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Markets" onerror="this.style.background='#e4e6ec';this.src=''">
+      </div>
+      <div class="card-cat-row">
+        <div class="card-cat-left">
+          <span class="card-eyebrow">Economy</span>
+          <span class="card-time">· 4h ago</span>
+        </div>
+        <button class="card-save" onclick="toggleSave(this, 'c2'); event.stopPropagation();" aria-label="Save">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        </button>
+      </div>
+      <h3 class="card-headline">Dow Rises for Third Straight Week as Fed Holds Rates Through Q3</h3>
+      <p class="card-dek">Tech stocks led the gains as investors read the Fed's hold as a signal that the rate cycle has peaked for the near term.</p>
+      <div class="card-bottom">
+        <div class="card-bias-mini" data-l="25" data-c="50" data-r="25"><div style="background:var(--left);width:25%"></div><div style="background:var(--center);width:50%"></div><div style="background:var(--right);width:25%"></div></div>
+        <div class="bias-tooltip">
+          <div class="b-row"><span class="sw" style="background:var(--left)"></span>Left: 1 source</div>
+          <div class="b-row"><span class="sw" style="background:var(--center)"></span>Center: 2 sources</div>
+          <div class="b-row"><span class="sw" style="background:var(--right)"></span>Right: 1 source</div>
+        </div>
+        <span class="card-sources"><b>4</b> sources</span>
+      </div>
+    </article>
+
+    <article class="story-card" data-bias-tilt="left" data-section="science" onclick="window.location='candor-article.html'">
+      <div class="card-img">
+        <img src="https://images.pexels.com/photos/3938022/pexels-photo-3938022.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Lab" onerror="this.style.background='#e4e6ec';this.src=''">
+      </div>
+      <div class="card-cat-row">
+        <div class="card-cat-left">
+          <span class="card-eyebrow">Health</span>
+          <span class="card-time">· 6h ago</span>
+        </div>
+        <button class="card-save" onclick="toggleSave(this, 'c3'); event.stopPropagation();" aria-label="Save">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        </button>
+      </div>
+      <h3 class="card-headline">Alzheimer's Breakthrough: Drug Slows Progression 60% — FDA Review in Q3</h3>
+      <p class="card-dek">Researchers say it could reach patients within 18 months. Here's what the Phase III results actually show.</p>
+      <div class="card-bottom">
+        <div class="card-bias-mini" data-l="33" data-c="67" data-r="0"><div style="background:var(--left);width:33%"></div><div style="background:var(--center);width:67%"></div><div style="background:var(--right);width:0%"></div></div>
+        <div class="bias-tooltip">
+          <div class="b-row"><span class="sw" style="background:var(--left)"></span>Left: 1 source</div>
+          <div class="b-row"><span class="sw" style="background:var(--center)"></span>Center: 2 sources</div>
+          <div class="b-row"><span class="sw" style="background:var(--right)"></span>Right: 0 sources</div>
+        </div>
+        <span class="card-sources"><b>3</b> sources</span>
+      </div>
+    </article>
+
+    <article class="story-card" data-bias-tilt="center" data-section="science" onclick="window.location='candor-article.html'">
+      <div class="card-img">
+        <img src="https://images.pexels.com/photos/586063/pexels-photo-586063.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Rocket" onerror="this.style.background='#e4e6ec';this.src=''">
+      </div>
+      <div class="card-cat-row">
+        <div class="card-cat-left">
+          <span class="card-eyebrow">Space</span>
+          <span class="card-time">· 8h ago</span>
+        </div>
+        <button class="card-save" onclick="toggleSave(this, 'c4'); event.stopPropagation();" aria-label="Save">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        </button>
+      </div>
+      <h3 class="card-headline">Starship Reaches Orbit: What SpaceX's Milestone Means for Artemis</h3>
+      <p class="card-dek">The full orbital flight with payload marks a turning point — and sets a new commercial launch timeline for NASA's moon program.</p>
+      <div class="card-bottom">
+        <div class="card-bias-mini" data-l="20" data-c="60" data-r="20"><div style="background:var(--left);width:20%"></div><div style="background:var(--center);width:60%"></div><div style="background:var(--right);width:20%"></div></div>
+        <div class="bias-tooltip">
+          <div class="b-row"><span class="sw" style="background:var(--left)"></span>Left: 1 source</div>
+          <div class="b-row"><span class="sw" style="background:var(--center)"></span>Center: 3 sources</div>
+          <div class="b-row"><span class="sw" style="background:var(--right)"></span>Right: 1 source</div>
+        </div>
+        <span class="card-sources"><b>5</b> sources</span>
+      </div>
+    </article>
+
+    <article class="story-card" data-bias-tilt="balanced" data-section="tech">
+      <div class="card-img">
+        <img src="https://images.pexels.com/photos/2582937/pexels-photo-2582937.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Tech" onerror="this.style.background='#e4e6ec';this.src=''">
+      </div>
+      <div class="card-cat-row">
+        <div class="card-cat-left">
+          <span class="card-eyebrow">Technology</span>
+          <span class="card-time">· 5h ago</span>
+        </div>
+        <button class="card-save" onclick="toggleSave(this, 'c5'); event.stopPropagation();" aria-label="Save">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        </button>
+      </div>
+      <h3 class="card-headline">Apple's On-Device AI Runs Without Cloud — A Privacy Shift for Consumers</h3>
+      <p class="card-dek">Full model inference on-device means no data ever leaves your phone. Analysts call it the biggest privacy feature in a decade.</p>
+      <div class="card-bottom">
+        <div class="card-bias-mini" data-l="25" data-c="50" data-r="25"><div style="background:var(--left);width:25%"></div><div style="background:var(--center);width:50%"></div><div style="background:var(--right);width:25%"></div></div>
+        <div class="bias-tooltip">
+          <div class="b-row"><span class="sw" style="background:var(--left)"></span>Left: 1 source</div>
+          <div class="b-row"><span class="sw" style="background:var(--center)"></span>Center: 2 sources</div>
+          <div class="b-row"><span class="sw" style="background:var(--right)"></span>Right: 1 source</div>
+        </div>
+        <span class="card-sources"><b>4</b> sources</span>
+      </div>
+    </article>
+
+    <article class="story-card" data-bias-tilt="left" data-section="world">
+      <div class="card-img">
+        <img src="https://images.pexels.com/photos/957024/forest-trees-perspective-bright-957024.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Forest" onerror="this.style.background='#e4e6ec';this.src=''">
+      </div>
+      <div class="card-cat-row">
+        <div class="card-cat-left">
+          <span class="card-eyebrow">Environment</span>
+          <span class="card-time">· 8h ago</span>
+        </div>
+        <button class="card-save" onclick="toggleSave(this, 'c6'); event.stopPropagation();" aria-label="Save">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        </button>
+      </div>
+      <h3 class="card-headline">Amazon Deforestation Down 45% — But Cerrado Faces New Agricultural Threat</h3>
+      <p class="card-dek">Satellite data confirms significant forest recovery, but grassland biomes face escalating soy and cattle pressure outside legal protections.</p>
+      <div class="card-bottom">
+        <div class="card-bias-mini" data-l="40" data-c="40" data-r="20"><div style="background:var(--left);width:40%"></div><div style="background:var(--center);width:40%"></div><div style="background:var(--right);width:20%"></div></div>
+        <div class="bias-tooltip">
+          <div class="b-row"><span class="sw" style="background:var(--left)"></span>Left: 2 sources</div>
+          <div class="b-row"><span class="sw" style="background:var(--center)"></span>Center: 2 sources</div>
+          <div class="b-row"><span class="sw" style="background:var(--right)"></span>Right: 1 source</div>
+        </div>
+        <span class="card-sources"><b>5</b> sources</span>
+      </div>
+    </article>
+
+  </div>
+</div>
+
+<!-- ═══════════════ SUBSCRIBE STRIP ═══════════════ -->
+<section class="sub-strip">
+  <div class="sub-inner">
+    <div>
+      <div class="sub-eyebrow">— The Briefing</div>
+      <h2 class="sub-h">The story, before the spin.</h2>
+      <p class="sub-p">Every morning at 6 a.m., our AI rewrites the night's biggest stories from every side of the press into one balanced briefing. Free. No ads. No outrage cycle.</p>
+    </div>
+    <div class="sub-form">
+      <div class="sub-form-label">→ Start your free trial</div>
+      <div class="sub-form-row">
+        <input class="sub-input" id="sub-email" type="email" placeholder="your@email.com">
+        <button class="sub-btn" onclick="handleSubscribe()">Subscribe</button>
+      </div>
+      <div class="sub-form-foot">No spam · Unsubscribe anytime · Cancel in one click</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer class="footer">
+  <div class="footer-main">
+    <div class="footer-brand">
+      <div class="footer-logo"><span class="footer-logo-c">C</span>andor</div>
+      <p>An AI news desk that reads every outlet, every minute. We rewrite the stories of the day with sources cited, framing flagged, and bias on the record.</p>
+      <div class="footer-cert">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4M21 12c0 5-3.5 8-9 9-5.5-1-9-4-9-9V5l9-3 9 3v7z"/></svg>
+        <span>Methodology · Open</span>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Read</h4>
+      <ul>
+        <li><a href="#">U.S.</a></li>
+        <li><a href="#">World</a></li>
+        <li><a href="#">Politics</a></li>
+        <li><a href="#">Economy</a></li>
+        <li><a href="#">Technology</a></li>
+        <li><a href="#">Climate</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Trust</h4>
+      <ul>
+        <li><a href="#">Methodology</a></li>
+        <li><a href="#">Source List</a></li>
+        <li><a href="#">Bias Ratings</a></li>
+        <li><a href="#">Corrections</a></li>
+        <li><a href="#">Editorial Standards</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="candor-about.html">About</a></li>
+        <li><a href="candor-newsroom.html">Newsroom</a></li>
+        <li><a href="candor-careers.html">Careers</a></li>
+        <li><a href="candor-press.html">Press</a></li>
+        <li><a href="candor-contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-foot">
+    <span>© 2026 Candor News Inc. · AI-assisted summaries reviewed for factual accuracy.</span>
+    <div class="links">
+      <a href="candor-privacy.html">Privacy</a>
+      <a href="candor-terms.html">Terms</a>
+      <a href="candor-accessibility.html">Accessibility</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════ SEARCH MODAL ═══════════════ -->
+<div class="modal-backdrop" id="search-modal" onclick="if(event.target===this)closeSearch()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeSearch()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+    <h3>Search Candor</h3>
+    <p class="modal-sub">Search 184 stories rewritten today across 2,847 sources.</p>
+    <input class="search-input" id="search-input" type="text" placeholder="Search stories, topics, or sources…" autofocus>
+    <div class="search-hints">
+      <button class="search-hint" onclick="document.getElementById('search-input').value='climate'">climate</button>
+      <button class="search-hint" onclick="document.getElementById('search-input').value='AI regulation'">AI regulation</button>
+      <button class="search-hint" onclick="document.getElementById('search-input').value='Fed rates'">Fed rates</button>
+      <button class="search-hint" onclick="document.getElementById('search-input').value='Supreme Court'">Supreme Court</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOASTS -->
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<script>
+/* ═══════ SAVED STORIES ═══════ */
+const saved = new Set();
+function savedCount() { return saved.size; }
+function toggleSave(btn, id) {
+  if (saved.has(id)) {
+    saved.delete(id);
+    btn.classList.remove('saved');
+    toast('Removed from saved');
+  } else {
+    saved.add(id);
+    btn.classList.add('saved');
+    toast('Saved · ' + saved.size + ' total');
+  }
+}
+
+/* ═══════ TOAST ═══════ */
+function toast(msg) {
+  const wrap = document.getElementById('toast-wrap');
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg><span>' + msg + '</span>';
+  wrap.appendChild(t);
+  setTimeout(() => { t.classList.add('fade-out'); setTimeout(() => t.remove(), 300); }, 2400);
+}
+
+/* ═══════ THEME ═══════ */
+function toggleTheme() {
+  const html = document.documentElement;
+  const next = html.dataset.theme === 'dark' ? 'light' : 'dark';
+  html.dataset.theme = next;
+  const icon = document.getElementById('theme-icon');
+  if (next === 'dark') {
+    icon.innerHTML = '<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>';
+  } else {
+    icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+  }
+}
+
+/* ═══════ STORY DATA — drives AI + Compare Coverage ═══════ */
+const STORIES = {
+  general: {
+    title: 'Today\'s news (all stories)',
+    aiHeading: 'Ask across today\'s news.',
+    aiBlurb: 'Our AI has read every story on Candor today. Ask a general question and get a synthesized answer across the full spectrum.',
+    sources: 184, consensus: '—',
+    prompts: [
+      ['Top stories', 'What are the biggest stories today?'],
+      ['Bias', 'Which stories show the widest left-right framing gap?'],
+      ['Summary', 'Give me a 2-minute briefing on today\'s news.'],
+    ],
+    answers: {
+      'What are the biggest stories today?': 'The five most-covered stories today are: the <strong>G7 climate pact</strong> (11 sources), the <strong>Senate AI Oversight Act</strong> (6 sources), <strong>SpaceX\'s Starship orbital mission</strong> (5 sources), <strong>Amazon deforestation falling 45%</strong> (5 sources), and <strong>Apple\'s on-device AI announcement</strong> (4 sources). All five show broad cross-spectrum coverage.',
+      'Which stories show the widest left-right framing gap?': 'The widest framing gaps today are on the <strong>G7 climate pact</strong> (left: "historic but insufficient" vs. right: "sovereignty concerns") and the <strong>Senate AI Oversight Act</strong> (left: "long overdue regulation" vs. right: "innovation chilling effect"). Centrist outlets on both stories focus primarily on implementation logistics.',
+      'Give me a 2-minute briefing on today\'s news.': 'Top story: G7 nations signed the <strong>first-ever binding climate pact</strong> with financial penalties — 42% emissions cuts by 2030. The Senate passed an <strong>AI oversight bill 67–33</strong> with bipartisan support. Markets rallied on the Fed\'s rate pause. SpaceX completed Starship\'s first full orbital mission. An <strong>Alzheimer\'s drug</strong> showed 60% progression slowdown in Phase III. Amazon deforestation fell 45%, but the Cerrado biome faces new pressure.'
+    }
+  },
+  g7: {
+    title: 'G7 Binding Climate Pact', shortTitle: 'the G7 climate pact',
+    aiHeading: 'Ask about the G7 climate pact.',
+    aiBlurb: 'Candor AI has read 11 sources covering the G7 climate pact in real time. Ask follow-up questions cited across the full spectrum.',
+    sources: 11, consensus: '94%',
+    prompts: [
+      ['Details', 'What are the actual enforcement mechanisms?'],
+      ['Analysis', 'Which countries risk missing 2030 targets?'],
+      ['Compare', 'How does coverage differ across outlets?'],
+    ],
+    answers: {
+      'What are the actual enforcement mechanisms?': 'The deal introduces a <strong>carbon compliance fund</strong> — nations missing interim 2027 milestones pay into a $200B pool redistributed to climate-vulnerable nations. The EU and U.S. also agreed to bilateral tariffs on high-emission goods from noncompliant signatories, and an independent monitoring body will publish annual progress scorecards.',
+      'Which countries risk missing 2030 targets?': 'Analysts flag <strong>Italy and Japan</strong> as highest-risk given fossil fuel infrastructure dependencies. Canada faces scrutiny over its oil sands sector. Germany\'s coal phase-out timeline remains disputed domestically, and the U.S. faces congressional headwinds on implementation funding.',
+      'How does coverage differ across outlets?': 'Left-leaning outlets (Guardian, NYT) emphasize the historic enforcement breakthrough while calling it insufficient given 1.5°C targets. Right-leaning outlets (WSJ, NY Post) focus on economic costs and sovereignty concerns. Centrist sources (AP, Reuters) highlight verification challenges and the absence of China and India from the agreement.'
+    },
+    compare: {
+      framings: '3 different framings',
+      left: { headline: '"Historic deal — but still short of what 1.5°C demands"', count: '4 sources',
+        summary: 'Coverage emphasizes the <mark>enforcement breakthrough</mark> while pointing out that 42% by 2030 still falls short of IPCC recommendations. Frames cost concerns as industry talking points; centers climate-vulnerable nations and inter-generational justice.',
+        sources: ['Guardian', 'NYT', 'Vox', 'MSNBC'] },
+      center: { headline: '"First binding climate agreement; verification remains the hard part"', count: '4 sources',
+        summary: 'Focuses on the procedural breakthrough and the <mark>practical challenges of verification</mark>. Notes the absence of China and India from the agreement as a major caveat. Largely descriptive, light on political framing.',
+        sources: ['Reuters', 'AP', 'BBC', 'Bloomberg'] },
+      right: { headline: '"Penalties raise sovereignty concerns; industry warns of job losses"', count: '3 sources',
+        summary: 'Centers <mark>economic costs</mark> and the sovereignty implications of binding international penalties. Highlights congressional skepticism over implementation funding and questions verification methodology applied to U.S. industry.',
+        sources: ['WSJ', 'NY Post', 'Wash. Examiner'] }
+    }
+  },
+  senate: {
+    title: 'Senate AI Oversight Act 67–33', shortTitle: 'the Senate AI Oversight Act',
+    aiHeading: 'Ask about the AI Oversight Act.',
+    aiBlurb: 'Candor AI has read 6 sources covering the Senate\'s bipartisan AI vote. Ask follow-up questions cited across the spectrum.',
+    sources: 6, consensus: '88%',
+    prompts: [
+      ['Details', 'What does the bill actually require?'],
+      ['Politics', 'Why did this get bipartisan support?'],
+      ['Industry', 'How is the tech industry responding?'],
+    ],
+    answers: {
+      'What does the bill actually require?': 'The Act requires <strong>independent audits</strong> for foundation models above a $100M training-cost threshold, mandates incident reporting within 72 hours of safety failures, and creates a new <strong>Federal AI Bureau</strong> under the Commerce Department. Violations carry penalties up to $10M per incident, with personal liability provisions for C-suite executives at noncompliant firms.',
+      'Why did this get bipartisan support?': 'The 67–33 margin reflects an unusual alignment: <strong>progressives</strong> backed it for consumer-protection and labor reasons, while <strong>conservatives</strong> supported it citing national-security concerns about Chinese AI and a desire for "American AI sovereignty." A handful of libertarian-leaning senators on both sides voted no, citing innovation chilling effects.',
+      'How is the tech industry responding?': 'Major labs (Anthropic, OpenAI, Google) publicly supported the bill\'s safety framework. <strong>Meta and X expressed reservations</strong> on the audit provisions. Venture capital groups warned of compliance costs for smaller startups; the bill includes a carve-out exempting models under the $100M threshold.'
+    },
+    compare: {
+      framings: '3 different framings',
+      left: { headline: '"Long-overdue guardrails on Big Tech — finally"', count: '2 sources',
+        summary: 'Frames the bill as a <mark>necessary check on unaccountable tech power</mark>. Emphasizes labor impact, civil rights audits, and the harms of unregulated AI deployment. Concerned the penalty levels are still too low.',
+        sources: ['Guardian', 'NYT'] },
+      center: { headline: '"Bipartisan bill creates federal AI oversight regime"', count: '2 sources',
+        summary: 'Focuses on <mark>how the bill actually works</mark> — audit thresholds, the new Federal AI Bureau, and incident reporting timelines. Notes the carve-outs for smaller startups and discusses likely House timelines.',
+        sources: ['Reuters', 'AP'] },
+      right: { headline: '"Senate moves on AI — but who pays the compliance cost?"', count: '2 sources',
+        summary: 'Centers <mark>innovation and competitiveness concerns</mark>, especially against China. Supportive of national-security framing but skeptical of expanded federal authority. Highlights small-business compliance burden.',
+        sources: ['WSJ', 'NY Post'] }
+    }
+  },
+  fed: {
+    title: 'Dow Rises as Fed Holds Rates', shortTitle: 'the Fed\'s rate decision',
+    aiHeading: 'Ask about the Fed rate hold.',
+    aiBlurb: 'Candor AI has read 4 sources covering the Fed\'s Q3 rate hold and market reaction.',
+    sources: 4, consensus: '91%',
+    prompts: [
+      ['Markets', 'Why did tech stocks lead the rally?'],
+      ['Outlook', 'What does the Fed signal for Q4?'],
+      ['Risks', 'What\'s the downside scenario from here?'],
+    ],
+    answers: {
+      'Why did tech stocks lead the rally?': '<strong>Lower rates favor growth-oriented sectors</strong> with cash flows weighted toward the future — exactly the profile of large-cap tech. Investors also read Powell\'s language ("the data does not support further tightening at this time") as a signal that the rate cycle has peaked, prompting a rotation back into duration-sensitive equities.',
+      'What does the Fed signal for Q4?': 'The Fed signaled <strong>data-dependent neutrality</strong>: no commitment to cuts, but no further hikes barring a reacceleration in core PCE. The dot plot moved slightly dovish, with the median FOMC member now seeing one cut before year-end, down from two in March.',
+      'What\'s the downside scenario from here?': 'Two main risks: a <strong>resurgence in services inflation</strong> (especially shelter and wages), which would force hawkish revision; and a <strong>credit event</strong> in commercial real estate or regional banks that forces emergency easing — bullish for rates but bearish for risk assets.'
+    },
+    compare: {
+      framings: '3 different framings',
+      left: { headline: '"Fed holds steady — but workers still bear the cost of high rates"', count: '1 source',
+        summary: 'Frames the rate hold as <mark>insufficient relief for households and labor markets</mark>. Highlights ongoing pressure on borrowing costs for mortgages and consumer credit.',
+        sources: ['NYT'] },
+      center: { headline: '"Fed holds rates; markets read pause as cycle peak"', count: '2 sources',
+        summary: 'Describes the <mark>market mechanics</mark> of the rally — sector rotation, yield-curve movement, dot-plot revisions. Largely descriptive of Powell\'s statement.',
+        sources: ['Reuters', 'Bloomberg'] },
+      right: { headline: '"Markets rally as Fed signals end of tightening cycle"', count: '1 source',
+        summary: 'Frames the hold as <mark>vindication for capital markets</mark> and a positive signal for business investment. Highlights tech earnings and bullish CEO commentary.',
+        sources: ['WSJ'] }
+    }
+  },
+  alz: {
+    title: 'Alzheimer\'s Drug 60% Slowdown', shortTitle: 'the Alzheimer\'s drug trial',
+    aiHeading: 'Ask about the Alzheimer\'s trial.',
+    aiBlurb: 'Candor AI has read 3 sources covering the Phase III results and FDA pathway.',
+    sources: 3, consensus: '96%',
+    prompts: [
+      ['Science', 'How does the drug actually work?'],
+      ['Access', 'When could patients realistically get it?'],
+      ['Caveats', 'What are the trial\'s limitations?'],
+    ],
+    answers: {
+      'How does the drug actually work?': 'The drug is a <strong>monoclonal antibody targeting tau tangles</strong>, the second of two protein aggregates implicated in Alzheimer\'s. Unlike earlier amyloid-targeting drugs, this one cleared a clinically meaningful endpoint: a <strong>60% slowdown</strong> on the CDR-SB cognitive scale over 18 months relative to placebo.',
+      'When could patients realistically get it?': 'FDA review is expected by Q3 2026. If approved on accelerated pathway, patients could begin treatment in <strong>early 2027</strong>. Distribution will likely be limited initially to specialty centers given infusion logistics and biomarker screening requirements (PET scan or CSF analysis).',
+      'What are the trial\'s limitations?': 'The Phase III enrolled <strong>1,800 early-stage patients</strong> — results may not generalize to moderate or late-stage Alzheimer\'s. Side effects include ARIA (amyloid-related imaging abnormalities) in 18% of treated patients, mostly asymptomatic. Long-term safety data beyond 24 months is not yet available.'
+    },
+    compare: {
+      framings: '2 different framings — no right-leaning coverage yet',
+      left: { headline: '"Breakthrough drug raises questions about access and pricing"', count: '1 source',
+        summary: 'Emphasizes <mark>equity concerns</mark> around access — the drug is expected to cost $30,000+ annually, raising Medicare and insurance questions.',
+        sources: ['NYT'] },
+      center: { headline: '"Phase III data shows 60% progression slowdown; FDA review pending"', count: '2 sources',
+        summary: 'Focuses on the <mark>clinical evidence</mark>, the FDA pathway, and the science of tau-targeting therapy. Cautious about generalizability beyond early-stage patients.',
+        sources: ['Reuters', 'AP'] },
+      right: { headline: '— No right-leaning coverage indexed yet —', count: '0 sources',
+        summary: 'Right-leaning outlets have not yet covered this trial in depth. Candor AI is monitoring.',
+        sources: [] }
+    }
+  },
+  starship: {
+    title: 'SpaceX Starship Orbital Mission', shortTitle: 'SpaceX\'s Starship orbital mission',
+    aiHeading: 'Ask about Starship\'s orbital flight.',
+    aiBlurb: 'Candor AI has read 5 sources covering the milestone flight and Artemis implications.',
+    sources: 5, consensus: '92%',
+    prompts: [
+      ['Mission', 'What exactly happened on this flight?'],
+      ['Artemis', 'How does this change NASA\'s moon plans?'],
+      ['Competition', 'What does this mean for Blue Origin and ULA?'],
+    ],
+    answers: {
+      'What exactly happened on this flight?': 'Starship completed a <strong>full orbital insertion</strong> with a 30-ton commercial payload (Starlink V3 satellites), executed a deorbit burn, and survived reentry to a controlled splashdown in the Indian Ocean. The Super Heavy booster also returned to a chopstick catch at Boca Chica — the second successful catch.',
+      'How does this change NASA\'s moon plans?': 'It significantly de-risks the <strong>Artemis III HLS timeline</strong>. NASA had been planning around a 2027 lunar landing using Starship as the human landing system; the orbital success means orbital refueling demonstrations can begin in earnest. A 2027 crewed landing now appears plausible rather than aspirational.',
+      'What does this mean for Blue Origin and ULA?': 'It widens the gap. <strong>Blue Origin\'s New Glenn</strong> has flown but not yet reached operational cadence; <strong>ULA\'s Vulcan</strong> is operational but expendable. With Starship\'s reusability now demonstrated at scale, per-kilogram launch economics shift dramatically in SpaceX\'s favor.'
+    },
+    compare: {
+      framings: '3 different framings',
+      left: { headline: '"SpaceX milestone — but at what regulatory cost?"', count: '1 source',
+        summary: 'Acknowledges the technical feat but raises <mark>environmental review</mark> and FAA oversight questions about the launch cadence.',
+        sources: ['Vox'] },
+      center: { headline: '"Starship reaches orbit with payload; Artemis timeline accelerates"', count: '3 sources',
+        summary: 'Descriptive coverage of the <mark>mission profile and engineering</mark>. Discusses implications for Artemis and the commercial launch market.',
+        sources: ['Reuters', 'AP', 'BBC'] },
+      right: { headline: '"American engineering triumph reshapes space race"', count: '1 source',
+        summary: 'Celebratory framing emphasizing <mark>U.S. space dominance</mark>, private-sector innovation, and competition with China\'s space program.',
+        sources: ['WSJ'] }
+    }
+  },
+  apple: {
+    title: 'Apple On-Device AI', shortTitle: 'Apple\'s on-device AI',
+    aiHeading: 'Ask about Apple\'s on-device AI.',
+    aiBlurb: 'Candor AI has read 4 sources covering Apple\'s privacy-focused AI announcement.',
+    sources: 4, consensus: '87%',
+    prompts: [
+      ['Tech', 'How does on-device inference actually work?'],
+      ['Privacy', 'Is it really more private than competitors?'],
+      ['Strategy', 'Why is Apple going this route?'],
+    ],
+    answers: {
+      'How does on-device inference actually work?': 'Apple is running a <strong>3B-parameter model</strong> compressed with 4-bit quantization on the Neural Engine of A18-class chips. For more complex queries, the system can fall back to "Private Cloud Compute" — Apple silicon servers with cryptographically verified isolation and no persistent storage.',
+      'Is it really more private than competitors?': 'For the on-device path, <strong>yes — meaningfully so</strong>. No data leaves the device. For the Private Cloud Compute path, Apple\'s architectural claims are strong but unverifiable by users; security researchers are still auditing. Competitors that route everything to cloud (most LLM products) cannot offer equivalent guarantees.',
+      'Why is Apple going this route?': 'Three reasons: <strong>differentiation</strong> in a market where rivals can\'t easily match on-device performance; <strong>regulatory positioning</strong> ahead of EU AI Act and U.S. privacy legislation; and <strong>cost</strong> — pushing inference to user-owned devices avoids the enormous cloud-compute bills that have squeezed competitors\' margins.'
+    },
+    compare: {
+      framings: '3 different framings',
+      left: { headline: '"Apple\'s privacy push — but accessibility costs remain"', count: '1 source',
+        summary: 'Praises the privacy architecture but raises <mark>concerns about hardware gatekeeping</mark> — the feature requires Apple\'s newest chips, deepening digital divides.',
+        sources: ['Guardian'] },
+      center: { headline: '"Apple announces on-device AI architecture"', count: '2 sources',
+        summary: 'Technical coverage of the <mark>architectural choices</mark> — quantization, Neural Engine, Private Cloud Compute. Compares against competitors\' cloud-first designs.',
+        sources: ['Reuters', 'Bloomberg'] },
+      right: { headline: '"Apple bets on privacy as competitive moat"', count: '1 source',
+        summary: 'Frames the move in <mark>business and competitive terms</mark> — Apple positioning against Google and OpenAI on trust and against Microsoft on consumer hardware.',
+        sources: ['WSJ'] }
+    }
+  },
+  amazon: {
+    title: 'Amazon Deforestation Down 45%', shortTitle: 'the Amazon deforestation report',
+    aiHeading: 'Ask about Amazon deforestation.',
+    aiBlurb: 'Candor AI has read 5 sources covering the satellite data and policy implications.',
+    sources: 5, consensus: '93%',
+    prompts: [
+      ['Cause', 'What drove the 45% reduction?'],
+      ['Cerrado', 'Why is the Cerrado biome now at risk?'],
+      ['Outlook', 'Is this trend likely to continue?'],
+    ],
+    answers: {
+      'What drove the 45% reduction?': 'A combination of <strong>renewed federal enforcement</strong> under Brazil\'s current administration (IBAMA operations, fines, satellite-led raids), <strong>international supply-chain pressure</strong> (EU deforestation regulation effective 2025), and a temporary commodity-price dip in soy and beef.',
+      'Why is the Cerrado biome now at risk?': 'The Cerrado — Brazil\'s tropical savanna — receives far weaker legal protection than the Amazon rainforest. As Amazon enforcement tightens, <strong>agricultural expansion is migrating south into the Cerrado</strong>, where conversion to soy and pasture is largely legal. Deforestation there has risen 22% year-over-year.',
+      'Is this trend likely to continue?': 'Uncertain. Continued reduction depends on <strong>sustained enforcement funding</strong>, congressional support in Brasília, and commodity-price trends. The EU regulation provides a structural tailwind, but a political shift in Brazil or rising soy prices could reverse the trend rapidly.'
+    },
+    compare: {
+      framings: '3 different framings',
+      left: { headline: '"Amazon victory — but Cerrado collapse looms"', count: '2 sources',
+        summary: 'Celebrates the Amazon progress while urgently flagging <mark>the Cerrado as the next frontier</mark>. Calls for expanded legal protections for non-rainforest biomes.',
+        sources: ['Guardian', 'Vox'] },
+      center: { headline: '"Brazil reports 45% Amazon deforestation drop; Cerrado pressure rises"', count: '2 sources',
+        summary: 'Reports the <mark>satellite data and policy context</mark> straightforwardly. Notes both the Amazon improvement and the displacement effect into the Cerrado.',
+        sources: ['Reuters', 'BBC'] },
+      right: { headline: '"Brazil\'s deforestation drop raises trade questions"', count: '1 source',
+        summary: 'Focuses on <mark>economic and trade implications</mark> — particularly the EU regulation and impact on Brazilian agribusiness exports.',
+        sources: ['WSJ'] }
+    }
+  }
+};
+
+let currentStory = 'g7';
+
+function applyStoryToAI(key) {
+  const s = STORIES[key];
+  currentStory = key;
+  document.getElementById('ai-brand-h2').textContent = s.aiHeading;
+  document.getElementById('ai-brand-p').textContent = s.aiBlurb;
+  document.getElementById('ai-stat-sources').textContent = s.sources;
+  document.getElementById('ai-stat-consensus').textContent = s.consensus;
+  document.getElementById('ss-current').textContent = s.title;
+  document.getElementById('ai-input').placeholder = key === 'general'
+    ? 'Ask anything about today\'s news…'
+    : 'Ask your own question about this story…';
+
+  // Render prompts
+  const promptsWrap = document.getElementById('ai-prompts');
+  promptsWrap.innerHTML = '';
+  s.prompts.forEach(([tag, q]) => {
+    const btn = document.createElement('button');
+    btn.className = 'ai-prompt';
+    btn.onclick = () => askAI(q);
+    btn.innerHTML = '<span class="prompt-icon">→ ' + tag + '</span><span>' + q + '</span>';
+    promptsWrap.appendChild(btn);
+  });
+
+  // Reset response
+  resetAI();
+
+  // Update menu active state
+  document.querySelectorAll('.ss-option').forEach(o => o.classList.toggle('active', o.dataset.story === key));
+}
+
+function toggleStoryMenu() {
+  document.querySelector('.story-selector').classList.toggle('open');
+}
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.story-selector')) {
+    const ss = document.querySelector('.story-selector');
+    if (ss) ss.classList.remove('open');
+  }
+  if (!e.target.closest('.story-selector-light')) {
+    const ssl = document.querySelector('.story-selector-light');
+    if (ssl) ssl.classList.remove('open');
+  }
+});
+document.querySelectorAll('.ss-option').forEach(opt => {
+  opt.addEventListener('click', (e) => {
+    e.stopPropagation();
+    applyStoryToAI(opt.dataset.story);
+    document.querySelector('.story-selector').classList.remove('open');
+  });
+});
+
+/* ═══════ COMPARE COVERAGE — story aware ═══════ */
+let currentCompareStory = 'g7';
+function applyStoryToCompare(key) {
+  const s = STORIES[key];
+  if (!s || !s.compare) return;
+  currentCompareStory = key;
+  document.getElementById('compare-h-story').textContent = s.shortTitle;
+  document.getElementById('compare-framings').textContent = s.compare.framings;
+  document.getElementById('ssl-current').textContent = s.title;
+
+  ['left', 'center', 'right'].forEach(side => {
+    const data = s.compare[side];
+    document.getElementById('cc-' + side + '-count').textContent = data.count;
+    document.getElementById('cc-' + side + '-headline').textContent = data.headline;
+    document.getElementById('cc-' + side + '-summary').innerHTML = data.summary;
+    const srcWrap = document.getElementById('cc-' + side + '-sources');
+    srcWrap.innerHTML = data.sources.map(src => '<span class="col-source-chip">' + src + '</span>').join('');
+  });
+
+  document.querySelectorAll('.ssl-option').forEach(o => o.classList.toggle('active', o.dataset.story === key));
+}
+function toggleCompareMenu() {
+  document.querySelector('.story-selector-light').classList.toggle('open');
+}
+document.querySelectorAll('.ssl-option').forEach(opt => {
+  opt.addEventListener('click', (e) => {
+    e.stopPropagation();
+    applyStoryToCompare(opt.dataset.story);
+    document.querySelector('.story-selector-light').classList.remove('open');
+  });
+});
+
+/* ═══════ AI ASSISTANT — typing effect, story aware ═══════ */
+let typingTimer = null;
+function typeHTML(el, html, speed = 14) {
+  if (typingTimer) clearInterval(typingTimer);
+  el.innerHTML = '<span class="cursor"></span>';
+  const cursor = '<span class="cursor"></span>';
+  let i = 0;
+  let visible = '';
+  const tokens = [];
+  let buffer = '';
+  let inTag = false;
+  for (const ch of html) {
+    if (ch === '<') { if (buffer) { for (const c of buffer) tokens.push(c); buffer = ''; } inTag = true; buffer += ch; }
+    else if (ch === '>' && inTag) { buffer += ch; tokens.push(buffer); buffer = ''; inTag = false; }
+    else if (inTag) { buffer += ch; }
+    else { tokens.push(ch); }
+  }
+  if (buffer) tokens.push(buffer);
+
+  typingTimer = setInterval(() => {
+    if (i >= tokens.length) {
+      clearInterval(typingTimer);
+      el.innerHTML = html;
+      return;
+    }
+    visible += tokens[i];
+    el.innerHTML = visible + cursor;
+    i++;
+  }, speed);
+}
+
+function askAI(question) {
+  showPaywall('ai');
+  return;
+  if (!question || !question.trim()) return;
+  document.getElementById('ai-input').value = '';
+
+  const response = document.getElementById('ai-response');
+  const qEl = document.getElementById('ai-response-q');
+  const aEl = document.getElementById('ai-response-a');
+  const srcEl = document.getElementById('ai-response-src');
+
+  qEl.textContent = '" ' + question + ' "';
+  aEl.innerHTML = '<span style="color:#a8a497;font-style:italic;">Reading sources<span class="cursor"></span></span>';
+  srcEl.textContent = 'Analyzing ' + STORIES[currentStory].sources + ' sources…';
+  response.classList.add('visible');
+  response.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  setTimeout(() => {
+    const storyData = STORIES[currentStory];
+    const match = storyData.answers && storyData.answers[question];
+    const text = match || 'Candor\'s AI found broad factual consensus across ' + storyData.sources + ' sources on ' + (storyData.shortTitle || 'this topic') + ', though framing varies by outlet. Switch to the Compare Coverage section below to see the specific differences.';
+    const src = currentStory === 'general'
+      ? 'Cross-spectrum analysis · ' + storyData.sources + ' stories'
+      : 'Cited across ' + storyData.sources + ' sources covering ' + storyData.shortTitle;
+    typeHTML(aEl, text, 12);
+    srcEl.textContent = src;
+  }, 850);
+}
+
+function resetAI() {
+  if (typingTimer) clearInterval(typingTimer);
+  document.getElementById('ai-response').classList.remove('visible');
+  document.getElementById('ai-input').value = '';
+}
+
+/* ═══════ SUBSCRIBE ═══════ */
+function handleSubscribe() {
+  showPaywall('alerts');
+  return;
+  const email = document.getElementById('sub-email').value;
+  const btn = document.querySelector('.sub-btn');
+  if (email && email.includes('@')) {
+    btn.textContent = '✓ Check your inbox';
+    btn.style.background = '#1a2233';
+    btn.disabled = true;
+    toast('Welcome to Candor! Check your inbox.');
+  } else {
+    document.getElementById('sub-email').style.outline = '2px solid #c8102e';
+    setTimeout(() => { document.getElementById('sub-email').style.outline = ''; }, 1400);
+  }
+}
+
+/* ═══════ SHARE ═══════ */
+function shareStory() {
+  navigator.clipboard && navigator.clipboard.writeText(window.location.href);
+  toast('Link copied to clipboard');
+}
+
+/* ═══════ TOGGLE ANALYSIS PANEL ═══════ */
+function toggleAnalysis() {
+  const panel = document.getElementById('analysis-panel');
+  panel.classList.toggle('open');
+  const isOpen = panel.classList.contains('open');
+  const toggle = panel.querySelector('.analysis-toggle');
+  toggle.setAttribute('aria-expanded', isOpen);
+  panel.querySelector('.atog-label').textContent = isOpen ? 'Hide' : 'View details';
+}
+
+/* ═══════ FOCUS BIAS — jump to compare section ═══════ */
+function focusBias(which) {
+  scrollToCompare();
+  setTimeout(() => {
+    document.querySelectorAll('.compare-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === which));
+    applyCompareFilter(which);
+  }, 600);
+}
+function scrollToCompare() {
+  document.getElementById('compare-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ═══════ COMPARE TABS ═══════ */
+function applyCompareFilter(tab) {
+  const cols = document.querySelectorAll('.compare-col');
+  cols.forEach(col => {
+    col.classList.remove('focused', 'dimmed');
+    if (tab === 'all') return;
+    if (col.dataset.col === tab) col.classList.add('focused');
+    else col.classList.add('dimmed');
+  });
+}
+document.querySelectorAll('.compare-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.compare-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    applyCompareFilter(tab.dataset.tab);
+  });
+});
+
+/* ═══════ STORY FILTERING (section + bias, combined) ═══════ */
+const storyFilter = { section: 'all', bias: 'all' };
+
+function sectionMatch(card) {
+  return storyFilter.section === 'all' || card.dataset.section === storyFilter.section;
+}
+function biasMatch(card) {
+  const tilt = card.dataset.biasTilt;
+  if (storyFilter.bias === 'all') return true;
+  if (storyFilter.bias === 'balanced') return tilt === 'balanced' || tilt === 'center';
+  return tilt === storyFilter.bias;
+}
+
+function applyStoryFilter() {
+  const cards = document.querySelectorAll('.story-card');
+  let visible = 0;
+  cards.forEach(card => {
+    const show = sectionMatch(card) && biasMatch(card);
+    card.classList.toggle('filter-hidden', !show);
+    if (show) visible++;
+  });
+
+  // Empty-state message
+  let empty = document.getElementById('grid-empty');
+  const grid = document.getElementById('stories-grid');
+  if (!empty && grid) {
+    empty = document.createElement('div');
+    empty.id = 'grid-empty';
+    empty.className = 'grid-empty';
+    grid.appendChild(empty);
+  }
+  if (empty) {
+    if (visible === 0) {
+      const parts = [];
+      if (storyFilter.section !== 'all') parts.push(storyFilter.section.toUpperCase());
+      if (storyFilter.bias !== 'all') parts.push(storyFilter.bias + ' coverage');
+      empty.textContent = 'No stories match ' + (parts.join(' · ') || 'this filter') + ' right now. Try another section or lean.';
+      empty.style.display = 'block';
+    } else {
+      empty.style.display = 'none';
+    }
+  }
+
+  // Update sub-label
+  const sub = document.getElementById('grid-sub');
+  if (sub) {
+    if (storyFilter.section === 'all' && storyFilter.bias === 'all') {
+      sub.textContent = 'Updated continuously · ranked by source breadth';
+    } else {
+      const bits = [];
+      if (storyFilter.section !== 'all') bits.push(storyFilter.section.toUpperCase());
+      if (storyFilter.bias !== 'all') bits.push(storyFilter.bias + ' lean');
+      sub.textContent = 'Showing ' + visible + ' ' + (visible === 1 ? 'story' : 'stories') + ' · ' + bits.join(' · ');
+    }
+  }
+}
+
+/* Section nav (Live / U.S. / World / Politics / ...) */
+document.querySelectorAll('.nav-link[data-section]').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    link.classList.add('active');
+    storyFilter.section = link.dataset.section;
+    applyStoryFilter();
+    const grid = document.getElementById('stories-grid');
+    if (grid && storyFilter.section !== 'all') grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+/* Political-lean filter (All / Left / Center / Right / Balanced) */
+document.querySelectorAll('.bias-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.bias-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    storyFilter.bias = btn.dataset.filter;
+    applyStoryFilter();
+  });
+});
+
+/* ═══════ SEARCH MODAL ═══════ */
+function openSearch() {
+  const modal = document.getElementById('search-modal');
+  modal.classList.add('open');
+  setTimeout(() => document.getElementById('search-input').focus(), 50);
+}
+function closeSearch() {
+  document.getElementById('search-modal').classList.remove('open');
+}
+document.addEventListener('keydown', (e) => {
+  if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+    e.preventDefault();
+    openSearch();
+  }
+  if (e.key === 'Escape') closeSearch();
+});
+
+/* ═══════ READING PROGRESS BAR ═══════ */
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const scrolled = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  document.getElementById('progress-bar').style.width = scrolled + '%';
+});
+
+/* ═══════ LIVE REWRITING FEED ═══════ */
+const feedItems = [
+  'Rewriting: Fed minutes from 4 sources…',
+  'Rewriting: Senate AI hearing from 6 sources…',
+  'Synthesizing: Cannes results across 5 outlets…',
+  'Rewriting: SpaceX orbital report from 7 sources…',
+  'Cross-checking: Alzheimer\'s trial data from 3 journals…',
+  'Rewriting: G7 climate deal from 11 sources…',
+  'Synthesizing: Apple AI announcement from 8 outlets…',
+  'Rewriting: Markets close from 4 sources…',
+];
+let feedIdx = 0;
+setInterval(() => {
+  feedIdx = (feedIdx + 1) % feedItems.length;
+  const feed = document.getElementById('feed-text');
+  if (feed) {
+    feed.style.opacity = '0';
+    setTimeout(() => {
+      feed.textContent = feedItems[feedIdx];
+      feed.style.opacity = '1';
+    }, 200);
+  }
+  // tick up source count
+  const sc = document.getElementById('src-count');
+  if (sc) {
+    const n = parseInt(sc.textContent.replace(',', '')) + Math.floor(Math.random() * 3);
+    sc.textContent = n.toLocaleString();
+  }
+}, 4500);
+
+/* ═══════ LIVE TIMESTAMP TICK ═══════ */
+let heroSeconds = 8;
+setInterval(() => {
+  heroSeconds++;
+  const ts = document.getElementById('hero-timestamp');
+  if (!ts) return;
+  if (heroSeconds < 60) ts.textContent = '— ' + heroSeconds + ' seconds ago';
+  else ts.textContent = '— ' + Math.floor(heroSeconds / 60) + ' min ' + (heroSeconds % 60) + 's ago';
+}, 1000);
+
+/* ═══════ ANIMATED BARS ON LOAD ═══════ */
+window.addEventListener('load', () => {
+  // Initialize AI panel with default story
+  applyStoryToAI('g7');
+
+  document.querySelectorAll('.bias-seg, .card-bias-mini div, .mini-bar div').forEach(bar => {
+    const w = bar.style.width;
+    bar.style.width = '0%';
+    setTimeout(() => { bar.style.transition = 'width 0.9s cubic-bezier(.2,.8,.2,1)'; bar.style.width = w; }, 120);
+  });
+
+  // Feed transition style
+  const feed = document.getElementById('feed-text');
+  if (feed) feed.style.transition = 'opacity 0.2s';
+});
+
+</script>
+
+<!-- ═══════════════ PAYWALL MODAL (universal) ═══════════════ -->
+<div class="paywall-overlay" id="paywall-overlay" onclick="if(event.target===this)closePaywall()">
+  <div class="paywall-modal" role="dialog" aria-modal="true" aria-labelledby="paywall-title">
+    <button class="paywall-close" onclick="closePaywall()" aria-label="Close">&times;</button>
+    <div class="paywall-eyebrow" id="paywall-eyebrow">Candor Membership</div>
+    <h3 class="paywall-title" id="paywall-title">This is a member feature.</h3>
+    <p class="paywall-body" id="paywall-body">The Candor AI assistant is part of Candor membership. Start a free 7-day trial to use it — no charge today, cancel anytime.</p>
+    <div class="paywall-price">
+      <span class="paywall-amount">$4.99</span>
+      <span class="paywall-per">/ month</span>
+      <span class="paywall-note">after your 7-day free trial</span>
+    </div>
+    <ul class="paywall-perks">
+      <li>Unlimited Candor AI — ask any story anything</li>
+      <li>Breaking-news alerts and the Daily Brief by email</li>
+      <li>Full archive, Compare Coverage, and the weekend long-read</li>
+    </ul>
+    <div class="paywall-actions">
+      <a href="candor-signup.html" class="paywall-btn-primary">Start 7-day free trial</a>
+      <a href="candor-signup.html" class="paywall-btn-secondary">Create a free account</a>
+    </div>
+    <div class="paywall-foot">Already a member? <a href="candor-login.html">Log in</a></div>
+  </div>
+</div>
+
+<script>
+/* ═══════ PAYWALL (member-feature gating) ═══════ */
+function showPaywall(feature) {
+  var overlay = document.getElementById('paywall-overlay');
+  if (!overlay) return;
+  var title = document.getElementById('paywall-title');
+  var body = document.getElementById('paywall-body');
+  var eyebrow = document.getElementById('paywall-eyebrow');
+  if (feature === 'alerts' || feature === 'email' || feature === 'newsletter' || feature === 'trial') {
+    eyebrow.textContent = 'Candor Membership';
+    title.textContent = 'Alerts are a member feature.';
+    body.textContent = 'Breaking-news alerts and the Daily Brief by email are part of Candor membership. Start a free 7-day trial to turn them on — no charge today, cancel anytime.';
+  } else {
+    eyebrow.textContent = 'Candor Membership';
+    title.textContent = 'Candor AI is a member feature.';
+    body.textContent = 'The Candor AI assistant is part of Candor membership. Start a free 7-day trial to ask any story anything — no charge today, cancel anytime.';
+  }
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closePaywall() {
+  var overlay = document.getElementById('paywall-overlay');
+  if (!overlay) return;
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closePaywall(); });
+
+</script>
+</body>
+</html>
