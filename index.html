@@ -2290,79 +2290,27 @@ kbd {
   </div>
 </div>
 
-<!-- ═══════════════ FROM THE AI DESK ═══════════════ -->
+<!-- ═══════════════ BREAKING STRIP ═══════════════ -->
 <style>
-  .ai-desk-section { padding: 36px 0 28px; }
-  .ai-desk-head { display: flex; align-items: baseline; justify-content: space-between; border-bottom: 2px solid var(--ink); padding-bottom: 12px; margin-bottom: 24px; gap: 12px; flex-wrap: wrap; }
-  .ai-desk-title { font-family: 'Fraunces', serif; font-weight: 700; font-size: 30px; letter-spacing: -0.6px; color: var(--ink); display: flex; align-items: center; gap: 12px; }
-  .ai-desk-badge { display: inline-flex; align-items: center; gap: 5px; font-family: 'Figtree', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent); padding: 3px 9px; border-radius: 2px; }
-  .ai-desk-meta { font-family: 'Newsreader', serif; font-style: italic; font-size: 14px; color: var(--mute); }
-  .ai-desk-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
-  .ai-card { background: var(--white); border: 1px solid var(--line); padding: 22px; display: flex; flex-direction: column; gap: 10px; transition: border-color .2s, box-shadow .2s; }
-  .ai-card:hover { border-color: var(--ink-3); box-shadow: 0 4px 18px rgba(11,18,32,0.06); }
-  .ai-cat { font-family: 'Figtree', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
-  .ai-hed { font-family: 'Fraunces', serif; font-weight: 600; font-size: 21px; line-height: 1.18; letter-spacing: -0.3px; color: var(--ink); }
-  .ai-dek { font-size: 15px; line-height: 1.5; color: var(--ink-3); margin-top: 2px; }
-  .ai-foot { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--line); font-family: 'Figtree', sans-serif; font-size: 12px; color: var(--mute); display: flex; justify-content: space-between; align-items: center; }
-  .ai-empty { color: var(--mute); font-style: italic; grid-column: 1 / -1; padding: 24px 0; }
-  .ai-empty code { font-family: monospace; font-size: 13px; background: var(--paper-2); padding: 1px 6px; border-radius: 2px; }
-  @media (max-width: 700px) { .ai-desk-title { font-size: 24px; } }
+  .breaking-strip { background: #fff8f6; border-top: 1px solid var(--accent); border-bottom: 1px solid var(--line); padding: 10px 0; display: none; }
+  .breaking-strip.has-items { display: block; }
+  .breaking-strip .wrap { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+  .breaking-label { font-family: 'Figtree', sans-serif; font-size: 10px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; padding: 5px 9px; background: var(--accent); color: #fff; display: inline-flex; align-items: center; gap: 7px; flex-shrink: 0; }
+  .breaking-pulse { width: 6px; height: 6px; background: #fff; border-radius: 50%; animation: bpulse 1.4s ease-in-out infinite; }
+  @keyframes bpulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+  .breaking-items { display: flex; gap: 22px; flex-wrap: wrap; flex: 1; min-width: 0; }
+  .breaking-item { display: inline-flex; align-items: center; gap: 8px; font-family: 'Figtree', sans-serif; font-size: 13px; color: var(--ink); text-decoration: none; line-height: 1.3; }
+  .breaking-item:hover { color: var(--accent); }
+  .breaking-item .bsep { color: var(--accent); font-weight: 700; }
+  .breaking-item .bhed { font-weight: 600; }
+  .breaking-item .bmeta { color: var(--mute); font-size: 11px; }
 </style>
-<div class="wrap">
-  <section class="ai-desk-section">
-    <div class="ai-desk-head">
-      <h2 class="ai-desk-title">From the AI Desk <span class="ai-desk-badge">Live</span></h2>
-      <span class="ai-desk-meta" id="ai-desk-meta">Loading…</span>
-    </div>
-    <div class="ai-desk-grid" id="ai-desk-grid"></div>
-  </section>
+<div class="breaking-strip" id="breaking-strip">
+  <div class="wrap">
+    <span class="breaking-label"><span class="breaking-pulse"></span>Breaking</span>
+    <div class="breaking-items" id="breaking-items"></div>
+  </div>
 </div>
-<script>
-(function() {
-  const API = "https://candor-pipeline.1776actanonverba.workers.dev/api/articles";
-  function escapeHtml(s) {
-    return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  }
-  function safeJSON(s, fb) { try { return JSON.parse(s); } catch (e) { return fb; } }
-  function fmtDate(iso) {
-    if (!iso) return '';
-    try { return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); }
-    catch (e) { return ''; }
-  }
-  function cardHtml(a) {
-    const sources = safeJSON(a.sources, []);
-    const cat = a.category || 'News';
-    const date = fmtDate(a.published_at);
-    return '<article class="ai-card">' +
-      '<div class="ai-cat">' + escapeHtml(cat) + '</div>' +
-      '<h3 class="ai-hed">' + escapeHtml(a.headline) + '</h3>' +
-      '<p class="ai-dek">' + escapeHtml(a.dek || '') + '</p>' +
-      '<div class="ai-foot"><span>' + sources.length + ' source' + (sources.length === 1 ? '' : 's') + '</span><span>' + escapeHtml(date) + '</span></div>' +
-    '</article>';
-  }
-  function render(articles) {
-    const grid = document.getElementById('ai-desk-grid');
-    const meta = document.getElementById('ai-desk-meta');
-    if (!grid || !meta) return;
-    if (!articles.length) {
-      grid.innerHTML = '<p class="ai-empty">No published articles yet. Trigger a manual run on candor-pipeline (visit <code>/run</code>) to populate.</p>';
-      meta.textContent = 'No stories yet';
-      return;
-    }
-    meta.textContent = articles.length + ' published ' + (articles.length === 1 ? 'story' : 'stories');
-    grid.innerHTML = articles.map(cardHtml).join('');
-  }
-  fetch(API)
-    .then(r => r.ok ? r.json() : Promise.reject(new Error('API ' + r.status)))
-    .then(render)
-    .catch(e => {
-      const grid = document.getElementById('ai-desk-grid');
-      const meta = document.getElementById('ai-desk-meta');
-      if (grid) grid.innerHTML = '<p class="ai-empty">Could not load articles: ' + escapeHtml(e.message) + '</p>';
-      if (meta) meta.textContent = 'Error';
-    });
-})();
-</script>
 
 <!-- ═══════════════ HERO ═══════════════ -->
 <div class="wrap">
@@ -2383,18 +2331,18 @@ kbd {
       </div>
 
       <div class="story-eyebrow">
-        <span class="tag">● Breaking</span>
-        <span class="section">World / <a href="#">Climate Policy</a></span>
+        <span class="tag" id="hero-eyebrow-tag">● Latest</span>
+        <span class="section" id="hero-section-label">News</span>
       </div>
 
-      <h1 class="hero-headline" style="cursor:pointer" onclick="window.location='candor-article.html'">G7 Nations Sign First-Ever Binding Climate Pact With Real Enforcement Teeth</h1>
+      <h1 class="hero-headline" id="hero-hed" style="cursor:pointer">Loading the latest story…</h1>
 
-      <p class="hero-dek">Leaders from all seven nations committed to a 42% emissions cut by 2030 — and, for the first time, agreed to financial penalties for missing the targets. Officials called it a "historic turning point" in global climate governance.</p>
+      <p class="hero-dek" id="hero-dek"></p>
 
       <div class="ai-rewrite-banner">
         <span class="pulse-dot"></span>
-        <span>Candor AI · Rewritten from 11 sources</span>
-        <span class="timestamp" id="hero-timestamp">— 8 seconds ago</span>
+        <span id="hero-rewrite-meta">Candor AI · Rewritten from sources</span>
+        <span class="timestamp" id="hero-timestamp">— just now</span>
       </div>
 
       <!-- COLLAPSIBLE ANALYSIS PANEL -->
@@ -2403,7 +2351,7 @@ kbd {
           <span class="atog-left">
             <svg class="atog-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
             Coverage Analysis
-            <span class="atog-pip">11 sources</span>
+            <span class="atog-pip" id="hero-atog-pip">— sources</span>
           </span>
           <span class="atog-right">
             <span class="atog-label">View details</span>
@@ -2456,25 +2404,13 @@ kbd {
               <span class="ass-title">All Sources</span>
               <span class="ass-sub">11 outlets cited</span>
             </div>
-            <div class="source-list open">
-              <div class="src-chip"><span class="src-bias" style="background:var(--left)"></span>Guardian</div>
-              <div class="src-chip"><span class="src-bias" style="background:var(--left)"></span>New York Times</div>
-              <div class="src-chip"><span class="src-bias" style="background:var(--left)"></span>Vox</div>
-              <div class="src-chip"><span class="src-bias" style="background:var(--left)"></span>MSNBC</div>
-              <div class="src-chip"><span class="src-bias" style="background:var(--center)"></span>Reuters</div>
-              <div class="src-chip"><span class="src-bias" style="background:var(--center)"></span>Associated Press</div>
-              <div class="src-chip"><span class="src-bias" style="background:var(--center)"></span>BBC</div>
-              <div class="src-chip"><span class="src-bias" style="background:var(--center)"></span>Bloomberg</div>
-              <div class="src-chip"><span class="src-bias" style="background:var(--right)"></span>Wall Street Journal</div>
-              <div class="src-chip"><span class="src-bias" style="background:var(--right)"></span>New York Post</div>
-              <div class="src-chip"><span class="src-bias" style="background:var(--right)"></span>Washington Examiner</div>
-            </div>
+            <div class="source-list open" id="hero-source-list"></div>
           </div>
         </div>
       </div>
 
       <div class="action-row">
-        <a class="read-cta" href="#">
+        <a class="read-cta" id="hero-read-cta" href="#">
           Read the full report
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
         </a>
@@ -2487,67 +2423,12 @@ kbd {
       </div>
     </div>
 
-    <aside class="hero-side">
+    <aside class="hero-side" id="hero-sidebar">
       <div class="side-header">
         <h3>Top Stories</h3>
-        <span class="more">Trending now</span>
+        <span class="more" id="hero-sidebar-meta">Loading…</span>
       </div>
-
-      <article class="side-story" data-bias-tilt="balanced" data-section="politics">
-        <div class="side-content">
-          <div class="side-eyebrow">Politics</div>
-          <h4 class="side-headline">Senate Passes AI Oversight Act 67–33 in Rare Bipartisan Vote</h4>
-          <div class="side-meta">
-            <span class="mini-bar"><div style="background:var(--left);width:33%"></div><div style="background:var(--center);width:34%"></div><div style="background:var(--right);width:33%"></div></span>
-            <span><b>6</b> sources · 2h</span>
-          </div>
-        </div>
-        <div class="side-img">
-          <img src="https://images.pexels.com/photos/8112199/pexels-photo-8112199.jpeg?auto=compress&cs=tinysrgb&w=200" alt="Senate" onerror="this.style.background='#e4e6ec';this.src=''">
-        </div>
-      </article>
-
-      <article class="side-story" data-bias-tilt="center">
-        <div class="side-content">
-          <div class="side-eyebrow">Economy</div>
-          <h4 class="side-headline">Markets Rally Third Straight Week After Fed Signals Rate Pause</h4>
-          <div class="side-meta">
-            <span class="mini-bar"><div style="background:var(--left);width:25%"></div><div style="background:var(--center);width:50%"></div><div style="background:var(--right);width:25%"></div></span>
-            <span><b>4</b> sources · 4h</span>
-          </div>
-        </div>
-        <div class="side-img">
-          <img src="https://images.pexels.com/photos/187041/pexels-photo-187041.jpeg?auto=compress&cs=tinysrgb&w=200" alt="Markets" onerror="this.style.background='#e4e6ec';this.src=''">
-        </div>
-      </article>
-
-      <article class="side-story" data-bias-tilt="center">
-        <div class="side-content">
-          <div class="side-eyebrow">Health</div>
-          <h4 class="side-headline">Alzheimer's Drug Shows 60% Slowdown in Phase III Trial Results</h4>
-          <div class="side-meta">
-            <span class="mini-bar"><div style="background:var(--left);width:33%"></div><div style="background:var(--center);width:67%"></div><div style="background:var(--right);width:0%"></div></span>
-            <span><b>3</b> sources · 6h</span>
-          </div>
-        </div>
-        <div class="side-img">
-          <img src="https://images.pexels.com/photos/3938022/pexels-photo-3938022.jpeg?auto=compress&cs=tinysrgb&w=200" alt="Lab" onerror="this.style.background='#e4e6ec';this.src=''">
-        </div>
-      </article>
-
-      <article class="side-story" data-bias-tilt="balanced">
-        <div class="side-content">
-          <div class="side-eyebrow">Space</div>
-          <h4 class="side-headline">SpaceX Starship Completes First Full Orbital Mission With Live Payload</h4>
-          <div class="side-meta">
-            <span class="mini-bar"><div style="background:var(--left);width:20%"></div><div style="background:var(--center);width:60%"></div><div style="background:var(--right);width:20%"></div></span>
-            <span><b>5</b> sources · 8h</span>
-          </div>
-        </div>
-        <div class="side-img">
-          <img src="https://images.pexels.com/photos/586063/pexels-photo-586063.jpeg?auto=compress&cs=tinysrgb&w=200" alt="Rocket" onerror="this.style.background='#e4e6ec';this.src=''">
-        </div>
-      </article>
+      <div id="hero-sidebar-items"></div>
     </aside>
 
   </section>
@@ -2768,164 +2649,8 @@ kbd {
   </div>
 
   <div class="stories-grid" id="stories-grid">
-
-    <article class="story-card" data-bias-tilt="balanced" data-section="politics">
-      <div class="card-img">
-        <img src="https://images.pexels.com/photos/8112199/pexels-photo-8112199.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Senate" onerror="this.style.background='#e4e6ec';this.src=''">
-      </div>
-      <div class="card-cat-row">
-        <div class="card-cat-left">
-          <span class="card-eyebrow">Politics</span>
-          <span class="card-time">· 2h ago</span>
-        </div>
-        <button class="card-save" onclick="toggleSave(this, 'c1'); event.stopPropagation();" aria-label="Save">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-        </button>
-      </div>
-      <h3 class="card-headline">Senate AI Oversight Act: What the 67–33 Vote Means Going Forward</h3>
-      <p class="card-dek">Independent audits, $10M penalties, and a new federal AI bureau — inside the bill that just cleared the Senate.</p>
-      <div class="card-bottom">
-        <div class="card-bias-mini" data-l="33" data-c="34" data-r="33"><div style="background:var(--left);width:33%"></div><div style="background:var(--center);width:34%"></div><div style="background:var(--right);width:33%"></div></div>
-        <div class="bias-tooltip">
-          <div class="b-row"><span class="sw" style="background:var(--left)"></span>Left: 2 sources</div>
-          <div class="b-row"><span class="sw" style="background:var(--center)"></span>Center: 2 sources</div>
-          <div class="b-row"><span class="sw" style="background:var(--right)"></span>Right: 2 sources</div>
-        </div>
-        <span class="card-sources"><b>6</b> sources</span>
-      </div>
-    </article>
-
-    <article class="story-card" data-bias-tilt="center" data-section="business" onclick="window.location='candor-article.html'">
-      <div class="card-img">
-        <img src="https://images.pexels.com/photos/187041/pexels-photo-187041.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Markets" onerror="this.style.background='#e4e6ec';this.src=''">
-      </div>
-      <div class="card-cat-row">
-        <div class="card-cat-left">
-          <span class="card-eyebrow">Economy</span>
-          <span class="card-time">· 4h ago</span>
-        </div>
-        <button class="card-save" onclick="toggleSave(this, 'c2'); event.stopPropagation();" aria-label="Save">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-        </button>
-      </div>
-      <h3 class="card-headline">Dow Rises for Third Straight Week as Fed Holds Rates Through Q3</h3>
-      <p class="card-dek">Tech stocks led the gains as investors read the Fed's hold as a signal that the rate cycle has peaked for the near term.</p>
-      <div class="card-bottom">
-        <div class="card-bias-mini" data-l="25" data-c="50" data-r="25"><div style="background:var(--left);width:25%"></div><div style="background:var(--center);width:50%"></div><div style="background:var(--right);width:25%"></div></div>
-        <div class="bias-tooltip">
-          <div class="b-row"><span class="sw" style="background:var(--left)"></span>Left: 1 source</div>
-          <div class="b-row"><span class="sw" style="background:var(--center)"></span>Center: 2 sources</div>
-          <div class="b-row"><span class="sw" style="background:var(--right)"></span>Right: 1 source</div>
-        </div>
-        <span class="card-sources"><b>4</b> sources</span>
-      </div>
-    </article>
-
-    <article class="story-card" data-bias-tilt="left" data-section="science" onclick="window.location='candor-article.html'">
-      <div class="card-img">
-        <img src="https://images.pexels.com/photos/3938022/pexels-photo-3938022.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Lab" onerror="this.style.background='#e4e6ec';this.src=''">
-      </div>
-      <div class="card-cat-row">
-        <div class="card-cat-left">
-          <span class="card-eyebrow">Health</span>
-          <span class="card-time">· 6h ago</span>
-        </div>
-        <button class="card-save" onclick="toggleSave(this, 'c3'); event.stopPropagation();" aria-label="Save">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-        </button>
-      </div>
-      <h3 class="card-headline">Alzheimer's Breakthrough: Drug Slows Progression 60% — FDA Review in Q3</h3>
-      <p class="card-dek">Researchers say it could reach patients within 18 months. Here's what the Phase III results actually show.</p>
-      <div class="card-bottom">
-        <div class="card-bias-mini" data-l="33" data-c="67" data-r="0"><div style="background:var(--left);width:33%"></div><div style="background:var(--center);width:67%"></div><div style="background:var(--right);width:0%"></div></div>
-        <div class="bias-tooltip">
-          <div class="b-row"><span class="sw" style="background:var(--left)"></span>Left: 1 source</div>
-          <div class="b-row"><span class="sw" style="background:var(--center)"></span>Center: 2 sources</div>
-          <div class="b-row"><span class="sw" style="background:var(--right)"></span>Right: 0 sources</div>
-        </div>
-        <span class="card-sources"><b>3</b> sources</span>
-      </div>
-    </article>
-
-    <article class="story-card" data-bias-tilt="center" data-section="science" onclick="window.location='candor-article.html'">
-      <div class="card-img">
-        <img src="https://images.pexels.com/photos/586063/pexels-photo-586063.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Rocket" onerror="this.style.background='#e4e6ec';this.src=''">
-      </div>
-      <div class="card-cat-row">
-        <div class="card-cat-left">
-          <span class="card-eyebrow">Space</span>
-          <span class="card-time">· 8h ago</span>
-        </div>
-        <button class="card-save" onclick="toggleSave(this, 'c4'); event.stopPropagation();" aria-label="Save">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-        </button>
-      </div>
-      <h3 class="card-headline">Starship Reaches Orbit: What SpaceX's Milestone Means for Artemis</h3>
-      <p class="card-dek">The full orbital flight with payload marks a turning point — and sets a new commercial launch timeline for NASA's moon program.</p>
-      <div class="card-bottom">
-        <div class="card-bias-mini" data-l="20" data-c="60" data-r="20"><div style="background:var(--left);width:20%"></div><div style="background:var(--center);width:60%"></div><div style="background:var(--right);width:20%"></div></div>
-        <div class="bias-tooltip">
-          <div class="b-row"><span class="sw" style="background:var(--left)"></span>Left: 1 source</div>
-          <div class="b-row"><span class="sw" style="background:var(--center)"></span>Center: 3 sources</div>
-          <div class="b-row"><span class="sw" style="background:var(--right)"></span>Right: 1 source</div>
-        </div>
-        <span class="card-sources"><b>5</b> sources</span>
-      </div>
-    </article>
-
-    <article class="story-card" data-bias-tilt="balanced" data-section="tech">
-      <div class="card-img">
-        <img src="https://images.pexels.com/photos/2582937/pexels-photo-2582937.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Tech" onerror="this.style.background='#e4e6ec';this.src=''">
-      </div>
-      <div class="card-cat-row">
-        <div class="card-cat-left">
-          <span class="card-eyebrow">Technology</span>
-          <span class="card-time">· 5h ago</span>
-        </div>
-        <button class="card-save" onclick="toggleSave(this, 'c5'); event.stopPropagation();" aria-label="Save">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-        </button>
-      </div>
-      <h3 class="card-headline">Apple's On-Device AI Runs Without Cloud — A Privacy Shift for Consumers</h3>
-      <p class="card-dek">Full model inference on-device means no data ever leaves your phone. Analysts call it the biggest privacy feature in a decade.</p>
-      <div class="card-bottom">
-        <div class="card-bias-mini" data-l="25" data-c="50" data-r="25"><div style="background:var(--left);width:25%"></div><div style="background:var(--center);width:50%"></div><div style="background:var(--right);width:25%"></div></div>
-        <div class="bias-tooltip">
-          <div class="b-row"><span class="sw" style="background:var(--left)"></span>Left: 1 source</div>
-          <div class="b-row"><span class="sw" style="background:var(--center)"></span>Center: 2 sources</div>
-          <div class="b-row"><span class="sw" style="background:var(--right)"></span>Right: 1 source</div>
-        </div>
-        <span class="card-sources"><b>4</b> sources</span>
-      </div>
-    </article>
-
-    <article class="story-card" data-bias-tilt="left" data-section="world">
-      <div class="card-img">
-        <img src="https://images.pexels.com/photos/957024/forest-trees-perspective-bright-957024.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Forest" onerror="this.style.background='#e4e6ec';this.src=''">
-      </div>
-      <div class="card-cat-row">
-        <div class="card-cat-left">
-          <span class="card-eyebrow">Environment</span>
-          <span class="card-time">· 8h ago</span>
-        </div>
-        <button class="card-save" onclick="toggleSave(this, 'c6'); event.stopPropagation();" aria-label="Save">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-        </button>
-      </div>
-      <h3 class="card-headline">Amazon Deforestation Down 45% — But Cerrado Faces New Agricultural Threat</h3>
-      <p class="card-dek">Satellite data confirms significant forest recovery, but grassland biomes face escalating soy and cattle pressure outside legal protections.</p>
-      <div class="card-bottom">
-        <div class="card-bias-mini" data-l="40" data-c="40" data-r="20"><div style="background:var(--left);width:40%"></div><div style="background:var(--center);width:40%"></div><div style="background:var(--right);width:20%"></div></div>
-        <div class="bias-tooltip">
-          <div class="b-row"><span class="sw" style="background:var(--left)"></span>Left: 2 sources</div>
-          <div class="b-row"><span class="sw" style="background:var(--center)"></span>Center: 2 sources</div>
-          <div class="b-row"><span class="sw" style="background:var(--right)"></span>Right: 1 source</div>
-        </div>
-        <span class="card-sources"><b>5</b> sources</span>
-      </div>
-    </article>
-
-  </div>
+    <!-- populated by JS from /api/articles -->
+    </div>
 </div>
 
 <!-- ═══════════════ SUBSCRIBE STRIP ═══════════════ -->
@@ -3705,6 +3430,179 @@ function closePaywall() {
 }
 document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closePaywall(); });
 
+</script>
+<script>
+// ═══════════════ CANDOR AI · LIVE ARTICLE POPULATION ═══════════════
+(function() {
+  const API_BASE = "https://candor-pipeline.1776actanonverba.workers.dev";
+  const ARTICLE_BASE = API_BASE + "/article/";
+  const FEED = API_BASE + "/api/articles";
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+  function parse(s, fb) {
+    if (s && typeof s === 'object') return s;
+    try { return JSON.parse(s); } catch (e) { return fb; }
+  }
+  function timeAgo(iso) {
+    if (!iso) return '';
+    const then = new Date(iso).getTime();
+    const diff = Math.max(0, Date.now() - then);
+    const m = Math.floor(diff / 60000);
+    if (m < 1) return 'just now';
+    if (m < 60) return m + 'm ago';
+    const h = Math.floor(m / 60);
+    if (h < 24) return h + 'h ago';
+    const d = Math.floor(h / 24);
+    return d + 'd ago';
+  }
+  function biasDomain(url) {
+    // very rough bias hint by known outlets — used only for the visual color
+    const left = ['nytimes','guardian','vox','msnbc','huffpost','theatlantic','newyorker'];
+    const right = ['foxnews','nypost','washingtonexaminer','wsj.com','dailycaller','breitbart'];
+    const u = String(url || '').toLowerCase();
+    if (left.some(s => u.includes(s))) return 'left';
+    if (right.some(s => u.includes(s))) return 'right';
+    return 'center';
+  }
+  function articleUrl(slug) { return ARTICLE_BASE + encodeURIComponent(slug); }
+
+  // ----- HERO POPULATION -----
+  function populateHero(a) {
+    if (!a) return;
+    const sources = parse(a.sources, []);
+    const sc = sources.length;
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+    const setHtml = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = val; };
+
+    set('hero-hed', a.headline || '');
+    set('hero-dek', a.dek || '');
+    set('hero-section-label', a.category || 'News');
+    set('hero-rewrite-meta', 'Candor AI · Rewritten from ' + sc + ' source' + (sc === 1 ? '' : 's'));
+    set('hero-timestamp', '— ' + timeAgo(a.published_at));
+    set('hero-atog-pip', sc + ' source' + (sc === 1 ? '' : 's'));
+
+    const hed = document.getElementById('hero-hed');
+    if (hed) hed.onclick = () => { window.location = articleUrl(a.slug); };
+
+    const cta = document.getElementById('hero-read-cta');
+    if (cta) cta.href = articleUrl(a.slug);
+
+    const list = document.getElementById('hero-source-list');
+    if (list) {
+      list.innerHTML = sources.map(s => {
+        const bias = biasDomain(s.url);
+        const colorVar = bias === 'left' ? 'var(--left)' : bias === 'right' ? 'var(--right)' : 'var(--center)';
+        return '<div class="src-chip"><span class="src-bias" style="background:' + colorVar + '"></span>' + esc(s.outlet || '') + '</div>';
+      }).join('');
+    }
+  }
+
+  // ----- SIDEBAR POPULATION -----
+  function populateSidebar(items) {
+    const wrap = document.getElementById('hero-sidebar-items');
+    const meta = document.getElementById('hero-sidebar-meta');
+    if (!wrap) return;
+    if (!items.length) {
+      wrap.innerHTML = '<p style="font-family:Newsreader,serif;font-style:italic;color:var(--mute);font-size:14px;padding:16px 0">No additional stories yet. More will appear here as the AI publishes them.</p>';
+      if (meta) meta.textContent = 'Awaiting more';
+      return;
+    }
+    if (meta) meta.textContent = items.length + ' more';
+    wrap.innerHTML = items.map(a => {
+      const sources = parse(a.sources, []);
+      const sc = sources.length;
+      const ago = timeAgo(a.published_at);
+      return '<a href="' + esc(articleUrl(a.slug)) + '" style="text-decoration:none;color:inherit"><article class="side-story">' +
+        '<div class="side-content">' +
+          '<div class="side-eyebrow">' + esc(a.category || 'News') + '</div>' +
+          '<h4 class="side-headline">' + esc(a.headline) + '</h4>' +
+          '<div class="side-meta">' +
+            '<span class="mini-bar"><div style="background:var(--left);width:33%"></div><div style="background:var(--center);width:34%"></div><div style="background:var(--right);width:33%"></div></span>' +
+            '<span><b>' + sc + '</b> source' + (sc === 1 ? '' : 's') + ' · ' + esc(ago) + '</span>' +
+          '</div>' +
+        '</div>' +
+      '</article></a>';
+    }).join('');
+  }
+
+  // ----- MORE STORIES GRID POPULATION -----
+  function populateGrid(items) {
+    const grid = document.getElementById('stories-grid');
+    if (!grid) return;
+    if (!items.length) {
+      grid.innerHTML = '<p style="font-family:Newsreader,serif;font-style:italic;color:var(--mute);grid-column:1/-1;padding:32px 0;text-align:center">More stories will appear here as the AI publishes them. Trigger a manual run at <code style="font-family:monospace;background:var(--paper-2);padding:1px 6px;border-radius:2px">/run</code> to populate.</p>';
+      return;
+    }
+    grid.innerHTML = items.map(a => {
+      const sources = parse(a.sources, []);
+      const sc = sources.length;
+      const ago = timeAgo(a.published_at);
+      return '<a href="' + esc(articleUrl(a.slug)) + '" style="text-decoration:none;color:inherit;display:block">' +
+        '<article class="story-card">' +
+          '<div class="card-cat-row">' +
+            '<div class="card-cat-left">' +
+              '<span class="card-eyebrow">' + esc(a.category || 'News') + '</span>' +
+              '<span class="card-time">· ' + esc(ago) + '</span>' +
+            '</div>' +
+          '</div>' +
+          '<h3 class="card-headline">' + esc(a.headline) + '</h3>' +
+          '<p class="card-dek">' + esc(a.dek || '') + '</p>' +
+          '<div class="card-bottom">' +
+            '<div class="card-bias-mini"><div style="background:var(--left);width:33%"></div><div style="background:var(--center);width:34%"></div><div style="background:var(--right);width:33%"></div></div>' +
+            '<span class="card-sources"><b>' + sc + '</b> source' + (sc === 1 ? '' : 's') + '</span>' +
+          '</div>' +
+        '</article>' +
+      '</a>';
+    }).join('');
+  }
+
+  // ----- BREAKING STRIP POPULATION -----
+  // For now: shows nothing (no articles flagged as breaking yet).
+  // Future: AI prompt adds `breaking: true` flag → strip shows those.
+  function populateBreaking(items) {
+    const strip = document.getElementById('breaking-strip');
+    const wrap = document.getElementById('breaking-items');
+    if (!strip || !wrap) return;
+    const breaking = items.filter(a => a.breaking === true || a.breaking === 1);
+    if (!breaking.length) { strip.classList.remove('has-items'); return; }
+    strip.classList.add('has-items');
+    wrap.innerHTML = breaking.slice(0, 4).map((a, i) => {
+      return (i > 0 ? '<span class="bsep">·</span>' : '') +
+        '<a class="breaking-item" href="' + esc(articleUrl(a.slug)) + '">' +
+          '<span class="bhed">' + esc(a.headline) + '</span>' +
+          '<span class="bmeta">' + esc(timeAgo(a.published_at)) + '</span>' +
+        '</a>';
+    }).join('');
+  }
+
+  // ----- ORCHESTRATOR -----
+  fetch(FEED)
+    .then(r => r.ok ? r.json() : Promise.reject(new Error('Feed ' + r.status)))
+    .then(articles => {
+      if (!articles || !articles.length) {
+        const hed = document.getElementById('hero-hed');
+        if (hed) hed.textContent = 'No published articles yet';
+        const dek = document.getElementById('hero-dek');
+        if (dek) dek.textContent = 'Trigger a manual pipeline run to populate the front page.';
+        populateSidebar([]);
+        populateGrid([]);
+        populateBreaking([]);
+        return;
+      }
+      populateHero(articles[0]);
+      populateSidebar(articles.slice(1, 5));
+      populateGrid(articles.slice(1));
+      populateBreaking(articles);
+    })
+    .catch(e => {
+      const hed = document.getElementById('hero-hed');
+      if (hed) hed.textContent = 'Could not load stories';
+      const dek = document.getElementById('hero-dek');
+      if (dek) dek.textContent = 'Error: ' + e.message;
+    });
+})();
 </script>
 <script src="/live-header.js" defer></script>
 </body>
