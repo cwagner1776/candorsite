@@ -419,43 +419,7 @@ button { font-family: inherit; cursor: pointer; }
           </div>
         </div>
         <div class="panel-body" id="review-list">
-          <!-- review cards -->
-          <div class="rev" data-id="r1">
-            <div class="rev-flag crit"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Unconfirmed death toll</div>
-            <div class="rev-h">Explosion at Port of Rotterdam; casualty figures vary widely across sources</div>
-            <div class="rev-detail">Three outlets report different casualty counts (Reuters: "at least 4," AP: "up to 12," local source: "dozens feared"). The sensitivity check held this because sources directly contradict each other on a core fact involving loss of life.</div>
-            <div class="rev-meta"><span>Section <b>World</b></span><span>Importance <b>89</b></span><span>Sources <b>6</b></span><span>Held <b>22 min ago</b></span><span>Confidence <b>Low</b></span></div>
-            <div class="rev-actions">
-              <button class="btn btn-ok btn-sm" onclick="resolveReview('r1','approved')">Approve & publish</button>
-              <button class="btn btn-sm" onclick="toast('Opened in editor')">Edit synthesis</button>
-              <button class="btn btn-sm" onclick="toast('Will re-check when more sources arrive')">Hold for more sources</button>
-              <button class="btn btn-sm btn-danger" onclick="resolveReview('r1','rejected')">Reject</button>
-            </div>
-          </div>
-          <div class="rev" data-id="r2">
-            <div class="rev-flag"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Allegations against named private individual</div>
-            <div class="rev-h">Tech executive named in unverified misconduct report circulating on two outlets</div>
-            <div class="rev-detail">A named, non-public figure is the subject of allegations sourced to a single outlet and an anonymous post. Held pending verification that at least one further reputable source corroborates before any synthesis publishes.</div>
-            <div class="rev-meta"><span>Section <b>Business</b></span><span>Importance <b>61</b></span><span>Sources <b>2</b></span><span>Held <b>14 min ago</b></span><span>Confidence <b>Low</b></span></div>
-            <div class="rev-actions">
-              <button class="btn btn-ok btn-sm" onclick="resolveReview('r2','approved')">Approve & publish</button>
-              <button class="btn btn-sm" onclick="toast('Opened in editor')">Edit synthesis</button>
-              <button class="btn btn-sm" onclick="toast('Will re-check when more sources arrive')">Hold for more sources</button>
-              <button class="btn btn-sm btn-danger" onclick="resolveReview('r2','rejected')">Reject</button>
-            </div>
-          </div>
-          <div class="rev" data-id="r3">
-            <div class="rev-flag"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Single anonymous source only</div>
-            <div class="rev-h">Reported cabinet reshuffle attributed to one unnamed official</div>
-            <div class="rev-detail">The entire story rests on a single anonymous source from one outlet. Per editorial standards, synthesis of major-public-interest claims on a lone anonymous source requires Editor-in-Chief sign-off and a confidence cap.</div>
-            <div class="rev-meta"><span>Section <b>Politics</b></span><span>Importance <b>73</b></span><span>Sources <b>1</b></span><span>Held <b>9 min ago</b></span><span>Confidence <b>Low</b></span></div>
-            <div class="rev-actions">
-              <button class="btn btn-ok btn-sm" onclick="resolveReview('r3','approved')">Approve (capped confidence)</button>
-              <button class="btn btn-sm" onclick="toast('Opened in editor')">Edit synthesis</button>
-              <button class="btn btn-sm" onclick="toast('Will re-check when more sources arrive')">Hold for more sources</button>
-              <button class="btn btn-sm btn-danger" onclick="resolveReview('r3','rejected')">Reject</button>
-            </div>
-          </div>
+          <div class="empty" id="review-loading">Loading review queue…</div>
         </div>
       </div>
     </section>
@@ -885,6 +849,159 @@ setInterval(() => {
   const el = document.getElementById('next-run');
   if (el) el.textContent = 'in ' + m + 'm ' + (s < 10 ? '0' : '') + s + 's';
 }, 1000);
+</script>
+<script>
+// ═══════════════ CANDOR ADMIN · LIVE API WIREUP ═══════════════
+(function() {
+  const ADMIN_API = "https://candor-pipeline.1776actanonverba.workers.dev";
+
+  function getAdminToken() {
+    let t = localStorage.getItem('candor_admin_token');
+    if (!t) {
+      t = prompt('Enter your Candor admin token:');
+      if (!t) return null;
+      localStorage.setItem('candor_admin_token', t.trim());
+      return t.trim();
+    }
+    return t;
+  }
+
+  async function adminFetch(path, options) {
+    options = options || {};
+    const token = getAdminToken();
+    if (!token) throw new Error('No admin token entered');
+    const res = await fetch(ADMIN_API + path, Object.assign({}, options, {
+      headers: Object.assign({
+        'Content-Type': 'application/json',
+        'X-Admin-Token': token,
+      }, options.headers || {}),
+    }));
+    if (res.status === 401) {
+      localStorage.removeItem('candor_admin_token');
+      throw new Error('Wrong token — cleared. Refresh to try again.');
+    }
+    if (!res.ok) throw new Error('API ' + res.status + ': ' + (await res.text()));
+    return res.json();
+  }
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  }
+  function timeAgo(iso) {
+    if (!iso) return 'recently';
+    const m = Math.max(0, Math.floor((Date.now() - new Date(iso).getTime()) / 60000));
+    if (m < 1) return 'just now';
+    if (m < 60) return m + ' min ago';
+    const h = Math.floor(m / 60);
+    if (h < 24) return h + 'h ago';
+    return Math.floor(h / 24) + 'd ago';
+  }
+  function flagSummary(flags, riskTier) {
+    if (Array.isArray(flags) && flags.length) return flags[0];
+    if (riskTier === 'high') return 'High-risk story';
+    if (riskTier === 'medium') return 'Medium-risk story';
+    return 'Held for review';
+  }
+
+  function pendingCardHtml(a) {
+    const flags = Array.isArray(a.flags) ? a.flags : [];
+    const sources = Array.isArray(a.sources) ? a.sources : [];
+    const isCritical = (a.risk_tier === 'high') || flags.some(f => /death|minor|election/i.test(f));
+    const extraFlags = flags.length > 1 ? '<br><small style="opacity:0.7;font-size:12px">Other flags: ' + flags.slice(1).map(esc).join(', ') + '</small>' : '';
+    return ''
+      + '<div class="rev" data-id="' + esc(a.slug) + '">'
+      +   '<div class="rev-flag ' + (isCritical ? 'crit' : '') + '">'
+      +     '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> '
+      +     esc(flagSummary(flags, a.risk_tier))
+      +   '</div>'
+      +   '<div class="rev-h">' + esc(a.headline) + '</div>'
+      +   '<div class="rev-detail">' + esc(a.dek || '') + extraFlags + '</div>'
+      +   '<div class="rev-meta">'
+      +     '<span>Section <b>' + esc(a.category) + '</b></span>'
+      +     '<span>Risk <b>' + esc(a.risk_tier || 'low') + '</b></span>'
+      +     '<span>Sources <b>' + sources.length + '</b></span>'
+      +     '<span>Held <b>' + esc(timeAgo(a.created_at)) + '</b></span>'
+      +     '<a href="' + ADMIN_API + '/article/' + encodeURIComponent(a.slug) + '" target="_blank" style="color:var(--accent);text-decoration:none;font-weight:600">Preview full article →</a>'
+      +   '</div>'
+      +   '<div class="rev-actions">'
+      +     '<button class="btn btn-ok btn-sm" onclick="resolveReview(\'' + esc(a.slug) + '\',\'approved\')">Approve &amp; publish</button>'
+      +     '<button class="btn btn-sm btn-danger" onclick="resolveReview(\'' + esc(a.slug) + '\',\'rejected\')">Reject</button>'
+      +   '</div>'
+      + '</div>';
+  }
+
+  async function loadPending() {
+    const list = document.getElementById('review-list');
+    const counter = document.getElementById('rev-count');
+    const heldLabel = document.getElementById('held-label');
+    if (!list) return;
+    try {
+      const articles = await adminFetch('/api/admin/pending');
+      if (!articles.length) {
+        list.innerHTML = '<div class="empty">Queue is clear. No stories currently held for review.</div>';
+        if (counter) { counter.textContent = '0'; counter.classList.add('muted'); }
+        if (heldLabel) heldLabel.textContent = '0 pending';
+        return;
+      }
+      list.innerHTML = articles.map(pendingCardHtml).join('');
+      if (counter) { counter.textContent = articles.length; counter.classList.remove('muted'); }
+      if (heldLabel) heldLabel.textContent = articles.length + ' pending';
+    } catch (e) {
+      list.innerHTML = '<div class="empty" style="color:var(--warn)">Could not load queue: ' + esc(e.message) + '</div>';
+    }
+  }
+
+  // Override the demo resolveReview with the real one (later function declarations win)
+  window.resolveReview = async function(slug, decision) {
+    const apiDecision = decision === 'approved' ? 'approve' : 'reject';
+    try {
+      await adminFetch('/api/admin/decide', {
+        method: 'POST',
+        body: JSON.stringify({ slug: slug, decision: apiDecision }),
+      });
+      const card = document.querySelector('.rev[data-id="' + slug.replace(/"/g, '\\"') + '"]');
+      if (card) {
+        card.classList.add('resolved');
+        const tag = document.createElement('span');
+        tag.className = 'rev-resolved-tag';
+        tag.textContent = decision === 'approved' ? '✓ Approved & published' : '✕ Rejected';
+        const metaEl = card.querySelector('.rev-meta');
+        if (metaEl) metaEl.appendChild(tag);
+      }
+      if (typeof toast === 'function') {
+        toast(decision === 'approved' ? 'Story approved and published' : 'Story rejected');
+      }
+      const pending = document.querySelectorAll('.rev:not(.resolved)').length;
+      const counter = document.getElementById('rev-count');
+      const heldLabel = document.getElementById('held-label');
+      if (counter) counter.textContent = pending;
+      if (heldLabel) heldLabel.textContent = pending + ' pending';
+      if (pending === 0) {
+        if (counter) counter.classList.add('muted');
+        const list = document.getElementById('review-list');
+        if (list && !list.querySelector('.empty')) {
+          list.insertAdjacentHTML('beforeend', '<div class="empty">Queue is clear. Every flagged story has been resolved.</div>');
+        }
+      }
+    } catch (e) {
+      if (typeof toast === 'function') toast('Error: ' + e.message);
+      else alert('Error: ' + e.message);
+    }
+  };
+
+  // Refresh button — clears localStorage so user can re-enter token if needed
+  window.candorAdminClearToken = function() {
+    localStorage.removeItem('candor_admin_token');
+    location.reload();
+  };
+
+  // Load when DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadPending);
+  } else {
+    loadPending();
+  }
+})();
 </script>
 </body>
 </html>
