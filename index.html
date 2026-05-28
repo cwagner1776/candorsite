@@ -2290,6 +2290,80 @@ kbd {
   </div>
 </div>
 
+<!-- ═══════════════ FROM THE AI DESK ═══════════════ -->
+<style>
+  .ai-desk-section { padding: 36px 0 28px; }
+  .ai-desk-head { display: flex; align-items: baseline; justify-content: space-between; border-bottom: 2px solid var(--ink); padding-bottom: 12px; margin-bottom: 24px; gap: 12px; flex-wrap: wrap; }
+  .ai-desk-title { font-family: 'Fraunces', serif; font-weight: 700; font-size: 30px; letter-spacing: -0.6px; color: var(--ink); display: flex; align-items: center; gap: 12px; }
+  .ai-desk-badge { display: inline-flex; align-items: center; gap: 5px; font-family: 'Figtree', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent); padding: 3px 9px; border-radius: 2px; }
+  .ai-desk-meta { font-family: 'Newsreader', serif; font-style: italic; font-size: 14px; color: var(--mute); }
+  .ai-desk-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+  .ai-card { background: var(--white); border: 1px solid var(--line); padding: 22px; display: flex; flex-direction: column; gap: 10px; transition: border-color .2s, box-shadow .2s; }
+  .ai-card:hover { border-color: var(--ink-3); box-shadow: 0 4px 18px rgba(11,18,32,0.06); }
+  .ai-cat { font-family: 'Figtree', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
+  .ai-hed { font-family: 'Fraunces', serif; font-weight: 600; font-size: 21px; line-height: 1.18; letter-spacing: -0.3px; color: var(--ink); }
+  .ai-dek { font-size: 15px; line-height: 1.5; color: var(--ink-3); margin-top: 2px; }
+  .ai-foot { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--line); font-family: 'Figtree', sans-serif; font-size: 12px; color: var(--mute); display: flex; justify-content: space-between; align-items: center; }
+  .ai-empty { color: var(--mute); font-style: italic; grid-column: 1 / -1; padding: 24px 0; }
+  .ai-empty code { font-family: monospace; font-size: 13px; background: var(--paper-2); padding: 1px 6px; border-radius: 2px; }
+  @media (max-width: 700px) { .ai-desk-title { font-size: 24px; } }
+</style>
+<div class="wrap">
+  <section class="ai-desk-section">
+    <div class="ai-desk-head">
+      <h2 class="ai-desk-title">From the AI Desk <span class="ai-desk-badge">Live</span></h2>
+      <span class="ai-desk-meta" id="ai-desk-meta">Loading…</span>
+    </div>
+    <div class="ai-desk-grid" id="ai-desk-grid"></div>
+  </section>
+</div>
+<script>
+(function() {
+  const API = "https://candor-pipeline.1776actanonverba.workers.dev/api/articles";
+  function escapeHtml(s) {
+    return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  }
+  function safeJSON(s, fb) { try { return JSON.parse(s); } catch (e) { return fb; } }
+  function fmtDate(iso) {
+    if (!iso) return '';
+    try { return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); }
+    catch (e) { return ''; }
+  }
+  function cardHtml(a) {
+    const sources = safeJSON(a.sources, []);
+    const cat = a.category || 'News';
+    const date = fmtDate(a.published_at);
+    return '<article class="ai-card">' +
+      '<div class="ai-cat">' + escapeHtml(cat) + '</div>' +
+      '<h3 class="ai-hed">' + escapeHtml(a.headline) + '</h3>' +
+      '<p class="ai-dek">' + escapeHtml(a.dek || '') + '</p>' +
+      '<div class="ai-foot"><span>' + sources.length + ' source' + (sources.length === 1 ? '' : 's') + '</span><span>' + escapeHtml(date) + '</span></div>' +
+    '</article>';
+  }
+  function render(articles) {
+    const grid = document.getElementById('ai-desk-grid');
+    const meta = document.getElementById('ai-desk-meta');
+    if (!grid || !meta) return;
+    if (!articles.length) {
+      grid.innerHTML = '<p class="ai-empty">No published articles yet. Trigger a manual run on candor-pipeline (visit <code>/run</code>) to populate.</p>';
+      meta.textContent = 'No stories yet';
+      return;
+    }
+    meta.textContent = articles.length + ' published ' + (articles.length === 1 ? 'story' : 'stories');
+    grid.innerHTML = articles.map(cardHtml).join('');
+  }
+  fetch(API)
+    .then(r => r.ok ? r.json() : Promise.reject(new Error('API ' + r.status)))
+    .then(render)
+    .catch(e => {
+      const grid = document.getElementById('ai-desk-grid');
+      const meta = document.getElementById('ai-desk-meta');
+      if (grid) grid.innerHTML = '<p class="ai-empty">Could not load articles: ' + escapeHtml(e.message) + '</p>';
+      if (meta) meta.textContent = 'Error';
+    });
+})();
+</script>
+
 <!-- ═══════════════ HERO ═══════════════ -->
 <div class="wrap">
   <section class="hero">
