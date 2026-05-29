@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{HEADLINE}} — Candor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,900&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #0b1220; --ink-2: #1a2233; --ink-3: #3a4358;
+  --mute: #6b7488; --mute-2: #9aa2b4;
+  --line: #e4e6ec; --line-2: #ecedf1;
+  --paper: #f7f5ef; --paper-2: #efece3; --paper-3: #e8e4d8;
+  --white: #ffffff;
+  --accent: #c8102e; --accent-dark: #9c0a23;
+  --left: #2d62b3; --center: #4a4a4a; --right: #b8451e;
+  --max: 1280px;
+  --shadow: 0 1px 2px rgba(11,18,32,0.04), 0 4px 16px rgba(11,18,32,0.04);
+  --shadow-lg: 0 4px 12px rgba(11,18,32,0.06), 0 12px 40px rgba(11,18,32,0.08);
+}
+[data-theme="dark"] {
+  --ink: #f4f1e8; --ink-2: #e0dccf; --ink-3: #c8c4b7;
+  --mute: #a8a497; --mute-2: #8e8a7e;
+  --line: #3d3a30; --line-2: #332f25;
+  --paper: #14130e; --paper-2: #1a1812; --paper-3: #221f17;
+  --white: #1a1812;
+  --accent: #ff4d63; --accent-dark: #e6304c;
+  --left: #6a9ad8; --center: #aab2c4; --right: #e8915a;
+  --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 4px 16px rgba(0,0,0,0.4);
+  --shadow-lg: 0 4px 12px rgba(0,0,0,0.5), 0 12px 40px rgba(0,0,0,0.6);
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: 'Newsreader', Georgia, serif; background: var(--paper); color: var(--ink); font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased; transition: background 0.3s, color 0.3s; }
+a { text-decoration: none; color: inherit; cursor: pointer; }
+button { cursor: pointer; font-family: inherit; border: none; background: none; color: inherit; }
+img { display: block; width: 100%; object-fit: cover; }
+
+.progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: var(--accent); z-index: 200; width: 0; transition: width 0.1s linear; }
+
+/* ── UTIL BAR ── */
+.util-bar { background: var(--ink); color: var(--mute-2); font-family: 'Newsreader', serif; font-size: 13px; }
+[data-theme="dark"] .util-bar { background: #0a0907; border-bottom: 1px solid var(--line); }
+.util-inner { max-width: var(--max); margin: 0 auto; padding: 9px 32px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.util-left { display: flex; align-items: center; gap: 22px; }
+.util-status { display: flex; align-items: center; gap: 8px; color: #ece8d8; font-variant-caps: all-small-caps; letter-spacing: 0.1em; font-weight: 600; font-size: 14px; }
+.live-dot { width: 7px; height: 7px; border-radius: 50%; background: #2ecc71; box-shadow: 0 0 0 0 rgba(46,204,113,0.55); animation: livePulse 1.8s ease-out infinite; }
+@keyframes livePulse { 0%{box-shadow:0 0 0 0 rgba(46,204,113,0.55)}70%{box-shadow:0 0 0 6px rgba(46,204,113,0)}100%{box-shadow:0 0 0 0 rgba(46,204,113,0)} }
+.util-stat { color: var(--mute-2); font-variant-caps: all-small-caps; letter-spacing: 0.08em; font-size: 14px; }
+.util-stat b { color: #ece8d8; font-weight: 700; font-variant-caps: normal; font-size: 13px; letter-spacing: 0; }
+.util-right { display: flex; align-items: center; gap: 14px; }
+.util-link { color: var(--mute-2); transition: color 0.15s; font-variant-caps: all-small-caps; letter-spacing: 0.1em; font-weight: 600; font-size: 14px; }
+.util-link:hover { color: #ece8d8; }
+.util-divider { width: 1px; height: 12px; background: #2a3344; }
+[data-theme="dark"] .util-divider { background: #4a5266; }
+
+/* ── MASTHEAD ── */
+.masthead { background: var(--white); border-bottom: 1px solid var(--line); }
+[data-theme="dark"] .masthead { background: var(--paper-2); }
+.mast-inner { max-width: var(--max); margin: 0 auto; padding: 22px 32px 18px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px; }
+.mast-left { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+.weather-chip { display: flex; align-items: center; gap: 8px; font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-weight: 500; letter-spacing: 0.06em; font-size: 15px; color: var(--mute); }
+.weather-chip svg { width: 14px; height: 14px; }
+.date-chip { font-family: 'Newsreader', serif; font-style: italic; font-size: 14px; color: var(--mute); }
+.logo-wrap { text-align: center; }
+.logo { font-family: 'Fraunces', serif; font-weight: 700; font-size: 48px; letter-spacing: -1.6px; line-height: 1; color: var(--ink); display: inline-flex; align-items: baseline; gap: 2px; }
+.logo-mark { display: inline-block; width: 13px; height: 13px; background: var(--accent); margin-right: 5px; position: relative; top: -3px; }
+.mast-right { display: flex; align-items: center; gap: 10px; justify-content: flex-end; }
+.icon-btn { width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--line); border-radius: 50%; color: var(--ink-3); transition: all 0.2s; background: var(--white); }
+.icon-btn:hover { color: var(--ink); border-color: var(--ink); transform: translateY(-1px); }
+.icon-btn svg { width: 15px; height: 15px; }
+[data-theme="dark"] .icon-btn { background: var(--paper-3); border-color: var(--line); }
+.btn-subscribe { background: var(--ink); color: var(--paper); font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 16px; font-weight: 700; letter-spacing: 0.08em; padding: 9px 18px; border-radius: 2px; transition: all 0.2s; }
+.btn-subscribe:hover { background: var(--accent); }
+
+/* ── NAV ── */
+.nav-wrap { background: var(--white); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 50; }
+[data-theme="dark"] .nav-wrap { background: var(--paper-2); }
+.nav-inner { max-width: var(--max); margin: 0 auto; padding: 0 32px; display: flex; align-items: center; gap: 4px; overflow-x: auto; scrollbar-width: none; }
+.nav-inner::-webkit-scrollbar { display: none; }
+.nav-link { font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 16px; font-weight: 600; letter-spacing: 0.08em; color: var(--ink-3); padding: 14px 14px; border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.15s; }
+.nav-link:first-child { padding-left: 0; }
+.nav-link:hover { color: var(--ink); }
+.nav-link.active { color: var(--ink); border-bottom-color: var(--accent); }
+.nav-link.live-link::before { content: ''; display: inline-block; width: 6px; height: 6px; background: #ef3340; border-radius: 50%; margin-right: 6px; vertical-align: middle; animation: livePulse 1.8s infinite; }
+
+/* ── TICKER ── */
+.ticker-bar { background: var(--ink); color: #d8d4c7; border-bottom: 1px solid #1a2233; }
+[data-theme="dark"] .ticker-bar { background: #0a0907; }
+.ticker-inner { max-width: var(--max); margin: 0 auto; padding: 0 32px; display: flex; align-items: center; height: 40px; gap: 18px; }
+.ticker-tag { background: var(--accent); color: var(--white); font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 14px; font-weight: 700; letter-spacing: 0.16em; padding: 4px 12px; flex-shrink: 0; }
+.ticker-wrap { flex: 1; overflow: hidden; -webkit-mask-image: linear-gradient(to right, transparent, black 20px, black calc(100% - 40px), transparent); mask-image: linear-gradient(to right, transparent, black 20px, black calc(100% - 40px), transparent); }
+.ticker-track { display: inline-block; white-space: nowrap; font-size: 15px; font-weight: 500; letter-spacing: 0.005em; animation: ticker 48s linear infinite; }
+.ticker-track:hover { animation-play-state: paused; }
+.ticker-track span { color: #d4d0c0; }
+.ticker-track em { color: var(--mute); font-style: normal; margin: 0 18px; }
+@keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+/* ── ARTICLE LAYOUT ── */
+.wrap { max-width: var(--max); margin: 0 auto; padding: 0 32px; }
+
+.article-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 56px;
+  padding: 48px 0 64px;
+}
+
+/* ── ARTICLE MAIN ── */
+.article-back {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: 'Newsreader', serif; font-variant-caps: all-small-caps;
+  font-size: 13px; font-weight: 700; letter-spacing: 0.1em;
+  color: var(--mute); margin-bottom: 28px;
+  transition: color 0.15s;
+}
+.article-back:hover { color: var(--accent); }
+.article-back svg { width: 13px; height: 13px; }
+
+.article-eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.article-tag { background: var(--accent); color: var(--white); font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 14px; font-weight: 700; letter-spacing: 0.14em; padding: 4px 10px; }
+.article-section { font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 14px; letter-spacing: 0.1em; color: var(--mute); font-weight: 600; }
+
+.article-headline {
+  font-family: 'Fraunces', serif; font-weight: 700; font-size: 46px;
+  line-height: 1.06; letter-spacing: -1.2px; color: var(--ink);
+  margin-bottom: 20px;
+}
+.article-dek {
+  font-family: 'Newsreader', serif; font-size: 21px; font-weight: 400;
+  line-height: 1.48; color: var(--ink-2); margin-bottom: 24px;
+  border-left: 3px solid var(--accent); padding-left: 18px;
+}
+
+.article-meta-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; padding: 16px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  margin-bottom: 28px; flex-wrap: wrap;
+}
+.article-byline { display: flex; flex-direction: column; gap: 3px; }
+.byline-name { font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 14px; font-weight: 700; letter-spacing: 0.1em; color: var(--ink); }
+.byline-sub { font-family: 'Newsreader', serif; font-style: italic; font-size: 13px; color: var(--mute); }
+.article-actions { display: flex; align-items: center; gap: 8px; }
+.art-action-btn { width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--line); background: var(--white); color: var(--ink-3); transition: all 0.15s; }
+.art-action-btn:hover { border-color: var(--ink); color: var(--ink); }
+.art-action-btn svg { width: 13px; height: 13px; }
+[data-theme="dark"] .art-action-btn { background: var(--paper-3); border-color: var(--line); }
+
+.ai-rewrite-banner { display: inline-flex; align-items: center; gap: 10px; background: var(--white); border: 1px solid var(--line); border-left: 3px solid var(--accent); padding: 10px 14px; margin-bottom: 28px; font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 14px; font-weight: 600; letter-spacing: 0.08em; color: var(--ink-2); }
+.pulse-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: livePulse 1.8s infinite; flex-shrink: 0; }
+.ai-rewrite-banner .timestamp { font-variant-caps: normal; font-style: italic; font-weight: 400; letter-spacing: 0.01em; color: var(--mute); font-size: 13px; }
+[data-theme="dark"] .ai-rewrite-banner { background: var(--paper-2); }
+
+/* ── HERO IMAGE ── */
+.article-hero-img { position: relative; margin-bottom: 32px; overflow: hidden; background: var(--ink); }
+.article-hero-img img { width: 100%; height: 480px; object-fit: cover; filter: contrast(1.02) saturate(0.95); }
+.img-caption { padding: 10px 0; font-family: 'Newsreader', serif; font-style: italic; font-size: 13px; color: var(--mute); display: flex; justify-content: space-between; border-bottom: 1px solid var(--line); margin-bottom: 32px; }
+.img-caption .credit { font-style: normal; font-variant-caps: all-small-caps; letter-spacing: 0.08em; font-size: 12px; }
+
+/* ── ARTICLE BODY ── */
+.article-body { font-family: 'Newsreader', serif; font-size: 19px; line-height: 1.72; color: var(--ink-2); }
+.article-body p { margin-bottom: 26px; }
+.article-body p:first-child::first-letter { font-family: 'Fraunces', serif; font-size: 72px; font-weight: 700; line-height: 0.78; float: left; margin-right: 8px; margin-top: 6px; color: var(--ink); }
+.article-body h2 { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 600; color: var(--ink); margin: 40px 0 16px; letter-spacing: -0.4px; }
+.article-body blockquote { border-left: 3px solid var(--accent); margin: 32px 0; padding: 4px 0 4px 24px; }
+.article-body blockquote p { font-size: 22px; font-style: italic; color: var(--ink); margin-bottom: 8px; }
+.article-body blockquote cite { font-size: 14px; font-style: normal; font-variant-caps: all-small-caps; letter-spacing: 0.1em; color: var(--mute); }
+.article-body strong { color: var(--ink); font-weight: 700; }
+
+/* Source attribution inline */
+.source-attr { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; font-style: normal; font-variant-caps: all-small-caps; letter-spacing: 0.08em; font-weight: 700; color: var(--mute); border-bottom: 1px dotted var(--mute-2); vertical-align: middle; }
+.source-attr .src-dot { width: 5px; height: 5px; border-radius: 50%; display: inline-block; }
+
+/* ── ANALYSIS PANEL (in article) ── */
+.analysis-panel { background: var(--white); border: 1px solid var(--line); margin: 36px 0; overflow: hidden; }
+[data-theme="dark"] .analysis-panel { background: var(--paper-2); border-color: var(--line); }
+.analysis-toggle { width: 100%; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; background: var(--white); text-align: left; transition: background 0.15s; }
+[data-theme="dark"] .analysis-toggle { background: var(--paper-2); }
+.analysis-toggle:hover { background: var(--paper); }
+[data-theme="dark"] .analysis-toggle:hover { background: var(--paper-3); }
+.analysis-panel.open .analysis-toggle { border-bottom: 1px solid var(--line); background: var(--paper); }
+[data-theme="dark"] .analysis-panel.open .analysis-toggle { background: var(--paper-3); }
+.atog-left { display: flex; align-items: center; gap: 10px; font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 15px; font-weight: 700; letter-spacing: 0.12em; color: var(--ink); }
+.atog-pip { font-variant-caps: normal; font-style: italic; font-size: 13px; font-weight: 500; color: var(--mute); margin-left: 4px; }
+.atog-right { display: flex; align-items: center; gap: 8px; color: var(--mute); }
+.atog-label { font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; }
+.atog-chev { width: 14px; height: 14px; transition: transform 0.25s ease; }
+.analysis-panel.open .atog-chev { transform: rotate(180deg); }
+.analysis-body { display: none; padding: 4px 20px 22px; }
+.analysis-panel.open .analysis-body { display: block; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+
+.stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; padding: 18px 0; border-bottom: 1px solid var(--line); margin-bottom: 22px; }
+.stat-cell { padding: 0 18px; border-right: 1px solid var(--line); display: flex; flex-direction: column; gap: 6px; }
+.stat-cell:first-child { padding-left: 0; }
+.stat-cell:last-child { padding-right: 0; border-right: none; }
+.stat-label { font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; color: var(--mute); }
+.stat-value { font-family: 'Fraunces', serif; font-weight: 600; font-size: 26px; line-height: 1; letter-spacing: -0.5px; color: var(--ink); display: flex; align-items: baseline; gap: 4px; }
+.stat-unit { font-family: 'Newsreader', serif; font-style: italic; font-weight: 400; font-size: 13px; color: var(--mute); }
+.stat-conf-high { color: #2ecc71; font-style: italic; font-size: 22px; }
+
+.bias-bar { display: flex; height: 8px; overflow: hidden; border-radius: 1px; background: var(--line); cursor: pointer; }
+.bias-seg { height: 100%; transition: all 0.4s ease; }
+.bias-seg:hover { filter: brightness(1.15); }
+.bias-left { background: var(--left); } .bias-center { background: var(--center); } .bias-right { background: var(--right); }
+.bias-labels { display: flex; margin-top: 10px; font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 13px; font-weight: 600; color: var(--mute); letter-spacing: 0.08em; }
+.bias-label-item { flex: 1; display: flex; align-items: center; gap: 6px; }
+.bias-label-item .swatch { width: 8px; height: 8px; }
+.bias-label-item.center { justify-content: center; }
+.bias-label-item.right { justify-content: flex-end; }
+.bias-label-item b { color: var(--ink); font-weight: 700; font-variant-caps: normal; }
+
+.src-chip { font-family: 'Newsreader', serif; font-size: 13px; font-weight: 500; padding: 4px 10px; border: 1px solid var(--line); background: var(--paper); color: var(--ink-2); border-radius: 2px; display: inline-flex; align-items: center; gap: 6px; margin: 3px; transition: all 0.15s; }
+.src-chip:hover { border-color: var(--ink); background: var(--white); }
+.src-chip .src-bias { width: 5px; height: 5px; border-radius: 50%; }
+[data-theme="dark"] .src-chip { background: var(--paper-3); border-color: var(--line); }
+
+/* ── COMPARE COLS (in article) ── */
+.compare-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px; }
+.compare-col { background: var(--white); border: 1px solid var(--line); padding: 20px; position: relative; }
+[data-theme="dark"] .compare-col { background: var(--paper-2); border-color: var(--line); }
+.compare-col::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+.col-left::before { background: var(--left); } .col-center::before { background: var(--center); } .col-right::before { background: var(--right); }
+.col-bias-label { font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 13px; font-weight: 700; letter-spacing: 0.12em; display: flex; align-items: center; gap: 7px; margin-bottom: 10px; }
+.col-left .col-bias-label { color: var(--left); } .col-center .col-bias-label { color: var(--center); } .col-right .col-bias-label { color: var(--right); }
+.col-bias-label .dot { width: 8px; height: 8px; border-radius: 50%; }
+.col-left .dot { background: var(--left); } .col-center .dot { background: var(--center); } .col-right .dot { background: var(--right); }
+.col-headline { font-family: 'Fraunces', serif; font-size: 16px; font-style: italic; font-weight: 500; line-height: 1.3; color: var(--ink); margin-bottom: 10px; }
+.col-summary { font-family: 'Newsreader', serif; font-size: 14px; color: var(--ink-2); line-height: 1.55; margin-bottom: 12px; }
+.col-summary mark { background: rgba(200,16,46,0.1); color: var(--ink); padding: 1px 4px; font-weight: 600; }
+.col-source-chip { font-family: 'Newsreader', serif; font-size: 12px; font-weight: 500; background: var(--paper); color: var(--ink-3); padding: 3px 8px; border: 1px solid var(--line); border-radius: 2px; display: inline-block; margin: 2px; }
+[data-theme="dark"] .col-source-chip { background: var(--paper-3); }
+
+/* ── AI BOX IN ARTICLE ── */
+.article-ai-box { background: var(--ink); color: var(--paper); padding: 32px; margin: 40px 0; position: relative; overflow: hidden; }
+[data-theme="dark"] .article-ai-box { background: #0a0907; border: 1px solid var(--line); }
+[data-theme="dark"] .article-ai-box .aai-h,
+[data-theme="dark"] .article-ai-box .aai-response-a,
+[data-theme="dark"] .article-ai-box .aai-prompt { color: #f4f1e8; }
+[data-theme="dark"] .article-ai-box .aai-response-q,
+[data-theme="dark"] .article-ai-box .aai-reset,
+[data-theme="dark"] .article-ai-box .aai-footer { color: #b0aca0; }
+.article-ai-box::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 80% 50%, rgba(200,16,46,0.12) 0%, transparent 50%); pointer-events: none; }
+.aai-tag { font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 13px; font-weight: 700; letter-spacing: 0.16em; color: var(--accent); display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.aai-h { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 600; letter-spacing: -0.4px; color: var(--paper); margin-bottom: 16px; line-height: 1.15; }
+.aai-prompts { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.aai-prompt { font-family: 'Newsreader', serif; font-size: 14px; color: #ece8d8; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); padding: 9px 14px; transition: all 0.2s; text-align: left; }
+.aai-prompt:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.28); }
+.aai-input-row { display: flex; gap: 0; }
+.aai-input { flex: 1; border: none; padding: 13px 16px; font-size: 15px; font-family: 'Newsreader', serif; color: var(--ink); background: var(--white); outline: none; }
+.aai-input::placeholder { color: var(--mute); font-style: italic; }
+.aai-submit { background: var(--accent); color: var(--white); padding: 0 22px; font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 14px; font-weight: 700; letter-spacing: 0.1em; transition: background 0.15s; white-space: nowrap; }
+.aai-submit:hover { background: var(--accent-dark); }
+.aai-response { display: none; margin-top: 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-left: 3px solid var(--accent); padding: 18px 20px; font-family: 'Newsreader', serif; font-size: 16px; line-height: 1.6; color: #d8d4c7; }
+.aai-response.visible { display: block; animation: fadeIn 0.3s ease; }
+.aai-response-q { font-style: italic; font-size: 14px; color: var(--mute-2); margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 10px; }
+.aai-response-a { color: var(--paper); margin-bottom: 12px; }
+.aai-response-a strong { color: #fff; }
+.cursor { display: inline-block; width: 8px; height: 16px; background: var(--accent); vertical-align: text-bottom; margin-left: 2px; animation: blink 1s infinite; }
+@keyframes blink { 0%,50%{opacity:1} 51%,100%{opacity:0} }
+.aai-reset { font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; color: var(--mute-2); transition: color 0.15s; }
+.aai-reset:hover { color: var(--paper); }
+.aai-footer { display: flex; justify-content: space-between; align-items: center; font-family: 'Newsreader', serif; font-style: italic; font-size: 12px; color: var(--mute); }
+
+/* ── SIDEBAR ── */
+.article-sidebar { padding-top: 8px; }
+.sidebar-sticky { position: sticky; top: 80px; display: flex; flex-direction: column; gap: 28px; }
+
+.sidebar-block { border-top: 2px solid var(--ink); padding-top: 16px; }
+.sidebar-block-title { font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 13px; font-weight: 700; letter-spacing: 0.14em; color: var(--ink); margin-bottom: 16px; }
+
+.related-story { padding: 14px 0; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 1fr 72px; gap: 12px; cursor: pointer; transition: opacity 0.15s; }
+.related-story:last-child { border-bottom: none; }
+.related-story:hover { opacity: 0.75; }
+.rs-eyebrow { font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: var(--accent); margin-bottom: 4px; }
+.rs-headline { font-family: 'Fraunces', serif; font-size: 15px; font-weight: 600; line-height: 1.25; color: var(--ink); margin-bottom: 5px; letter-spacing: -0.1px; }
+.rs-meta { font-family: 'Newsreader', serif; font-style: italic; font-size: 12px; color: var(--mute); }
+.rs-img { width: 72px; height: 72px; overflow: hidden; background: var(--paper-2); }
+.rs-img img { width: 72px; height: 72px; object-fit: cover; }
+
+/* Newsletter widget */
+.newsletter-box { background: var(--white); border: 1px solid var(--line); padding: 20px; }
+[data-theme="dark"] .newsletter-box { background: var(--paper-2); border-color: var(--line); }
+.nl-eyebrow { font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; color: var(--accent); margin-bottom: 8px; }
+.nl-h { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 600; color: var(--ink); margin-bottom: 8px; letter-spacing: -0.3px; line-height: 1.2; }
+.nl-p { font-family: 'Newsreader', serif; font-size: 14px; color: var(--mute); line-height: 1.5; margin-bottom: 14px; }
+.nl-input { width: 100%; border: 1px solid var(--line); padding: 10px 12px; font-family: 'Newsreader', serif; font-size: 14px; color: var(--ink); background: var(--paper); margin-bottom: 8px; outline: none; }
+.nl-input:focus { border-color: var(--ink); }
+[data-theme="dark"] .nl-input { background: var(--paper-3); color: var(--ink); }
+.nl-btn { width: 100%; background: var(--ink); color: var(--paper); font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 14px; font-weight: 700; letter-spacing: 0.1em; padding: 11px; transition: background 0.15s; }
+.nl-btn:hover { background: var(--accent); }
+
+/* ── FOOTER ── */
+.footer { background: var(--paper); border-top: 1px solid var(--line); }
+[data-theme="dark"] .footer { background: var(--paper-2); }
+.footer-main { max-width: var(--max); margin: 0 auto; padding: 40px 32px 32px; display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 48px; }
+.footer-brand .footer-logo { font-family: 'Fraunces', serif; font-weight: 700; font-size: 28px; letter-spacing: -1px; color: var(--ink); display: inline-flex; align-items: baseline; margin-bottom: 12px; }
+.footer-brand .footer-logo .mark { display: inline-block; width: 9px; height: 9px; background: var(--accent); margin-right: 5px; position: relative; top: -2px; }
+.footer-brand p { font-family: 'Newsreader', serif; font-size: 14px; color: var(--mute); line-height: 1.55; max-width: 38ch; }
+.footer-col h4 { font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 13px; font-weight: 700; letter-spacing: 0.14em; color: var(--ink); margin-bottom: 12px; }
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 7px; }
+.footer-col ul a { font-family: 'Newsreader', serif; font-size: 14px; color: var(--ink-3); transition: color 0.15s; }
+.footer-col ul a:hover { color: var(--accent); }
+.footer-foot { border-top: 1px solid var(--line); padding: 18px 32px; max-width: var(--max); margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; font-family: 'Newsreader', serif; font-style: italic; font-size: 13px; color: var(--mute); }
+.footer-foot .links { display: flex; gap: 18px; }
+.footer-foot a { font-style: normal; font-variant-caps: all-small-caps; letter-spacing: 0.08em; font-weight: 600; color: var(--mute); transition: color 0.15s; }
+.footer-foot a:hover { color: var(--ink); }
+
+/* Toast */
+.toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--ink); color: var(--paper); font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 14px; font-weight: 700; letter-spacing: 0.1em; padding: 12px 24px; opacity: 0; transition: all 0.3s; z-index: 999; pointer-events: none; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+@media (max-width: 960px) {
+  .article-layout { grid-template-columns: 1fr; gap: 40px; }
+  .article-sidebar { display: none; }
+  .article-headline { font-size: 34px; }
+  .compare-cols { grid-template-columns: 1fr; gap: 12px; }
+  .footer-main { grid-template-columns: 1fr 1fr; gap: 32px; }
+}
+@media (max-width: 640px) {
+  .wrap { padding: 0 20px; }
+  .mast-inner { padding: 16px 20px; }
+  .article-headline { font-size: 28px; }
+  .article-dek { font-size: 18px; }
+  .article-body { font-size: 17px; }
+  .stat-grid { grid-template-columns: repeat(2,1fr); }
+  .stat-cell { border-right: none; padding: 8px 0; }
+}
+
+/* New logo: red underline beneath the C (replaces square mark) */
+.logo { gap: 0 !important; }
+.logo-mark { display: none !important; }
+.logo-c { position: relative; padding-bottom: 0.05em; }
+.logo-c::after { content: ''; position: absolute; left: 0.01em; right: 0.01em; bottom: 0; height: 0.045em; background: var(--accent); border-radius: 1px; }
+.footer-logo .mark { display: none !important; }
+.footer-logo-c { position: relative; padding-bottom: 0.05em; }
+.footer-logo-c::after { content: ''; position: absolute; left: 0.01em; right: 0.01em; bottom: 0; height: 0.05em; background: var(--accent); border-radius: 1px; }
+/* ═══════ PAYWALL MODAL ═══════ */
+.paywall-overlay { display: none; position: fixed; inset: 0; background: rgba(11,18,32,0.55); z-index: 2000; align-items: center; justify-content: center; padding: 24px; }
+[data-theme="dark"] .paywall-overlay { background: rgba(0,0,0,0.78); }
+.paywall-overlay.open { display: flex; }
+.paywall-modal { background: var(--white); border: 1px solid var(--line); max-width: 460px; width: 100%; padding: 36px 36px 28px; position: relative; box-shadow: var(--shadow-lg, 0 12px 40px rgba(0,0,0,0.25)); animation: paywallIn 0.2s ease; }
+[data-theme="dark"] .paywall-modal { background: var(--paper-2); }
+@keyframes paywallIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+.paywall-close { position: absolute; top: 14px; right: 16px; background: none; border: none; font-size: 28px; line-height: 1; color: var(--mute); cursor: pointer; transition: color 0.15s; }
+.paywall-close:hover { color: var(--ink); }
+.paywall-eyebrow { font-variant-caps: all-small-caps; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; color: var(--accent); margin-bottom: 10px; }
+.paywall-title { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; letter-spacing: -0.5px; line-height: 1.15; color: var(--ink); margin-bottom: 12px; }
+.paywall-body { font-family: 'Newsreader', serif; font-size: 15px; line-height: 1.6; color: var(--ink-2); margin-bottom: 20px; }
+.paywall-price { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; padding: 16px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-bottom: 18px; }
+.paywall-amount { font-family: 'Fraunces', serif; font-size: 34px; font-weight: 700; color: var(--ink); letter-spacing: -1px; line-height: 1; }
+.paywall-per { font-size: 15px; color: var(--ink-2); }
+.paywall-note { font-size: 13px; color: var(--mute); font-style: italic; margin-left: auto; }
+.paywall-perks { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; padding: 0; }
+.paywall-perks li { font-size: 14px; color: var(--ink-2); line-height: 1.5; padding-left: 24px; position: relative; }
+.paywall-perks li::before { content: '✓'; position: absolute; left: 0; top: 0; color: var(--accent); font-weight: 700; }
+.paywall-actions { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.paywall-btn-primary { display: block; text-align: center; background: var(--accent); color: #fff; font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 15px; font-weight: 700; letter-spacing: 0.08em; padding: 13px; border-radius: 2px; transition: background 0.15s; }
+.paywall-btn-primary:hover { background: var(--accent-dark); }
+.paywall-btn-secondary { display: block; text-align: center; background: transparent; color: var(--ink); border: 1px solid var(--line); font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 15px; font-weight: 700; letter-spacing: 0.08em; padding: 12px; border-radius: 2px; transition: border-color 0.15s; }
+.paywall-btn-secondary:hover { border-color: var(--ink); }
+.paywall-foot { text-align: center; font-size: 14px; color: var(--mute); font-style: italic; }
+.paywall-foot a { color: var(--accent); font-style: normal; }
+
+
+.footer-cert { display: inline-flex; align-items: center; gap: 10px; margin-top: 16px; padding: 9px 13px; background: var(--white); border: 1px solid var(--line); font-family: 'Newsreader', serif; font-variant-caps: all-small-caps; font-size: 13px; font-weight: 700; color: var(--ink); letter-spacing: 0.08em; }
+.footer-cert svg { width: 14px; height: 14px; color: #2ecc71; }
+[data-theme="dark"] .footer-cert { background: var(--paper-3); border-color: var(--line); }
+
+/* ════════════ MOBILE OPTIMIZATION ════════════ */
+@media (max-width: 700px) {
+  /* Top utility bar: wrap and center instead of crowding/overflowing */
+  .util-inner { flex-wrap: wrap; justify-content: center; gap: 6px 16px; padding: 8px 18px; }
+
+  /* Masthead: stack the three groups into one centered column */
+  .mast-inner { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 12px; padding: 16px 18px 14px; }
+  .mast-left { align-items: center; text-align: center; }
+  .mast-right { justify-content: center; flex-wrap: wrap; }
+  .logo { font-size: 36px; }
+
+  /* Nav: scroll horizontally rather than overflow */
+  .nav-inner { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .nav-inner::-webkit-scrollbar { display: none; }
+
+  /* Never let an image force horizontal scrolling */
+  img { max-width: 100%; }
+}
+@media (max-width: 430px) {
+  .logo { font-size: 31px; }
+  .mast-inner { gap: 10px; }
+}
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progress-bar"></div>
+<div class="toast" id="toast"></div>
+
+<!-- UTIL BAR -->
+<div class="util-bar">
+  <div class="util-inner">
+    <div class="util-left">
+      <div class="util-status"><div class="live-dot"></div>Live Coverage</div>
+      <div class="util-stat"><b id="src-count">2,847</b> sources indexed today</div>
+      <div class="util-stat"><b>143</b> stories rewritten</div>
+    </div>
+    <div class="util-right">
+      <a href="/" class="util-link">← Back to Candor</a>
+      <div class="util-divider"></div>
+      <a href="candor-methodology.html" class="util-link">Methodology</a>
+      <div class="util-divider"></div>
+      <a href="candor-login.html" class="util-link">Sign in</a>
+    </div>
+  </div>
+</div>
+
+<!-- MASTHEAD -->
+<header class="masthead">
+  <div class="mast-inner">
+    <div class="mast-left">
+      <div class="weather-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <span>Pasadena · 74°F · Clear</span>
+      </div>
+      <div class="date-chip">Monday, May 26, 2026</div>
+    </div>
+    <div class="logo-wrap">
+      <a href="candor-news.html" class="logo"><span class="logo-c">C</span>andor</a>
+    </div>
+    <div class="mast-right">
+      <button class="icon-btn" aria-label="Theme" onclick="toggleTheme()">
+        <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <button class="btn-subscribe" onclick="showPaywall('trial')">Subscribe</button>
+    </div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav class="nav-wrap">
+  <div class="nav-inner">
+    <a class="nav-link live-link" href="/">Live</a>
+    <a class="nav-link" href="#">U.S.</a>
+    <a class="nav-link active" href="#">World</a>
+    <a class="nav-link" href="#">Politics</a>
+    <a class="nav-link" href="#">Business</a>
+    <a class="nav-link" href="#">Sports</a>
+    <a class="nav-link" href="#">Science</a>
+    <a class="nav-link" href="#">Tech</a>
+  </div>
+</nav>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-inner">
+    <span class="ticker-tag">Breaking</span>
+    <div class="ticker-wrap">
+      <div class="ticker-track">
+        <span>Senate passes AI Oversight Act 67–33</span><em>·</em>
+        <span>Fed holds rates; Dow gains 1.2%</span><em>·</em>
+        <span>G7 climate deal signed with binding 2030 targets</span><em>·</em>
+        <span>Alzheimer's drug shows 60% progression slowdown</span><em>·</em>
+        <span>SpaceX Starship completes full orbital mission</span><em>·</em>
+        <span>Senate passes AI Oversight Act 67–33</span><em>·</em>
+        <span>Fed holds rates; Dow gains 1.2%</span><em>·</em>
+        <span>G7 climate deal signed with binding 2030 targets</span><em>·</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ARTICLE -->
+<div class="wrap">
+  <div class="article-layout">
+
+    <!-- MAIN COLUMN -->
+    <main>
+      <a class="article-back" href="/">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back to top stories
+      </a>
+
+      <div class="article-eyebrow">
+        {{EYEBROW_TAG}}
+        <span class="article-section">{{SECTION}}</span>
+      </div>
+
+      <h1 class="article-headline">{{HEADLINE}}</h1>
+
+      <p class="article-dek">{{DEK}}</p>
+
+      <div class="article-meta-row">
+        <div class="article-byline">
+          <span class="byline-name">Candor AI Desk</span>
+          <span class="byline-sub">{{BYLINE_SUB}}</span>
+        </div>
+        <div class="article-actions">
+          <button class="art-action-btn" onclick="toggleSave()" title="Save">
+            <svg id="save-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          </button>
+          <button class="art-action-btn" onclick="shareArticle()" title="Share">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="ai-rewrite-banner">
+        <span class="pulse-dot"></span>
+        <span>Candor AI · Rewritten from {{SOURCE_COUNT}} sources</span>
+        <span class="timestamp" id="hero-timestamp">— {{TIME_AGO}}</span>
+      </div>
+
+{{HERO_IMAGE_BLOCK}}
+
+      <!-- ARTICLE BODY -->
+      <div class="article-body">{{BODY_HTML}}</div>
+
+      <!-- ANALYSIS PANEL -->
+      <div class="analysis-panel" id="analysis-panel">
+        <button class="analysis-toggle" onclick="toggleAnalysis()">
+          <span class="atog-left">
+            <svg style="width:15px;height:15px;color:var(--ink-3)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            Coverage Analysis
+            <span class="atog-pip">{{SOURCE_COUNT}} sources</span>
+          </span>
+          <span class="atog-right">
+            <span class="atog-label" id="atog-label-text">View details</span>
+            <svg class="atog-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+        </button>
+        <div class="analysis-body">
+          <div class="stat-grid">
+            <div class="stat-cell"><div class="stat-label">Updated</div><div class="stat-value">{{UPDATED_NUM}}<span class="stat-unit">{{UPDATED_UNIT}}</span></div></div>
+            <div class="stat-cell"><div class="stat-label">Read time</div><div class="stat-value">{{READ_TIME}}<span class="stat-unit">min</span></div></div>
+            <div class="stat-cell"><div class="stat-label">Source count</div><div class="stat-value">{{SOURCE_COUNT}}<span class="stat-unit">outlets</span></div></div>
+            <div class="stat-cell"><div class="stat-label">Importance</div><div class="stat-value stat-conf-high">{{IMPORTANCE}}</div></div>
+          </div>
+          <div style="margin-bottom:20px">
+            <div style="font-family:'Newsreader',serif;font-variant-caps:all-small-caps;font-size:13px;font-weight:700;letter-spacing:0.14em;color:var(--mute);margin-bottom:12px;">Source Coverage</div>
+            {{BIAS_BAR_BLOCK}}
+          </div>
+          <div>
+            <div style="font-family:'Newsreader',serif;font-variant-caps:all-small-caps;font-size:13px;font-weight:700;letter-spacing:0.14em;color:var(--mute);margin-bottom:10px;">All Sources</div>
+            <div>{{SOURCE_CHIPS}}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMPARE COVERAGE -->
+      <div style="margin: 40px 0 0;">
+        <div style="font-family:'Newsreader',serif;font-variant-caps:all-small-caps;font-size:13px;font-weight:700;letter-spacing:0.16em;color:var(--accent);margin-bottom:10px;">⊕ Compare Coverage</div>
+        <div style="font-family:'Fraunces',serif;font-size:26px;font-weight:600;letter-spacing:-0.4px;color:var(--ink);margin-bottom:20px;line-height:1.15;">How <em style="font-style:italic;color:var(--accent)">three sides</em> of the press are covering this story</div>
+        <div class="compare-cols">{{COMPARE_COLS}}</div>
+      </div>
+
+      <!-- AI BOX -->
+      <div class="article-ai-box">
+        <div class="aai-tag"><span class="pulse-dot"></span>Candor AI Desk</div>
+        <div class="aai-h">Ask anything about this story.</div>
+        <div class="aai-prompts">
+          <button class="aai-prompt" onclick="askAI(this.textContent)">What are the key facts of this story?</button>
+          <button class="aai-prompt" onclick="askAI(this.textContent)">How are different outlets framing this?</button>
+          <button class="aai-prompt" onclick="askAI(this.textContent)">What's the broader context?</button>
+        </div>
+        <div class="aai-input-row">
+          <input class="aai-input" id="aai-input" type="text" placeholder="Ask your own question about this story…" onkeydown="if(event.key==='Enter')askAI(this.value)">
+          <button class="aai-submit" onclick="askAI(document.getElementById('aai-input').value)">Ask Candor</button>
+        </div>
+        <div class="aai-response" id="aai-response">
+          <div class="aai-response-q" id="aai-q"></div>
+          <div class="aai-response-a" id="aai-a"></div>
+          <div class="aai-footer">
+            <span id="aai-src" style="font-style:italic;font-size:12px;color:var(--mute)"></span>
+            <button class="aai-reset" onclick="resetAI()">← Ask another</button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- SIDEBAR -->
+    <aside class="article-sidebar">
+      <div class="sidebar-sticky">
+
+        <div class="sidebar-block">
+          <div class="sidebar-block-title">Related Stories</div>
+          {{RELATED_STORIES}}
+        </div>
+
+        <div class="newsletter-box">
+          <div class="nl-eyebrow">Breaking Alerts</div>
+          <div class="nl-h">The story, before the spin.</div>
+          <p class="nl-p">AI-written summaries from 50+ outlets delivered to your inbox. No ads. Cancel anytime.</p>
+          <input class="nl-input" type="email" placeholder="your@email.com" id="nl-email">
+          <button class="nl-btn" onclick="handleNewsletter()">Start Free Trial</button>
+        </div>
+
+      </div>
+    </aside>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-main">
+    <div class="footer-brand">
+      <div class="footer-logo"><span class="footer-logo-c">C</span>andor</div>
+      <p>AI-powered news synthesis. Every story verified across the full source spectrum — left, center, and right — so you can read with confidence.</p>
+      <div class="footer-cert">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4M21 12c0 5-3.5 8-9 9-5.5-1-9-4-9-9V5l9-3 9 3v7z"/></svg>
+        <span>Methodology · Open</span>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Coverage</h4>
+      <ul>
+        <li><a href="#">U.S. News</a></li><li><a href="#">World</a></li>
+        <li><a href="#">Politics</a></li><li><a href="#">Business</a></li>
+        <li><a href="#">Science</a></li><li><a href="#">Tech</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <ul>
+        <li><a href="candor-methodology.html">How it works</a></li><li><a href="candor-sources.html">Source list</a></li>
+        <li><a href="candor-methodology.html">Methodology</a></li><li><a href="candor-signup.html">Subscribe</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="candor-about.html">About</a></li>
+        <li><a href="candor-newsroom.html">Newsroom</a></li>
+        <li><a href="candor-careers.html">Careers</a></li>
+        <li><a href="candor-press.html">Press</a></li>
+        <li><a href="candor-contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-foot">
+    <span>© 2026 Candor News Inc. · AI-assisted summaries reviewed for factual accuracy.</span>
+    <div class="links">
+      <a href="candor-privacy.html">Privacy</a>
+      <a href="candor-terms.html">Terms</a>
+      <a href="candor-accessibility.html">Accessibility</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* Theme */
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('theme-icon').innerHTML = isDark
+    ? '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'
+    : '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+}
+
+/* Toast */
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+/* Save */
+let saved = false;
+function toggleSave() {
+  saved = !saved;
+  document.getElementById('save-icon').style.fill = saved ? 'var(--accent)' : 'none';
+  document.getElementById('save-icon').style.stroke = saved ? 'var(--accent)' : 'currentColor';
+  toast(saved ? 'Story saved' : 'Story removed');
+}
+
+/* Share */
+function shareArticle() {
+  navigator.clipboard && navigator.clipboard.writeText(window.location.href);
+  toast('Link copied to clipboard');
+}
+
+/* Newsletter */
+function handleNewsletter() {
+  showPaywall('alerts');
+  return;
+  const email = document.getElementById('nl-email').value;
+  const btn = document.querySelector('.nl-btn');
+  if (email && email.includes('@')) {
+    btn.textContent = '✓ Check your inbox';
+    btn.style.background = 'var(--ink-2)';
+    btn.disabled = true;
+    toast('Welcome to Candor!');
+  } else {
+    document.getElementById('nl-email').style.outline = '2px solid var(--accent)';
+    setTimeout(() => { document.getElementById('nl-email').style.outline = ''; }, 1400);
+  }
+}
+
+/* Analysis panel */
+function toggleAnalysis() {
+  const panel = document.getElementById('analysis-panel');
+  panel.classList.toggle('open');
+  document.getElementById('atog-label-text').textContent = panel.classList.contains('open') ? 'Hide' : 'View details';
+}
+
+/* AI */
+const ANSWERS = {
+  'What are the actual enforcement mechanisms?': { a: 'The deal establishes a <strong>Carbon Compliance Fund</strong> — nations missing interim 2027 benchmarks pay into a $200B pool redistributed to climate-vulnerable nations. The EU and U.S. also agreed to bilateral tariffs on high-emission goods from noncompliant signatories, and an independent OECD-administered monitoring body will publish annual progress scorecards.', src: 'Reuters, AP, FT · synthesized from 11 sources' },
+  'Which countries are most at risk of missing targets?': { a: '<strong>Italy and Japan</strong> are flagged as highest-risk by analysts, given fossil fuel infrastructure dependencies. Canada faces domestic political pressure over its oil sands sector. Germany\'s coal phase-out timeline remains disputed. The U.S. faces congressional headwinds on implementation funding.', src: 'FT, Bloomberg, Guardian · synthesized from 8 sources' },
+  'How does this compare to the Paris Agreement?': { a: 'The Paris Agreement relied on <strong>voluntary commitments and reputational pressure</strong> with no enforcement mechanism. This deal is structurally different: standardized third-party monitoring, GDP-proportional financial penalties, and market-based tariff mechanisms that extend pressure to the private sector — not just governments.', src: 'AP, BBC, NYT · synthesized from 9 sources' },
+};
+
+let typingTimer = null;
+function typeHTML(el, html, speed = 12) {
+  if (typingTimer) clearInterval(typingTimer);
+  const cursor = '<span class="cursor"></span>';
+  let i = 0; let visible = '';
+  const tokens = [];
+  let buffer = ''; let inTag = false;
+  for (const ch of html) {
+    if (ch === '<') { if (buffer) { for (const c of buffer) tokens.push(c); buffer = ''; } inTag = true; buffer += ch; }
+    else if (ch === '>' && inTag) { buffer += ch; tokens.push(buffer); buffer = ''; inTag = false; }
+    else if (inTag) { buffer += ch; }
+    else { tokens.push(ch); }
+  }
+  if (buffer) tokens.push(buffer);
+  typingTimer = setInterval(() => {
+    if (i >= tokens.length) { clearInterval(typingTimer); el.innerHTML = html; return; }
+    visible += tokens[i]; el.innerHTML = visible + cursor; i++;
+  }, speed);
+}
+
+function askAI(question) {
+  showPaywall('ai');
+  return;
+  if (!question || !question.trim()) return;
+  document.getElementById('aai-input').value = '';
+  const response = document.getElementById('aai-response');
+  const qEl = document.getElementById('aai-q');
+  const aEl = document.getElementById('aai-a');
+  const srcEl = document.getElementById('aai-src');
+  qEl.textContent = '" ' + question + ' "';
+  aEl.innerHTML = '<span style="color:#a8a497;font-style:italic;">Reading sources<span class="cursor"></span></span>';
+  srcEl.textContent = 'Analyzing 11 sources…';
+  response.classList.add('visible');
+  response.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  setTimeout(() => {
+    const match = ANSWERS[question];
+    const text = match ? match.a : 'Candor\'s AI found broad factual consensus across 11 sources on this story, though framing varies by outlet. Left-leaning coverage emphasizes urgency and the absence of China; right-leaning coverage focuses on economic costs and sovereignty; centrist outlets describe the mechanics and note verification challenges.';
+    const src = match ? match.src : 'Cross-spectrum analysis · 11 sources';
+    typeHTML(aEl, text, 12);
+    srcEl.textContent = src;
+  }, 900);
+}
+function resetAI() {
+  if (typingTimer) clearInterval(typingTimer);
+  document.getElementById('aai-response').classList.remove('visible');
+  document.getElementById('aai-input').value = '';
+}
+
+/* Reading progress */
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const scrolled = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  document.getElementById('progress-bar').style.width = scrolled + '%';
+});
+
+/* Live timestamp */
+let secs = 12;
+setInterval(() => {
+  secs++;
+  const ts = document.getElementById('hero-timestamp');
+  if (!ts) return;
+  ts.textContent = secs < 60 ? '— ' + secs + ' seconds ago' : '— ' + Math.floor(secs/60) + ' min ' + (secs%60) + 's ago';
+}, 1000);
+
+/* Animate bias bars */
+window.addEventListener('load', () => {
+  document.querySelectorAll('.bias-seg').forEach(bar => {
+    const w = bar.style.width; bar.style.width = '0';
+    setTimeout(() => { bar.style.transition = 'width 0.9s cubic-bezier(.2,.8,.2,1)'; bar.style.width = w; }, 200);
+  });
+});
+</script>
+
+<!-- ═══════════════ PAYWALL MODAL (universal) ═══════════════ -->
+<div class="paywall-overlay" id="paywall-overlay" onclick="if(event.target===this)closePaywall()">
+  <div class="paywall-modal" role="dialog" aria-modal="true" aria-labelledby="paywall-title">
+    <button class="paywall-close" onclick="closePaywall()" aria-label="Close">&times;</button>
+    <div class="paywall-eyebrow" id="paywall-eyebrow">Candor Membership</div>
+    <h3 class="paywall-title" id="paywall-title">This is a member feature.</h3>
+    <p class="paywall-body" id="paywall-body">The Candor AI assistant is part of Candor membership. Start a free 7-day trial to use it — no charge today, cancel anytime.</p>
+    <div class="paywall-price">
+      <span class="paywall-amount">$4.99</span>
+      <span class="paywall-per">/ month</span>
+      <span class="paywall-note">after your 7-day free trial</span>
+    </div>
+    <ul class="paywall-perks">
+      <li>Unlimited Candor AI — ask any story anything</li>
+      <li>Breaking-news alerts and the Daily Brief by email</li>
+      <li>Full archive, Compare Coverage, and the weekend long-read</li>
+    </ul>
+    <div class="paywall-actions">
+      <a href="candor-signup.html" class="paywall-btn-primary">Start 7-day free trial</a>
+      <a href="candor-signup.html" class="paywall-btn-secondary">Create a free account</a>
+    </div>
+    <div class="paywall-foot">Already a member? <a href="candor-login.html">Log in</a></div>
+  </div>
+</div>
+
+<script>
+/* ═══════ PAYWALL (member-feature gating) ═══════ */
+function showPaywall(feature) {
+  var overlay = document.getElementById('paywall-overlay');
+  if (!overlay) return;
+  var title = document.getElementById('paywall-title');
+  var body = document.getElementById('paywall-body');
+  var eyebrow = document.getElementById('paywall-eyebrow');
+  if (feature === 'alerts' || feature === 'email' || feature === 'newsletter' || feature === 'trial') {
+    eyebrow.textContent = 'Candor Membership';
+    title.textContent = 'Alerts are a member feature.';
+    body.textContent = 'Breaking-news alerts and the Daily Brief by email are part of Candor membership. Start a free 7-day trial to turn them on — no charge today, cancel anytime.';
+  } else {
+    eyebrow.textContent = 'Candor Membership';
+    title.textContent = 'Candor AI is a member feature.';
+    body.textContent = 'The Candor AI assistant is part of Candor membership. Start a free 7-day trial to ask any story anything — no charge today, cancel anytime.';
+  }
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closePaywall() {
+  var overlay = document.getElementById('paywall-overlay');
+  if (!overlay) return;
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closePaywall(); });
+
+</script>
+<script src="/live-header.js" defer></script>
+</body>
+</html>
